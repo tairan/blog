@@ -1,0 +1,992 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="有时脑袋有了idea，就想马上实现它。原本PHP是个不错的选择，可是自己以后的工作和规划中已经排除了它，取而代之的是Python。 用Python写一个简单的web application可不是那么容易的事情，以前玩了一段时间的Django，那时还不是1.0 Release版本。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/page/9">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/25/why-webpy-is-instable/">Why Webpy Is Instable?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-25T00:00:00+08:00" pubdate data-updated="true">Nov 25<span>th</span>, 2008</time>
+        
+         | <a href="/blog/2008/11/25/why-webpy-is-instable/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>有时脑袋有了idea，就想马上实现它。原本PHP是个不错的选择，可是自己以后的工作和规划中已经排除了它，取而代之的是Python。</p>
+
+<p>用Python写一个简单的web application可不是那么容易的事情，以前玩了一段时间的Django，那时还不是1.0 Release版本。好不容易盼到Django 1.0 release了，却发现有很多东西不认识了。怎奈写一个小东东就这么难呢？</p>
+
+<p>寻寻觅觅，忽见web.py是一个更简洁的framework，so, 看文档，做练习。从下班一直捣鼓到此时22:55，发现web.py这个framework中还是有很多Bug的。</p>
+
+<p>官方释放版本是0.23，在cookbook中写到如何使用subapplication。
+<em>blog.py</em></p>
+
+<pre lang="python">import web
+urls = (
+  "", "reblog",
+  "/(.*)", "blog"
+)
+
+class reblog:
+    def GET(self): raise web.seeother('/')
+
+class blog:
+    def GET(self, path):
+        return "blog " + path
+
+app_blog = web.application(urls, locals())</pre>
+
+
+<p>这里有一个bug:
+<code>AttributeError: 'module' object has no attribute 'application'</code>
+Google以后才知道要用0.3版的才行，因为0.23版中根本就没有application.py这个文件</p>
+
+<p>这个问题解决以后，在code.py中引用subapp</p>
+
+<pre lang="python">urls = (
+    '/blog', blog.app_blog
+)</pre>
+
+
+<p>又有一个bug:
+<code>
+AttributeError: 'module' object has no attribute 'app_blog'
+</code></p>
+
+<p>痛苦阿，明天还要上班！暂时放一下web.py，让我在研究一下Django吧，好歹熟悉一些。如今的Django不仅很美，而且还很强壮，当然也很肥胖(相对)。</p>
+
+<p>开源，路还很长。祝福web.py</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/24/jtslczs/">教条示龙场诸生</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-24T00:00:00+08:00" pubdate data-updated="true">Nov 24<span>th</span>, 2008</time>
+        
+         | <a href="/blog/2008/11/24/jtslczs/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>(武宗正德元年，王守仁三十七歲，以上書救戴銑等，忤宦官劉謹，廷杖幾死，貶為貴州龍場驛丞。時龍場猶窮荒不文，守仁日與諸生講學不輟，書此教條以為訓示。) </p>
+
+<blockquote>　　诸生相从于此，甚盛。恐无能为助也，以四事相规，聊以答诸生之意。一曰立志，二曰勤学，三曰改过，四曰责善。其慎听，毋忽！
+
+　　<strong>立志</strong>
+
+　　<em><strong>志不立，天下无可成之事。虽百工技艺，未有不本于志者。</strong></em>今学者旷废隳惰，玩岁愒时，而百无所成，皆由于志之未立耳。故立志而圣，则圣矣；立志而贤，则贤矣；志不立，如无舵之舟，无衔之马，漂荡奔逸，终亦何所底乎？昔人所言：“使为善而父母怒之，兄弟怨之，宗族乡党贱恶之，如此而不为善，可也。为善则父母爱之，兄弟悦之，宗族乡党敬信之，何苦而不为善、为君子？使为恶而父母爱之，兄弟悦之，宗族乡党敬信之，如此而为恶，可也。为恶则父母怒之，兄弟怨之，宗族乡党贱恶之，何苦必为恶、为小人？”诸生念此，亦可以知所立志矣。
+
+　　<strong>勤学</strong>
+
+　　<em><strong>已立志为君子，自当从事于学。凡学之不勤，必其志之尚未笃也。</strong></em>从吾游者，不以聪慧警捷为高，而以勤确谦抑为上。诸生试观侪辈之中，苟有“虚而为盈，无而为有”讳己之不能，忌人之有善，自矜自是，大言欺人者，使其人资禀虽甚超迈，侪辈之中，有弗疾恶之者乎？有弗鄙贱之者乎？彼固将以欺人，人果遂为所欺，有弗窃笑之者乎？苟有谦默自持，无能自处，笃志力行，勤学好问；称人之善，而咎己之失；从人之长，而明己之短；忠信乐易，表里一致者；使其人资禀虽甚鲁钝，侪辈之中，有弗称慕之者乎？彼固以无能自处，而不求上人，人果遂以彼为无能，有弗敬尚之者乎？诸生观此，亦可以知所从事于学矣！
+
+　　<strong>改过</strong>
+
+　　<em><strong>夫过者，自大贤所不免；然不害其卒为大贤者，为其能改也。故不贵于无过，而贵于能改过。</strong></em>诸生自思，平日亦有缺于廉耻忠信之行者乎？亦有薄于孝友之道，陷于狡诈、偷刻之习者乎？诸生殆不至于此。不幸或有之，皆其不知而误蹈，素无师友之讲习规饬也。诸生试内省，万一有近于是者，固亦不可以不痛自悔咎；然亦不当以此自歉，遂馁于改过从善之心。但能一旦脱然洗涤旧染，虽昔为盗寇，今日不害为君子矣！若曰吾昔已如此，今虽改过而从善，人将不信我，且无赎于前过，反怀羞涩疑沮，而甘心于污浊终焉，则吾亦绝望尔矣！
+
+　　<strong>责善</strong>
+
+　　<em><strong>“责善，朋友之道；”然须“忠告而善道之”，悉其忠爱，致其婉曲，使彼闻之而可从，绎之而可改，有所感而无所怒，乃为善耳！</strong></em>若先暴白其过恶，痛毁极诋，使无所容，彼将发其愧耻愤恨之心；虽欲降以相从，而势有所不能。是激之而使为恶矣！故凡讦人之短，攻发人之阴私，以沽直者，皆不可以言责善。虽然，我以是而施于人，不可也；人以是而加诸我，凡攻我之失者，皆我师也，安可以不乐受而心感之乎？某于道未有所得，其学卤莽耳。谬为诸生相从于此．每终夜以思，恶且未免，况于过乎？人谓“事师无犯无隐”，而遂谓师无可谏，非也。谏师之道，直不至于犯，而婉不至于隐耳。使吾而是也，因得以明其是；吾而非也，因得以去其非。盖教学相长也。诸生责善，当自吾始。</blockquote>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/21/code-as-design/">编程不是构建软件，而是设计软件。&#8211; 源码就是设计</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-21T00:00:00+08:00" pubdate data-updated="true">Nov 21<span>st</span>, 2008</time>
+        
+         | <a href="/blog/2008/11/21/code-as-design/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>什么是软件工程中最重要的产出？毫无疑问是代码。代码是给人读的，偶尔让机器运行一下。为了给读代码的人提供便利，我们就需要给代码一些自描述信息（Meta）。这些Meta信息就是相关的文档，注释等。关于是否需要文档在<a href="http://www.javaeye.com/topic/2813" target="_blank">javaeye</a>还有很激烈的讨论。</p>
+
+<p>下面让我们看看大师是怎么说的：<a href="http://www.developerdotstar.com/mag/articles/PDF/DevDotStar_Reeves_CodeAsDesign.pdf" target="_blank">英文原版</a></p>
+
+<blockquote>至今，我仍能记起当我顿悟并最终产生下面文章时所在的地方。那是1986年的夏天，我在加利福尼亚中国湖海军武器中心担任临时顾问。在这期间，我有幸参加了一个关于Ada的研讨会。讨论当中，有一位听众提出了一个具有代表性的问题，“软件开发者是工程师吗？”我不记得当时的回答，但是我却记得当时并没有真正解答这个问题。于是，我就退出讨论，开始思考我会怎样回答这样一个问题。现在，我无法肯定当时我为什么会记起几乎10年前曾经在Datamation杂志上阅读过的一篇论文，不过促使我记起的应该是后续讨论中的某些东西。这篇论文阐述了工程师为什么必须是好的作家（我记得该论文谈论就是这个问题——好久没有看了），但是我从该论文中得到的关键一点是：作者认为工程过程的最终结果是文档。换句话说，工程师生产的是文档，不是实物。其他人根据这些文档去制造实物。于是，我就在困惑中提出了一个问题，“除了软件项目正常产生的所有文档以外，还有可以被认为是真正的工程文档的东西吗？”我给出的回答是，“是的，有这样的文档存在，并且只有一份——源代码。”
+
+把源代码看作是一份工程文档——设计——完全颠覆了我对自己所选择的职业的看法。它改变了我看待一切事情的方式。此外，我对它思考的越多，我就越觉得它阐明了软件项目常常遇到的众多问题。更确切地说，我觉得大多数人不理解这个不同的看法，或者有意拒绝它这样一个事实，就足以说明很多问题。几年后，我终于有机会把我的观点公开发表。C++ Journal中的一篇有关软件设计的论文促使我给编辑写了一封关于这个主题的信。经过几封书信交换后，编辑Livleen Singh同意把我关于这个主题的想法发表为一篇论文。下面就是这篇文章。
+
+——Jack Reecves, December,22,2001</blockquote>
+
+
+<blockquote><strong>什么是软件设计？</strong>
+Jack W.Reeves, 1992
+
+面向对象技术，特别是C++，似乎给软件界带来了不小的震动。出现了大量的论文和书籍去描述如何应用这项新技术。总的来说，那些关于面向对象技术是否只是一个骗局的问题已经被那些关于如何付出最小的努力即可获得收益的问题所替代。面向对象技术出现已经有一段时间了，但是这种爆炸式的流行却似乎有点不寻常。人们为何会突然关注它呢？对于这个问题，人们给出了各种各样的解释。事实上，很可能就没有单一的原因。也许，把多种因素的结合起来才能最终取得突破，并且这项工作正在进展之中。尽管如此，在软件革命的这个最新阶段中，C++本身看起来似乎成为了一个主要因素。同样，对于这个问题，很可能也存在很多种理由，不过我想从一个稍微不同的视角给出一个答案：C++之所以变得流行，是因为它使软件设计变得更容易的同时，也使编程变得更容易。
+
+虽然这个解释好像有点奇特，但是它却是深思熟虑的结果。在这篇论文中，我就是想要关注一下编程和程序设计之间的关系。近10年来，我一直觉得整个软件行业都没有觉察到做出一个软件设计和什么是真正的软件设计之间的一个微妙的不同点。只要看到了这一点，我认为我们就可以从C++增长的流行趋势中，学到关于如何才能成为更好的软件工程师的意义深远的知识。这个知识就是，编程不是构建软件，而是设计软件。
+
+几年前，我参见了一个讨论会，其中讨论到软件开发是否是一门工程学科的问题。虽然我不记得了讨论结果，但是我却记得它是如何促使我认识到：软件业已经做出了一些错误的和硬件工程的比较，而忽视了一些绝对正确的对比。其实，我认为我们不是软件工程师，因为我们没有认识到什么才是真正的软件设计。现在，我对这一点更是确信无疑。
+
+任何工程活动的最终目标都是某些类型的文档。当设计工作完成时，设计文档就被转交给制造团队。该团队是一个和设计团队完全不同的群体，并且其技能也和设计团队完全不同。如果设计文档正确地描绘了一个完整的设计，那么制造团队就可以着手构建产品。事实上，他们可以着手构建该产品的许多实物，完全无需设计者的任何进一步的介入。在按照我的理解方式审查了软件开发的生命周期后，我得出一个结论：实际上满足工程设计标准的惟一软件文档，就是源代码清单。
+
+对于这个观点，人们进行了很多的争论，无论是赞成的还是反对的都足以写成无数的论文。本文假定最终的源代码就是真正的软件设计，然后仔细研究了该假定带来的一些结果。我可能无法证明这个观点是正确的，但是我希望证明：它确实解释了软件行业中一些已经观察到的事实，包括C++的流行。
+
+在把代码看作是软件设计所带来的结果中，有一个结果完全盖过了所有其他的结果。它非常重要并且非常明显，也正因为如此，对于大多数软件机构来说，它完全是一个盲点。这个结果就是：软件的构建是廉价的。它根本就不具有昂贵的资格；它非常的廉价，几乎就是免费的。如果源代码是软件设计，那么实际的软件构建就是由编译器和连接器完成的。我们常常把编译和连接一个完整的软件系统的过程称为“进行一次构建”。在软件构建设备上所进行的主要投资是很少的——实际需要的只有一台计算机、一个编辑器、一个编译器以及一个连接器。一旦具有了一个构建环境，那么实际的软件构建只需花费少许的时间。编译50 000行的C++程序也许会花费很长的时间，但是构建一个具有和50 000行C++程序同样设计复杂性的硬件系统要花费多长的时间呢？
+
+把源代码看作是软件设计的另外一个结果是，软件设计相对易于创作，至少在机械意义上如此。通常，编写（也就是设计）一个具有代表性的软件模块（50至100行代码）只需花费几天的时间（对它进行完全的调试是另外一个议题，稍后会对它进行更多的讨论）。我很想问一下，是否还有任何其他的学科可以在如此短的时间内，产生出和软件具有同样复杂性的设计来，不过，首先我们必须要弄清出如何来度量和比较复杂性。然而，有一点是明显的，那就是软件设计可以 极为迅速地变得非常庞大。
+
+假设软件设计相对易于创作，并且在本质上构建起来也没有什么代价，一个不令人吃惊的发现是，软件设计往往是难以置信的庞大和复杂。这看起来似乎很明显，但是问题的重要性却常常被忽视。学校中的项目通常具有数千行的代码。具有10 000行代码（设计）的软件产品被它们的设计者丢弃的情况也是有的。我们早就不再关注于简单的软件。典型的商业软件的设计都是由数十万行代码组成的。许多软件设计达到了上百万行代码。另外，软件设计几乎总是在不断地演化。虽然当前的设计可能只有几千行代码，但是在产品的生命期中，实际上可能要编写许多倍的代码。
+
+尽管确实存在一些硬件设计，它们看起来似乎和软件设计一样复杂，但是请注意两个有关现代硬件的事实。第一，复杂的硬件工程成果未必总是没有错误的，在这一点上，它不存在像软件那样让我们相信的评判标准。多数的微处理器在发售时都具有一些逻辑错误：桥梁坍塌，大坝破裂，飞机失事以及数以千计的汽车和其他消费品被召回——所有的这些我们都记忆犹新，所有的这些都是设计错误的结果。第二，复杂的硬件设计具有与之对应的复杂、昂贵的构建阶段。结果，制造这种系统所需的能力限制了真正能够生产复杂硬件设计公司的数目。对于软件来说，没有这种限制。目前，已经有数以百计的软件机构和数以千计的非常复杂的软件系统存在，并且数量以及复杂性每天都在增长。这意味着软件行业不可能通过仿效硬件开发者找到针对自身问题的解决办法。倘若一定要说出有什么相同之处的话，那就是，当CAD和CAM可以做到帮助硬件设计者创建越来越复杂的设计时，硬件工程才会变得和软件开发越来越像。
+
+设计软件是一种管理复杂性的活动。复杂性存在于软件设计本身之中，存在于公司的软件机构之中，也存在于整个软件行业之中。软件设计和系统设计非常相似。它可以跨越多种技术并且常常涉及多个学科分支。软件的规格说明往往不固定、经常快速变化，这种变化常常在正进行软件设计时发生。同样，软件开发团队也往往不固定，常常在设计过程的中间发生变化。在许多方面，软件都要比硬件更像复杂的社会或者有机系统。所有这些都使得软件设计成为了一个困难的并且易出错的过程。虽然所有这些都不是创造性的想法，但是在软件工程革命开始将近30年后的今天，和其他工程行业相比，软件开发看起来仍然像是一种未受过训练（undisciplined）的技艺。
+
+一般的看法认为，当真正的工程师完成了一个设计，不管该设计有多么复杂，他们都非常确信该设计是可以工作的。他们也非常确信该设计可以使用公认的技术建造出来。为了做到这一点，硬件工程师花费了大量的时间去验证和改进他们的设计。例如，请考虑一个桥梁设计。在这样一个设计实际建造之前，工程师会进行结构分析——他们建立计算机模型并进行仿真，他们建立比例模型并在风洞中或者用其他一些方法进行测试。简而言之，在建造前，设计者会使用他们能够想到的一切方法来证实设计是正确的。对于一架新型客机的设计来说，情况甚至更加严重；必须要构建出和原物同尺寸的原型，并且必须要进行飞行测试来验证设计中的种种预计。
+
+对于大多数人来说，软件中明显不存在和硬件设计同样严格的工程。然而，如果我们把源代码看做是设计，那么就会发现软件工程师实际上对他们的设计做了大量的验证和改进。软件工程师不把这称为工程，而称它为测试和调试。大多数人不把测试和调试看作是真正的“工程”——在软件行业中肯定没有被看作是。造成这种看法的原因，更多的是因为软件行业拒绝把代码看作设计，而不是任何实际的工程差别。事实上，试验模型、原型以及电路试验板已经成为其他工程学科公认的组成部分。软件设计者之所以不具有或者没有使用更多的正规方法来验证他们的设计，是因为软件构建周期的简单经济规律。
+
+第一个启示：仅仅构建设计并测试它比做任何其他事情要廉价一些，也简单一些。我们不关心做了多少次构建——这些构建在时间方面的代价几乎为零，并且如果我们丢弃了构建，那么它所使用的资源完全可以重新利用。请注意，测试并非仅仅是让当前的设计正确，它也是改进设计的过程的一部分。复杂系统的硬件工程师常常建立模型（或者，至少他们把设计用计算机图形直观地表现出来）。这就使得他们获得了对于设计的一种“感觉”，而仅仅去检查设计是不可能获得这种感觉的。对于软件来说，构建这样一个模型既不可能也无必要。我们仅仅构建产品本身。即使正规的软件验证可以和编译器一样自动进行，我们还是会去进行构建/测试循环。因此，正规的验证对于软件行业来说从来没有太多的实际意义。
+
+这就是现今软件开发过程的现实。数量不断增长的人和机构正在创建着更加复杂的软件设计。这些设计会被先用某些编程语言编写出来，然后通过构建/测试循环进行验证和改进。过程易于出错，并且不是特别的严格。相当多的软件开发人员并不想相信这就是过程的运作方式，也正因为这一点，使问题变得更加复杂。
+
+当前大多数的软件过程都试图把软件设计的不同阶段分离到不同的类别中。必须要在顶层的设计完成并且冻结后，才能开始编码。测试和调试只对清除建造错误是必要的。程序员处在中间位置，他们是软件行业的建造工人。许多人认为，如果我们可以让程序员不再进行“随意的编码（hacking）”并且按照交给他们的设计去进行构建（还要在过程中，犯更少的错误），那么软件开发就可以变得成熟，从而成为一门真正的工程学科。但是，只要过程忽视了工程和经济学事实，这就不可能发生。
+
+例如，任何一个现代行业都无法忍受在其制造过程中出现超过100%的返工率。如果一个建造工人常常不能在第一次就构建正确，那么不久他就会失业。但是在软件业中，即使最小的一块代码，在测试和调试期间，也很可能会被修正或者完全重写。在一个创造性的过程中（比如：设计），我们认可这种改进不是制造过程的一部分。没有人会期望工程师第一次就创建出完美的设计。即使她做到了，仍然必须让它经受改进过程，目的就是为了证明它是完美的。
+
+即使我们从日本的管理方法中没有学到任何东西，我们也应该知道由于在过程中犯错误而去责备工人是无益于提高生产率的。我们不应该不断地强迫软件开发去符合不正确的过程模型，相反，我们需要去改进过程，使之有助于而不是阻碍产生更好的软件。这就是“软件工程”的石蕊测试。工程是关于你如何实施过程的，而不是关于是否需要一个CAD系统来产生最终的设计文档。
+
+关于软件开发有一个压倒性的问题，那就是一切都是设计过程的一部分。编码是设计，测试和调试是设计的一部分，并且我们通常认为的设计仍然是设计的一部分。虽然软件构建起来很廉价，但是设计起来却是难以置信的昂贵。软件非常的复杂，具有众多不同方面的设计内容以及它们所导致的设计考虑。问题在于，所有不同方面的内容是相互关连的（就像硬件工程中的一样）。我们希望顶层设计者可以忽视模块算法设计的细节。同样，我们希望程序员在设计模块内部算法时不必考虑顶层设计问题。糟糕的是，一个设计层面中的问题侵入到了其他层面之中。对于整个软件系统的成功来说，为一个特定模块选择算法可能和任何一个更高层次的设计问题同样重要。在软件设计的不同方面内容中，不存在重要性的等级。最低层模块中的一个不正确设计可能和最高层中的错误一样致命。软件设计必须在所有的方面都是完整和正确的，否则，构建于该设计基础之上的所有软件都会是错误的。
+
+为了管理复杂性，软件被分层设计。当程序员在考虑一个模块的详细设计时，可能还有数以百计的其他模块以及数以千计的细节，他不可能同时顾及。例如，在软件设计中，有一些重要方面的内容不是完全属于数据结构和算法的范畴。在理想情况下，程序员不应该在设计代码时还得去考虑设计的这些其他方面的内容。
+
+但是，设计并不是以这种方式工作的，并且原因也开始变得明朗。软件设计只有在其被编写和测试后才算完成。测试是设计验证和改进过程的基础部分。高层结构的设计不是完整的软件设计；它只是细节设计的一个结构框架。在严格地验证高层设计方面，我们的能力是非常有限的。详细设计最终会对高层设计造成的影响至少和其他的因素一样多（或者应该允许这种影响）。对设计的各个方面进行改进，是一个应该贯穿整个设计周期的过程。如果设计的任何一个方面内容被冻结在改进过程之外，那么对于最终设计将会是糟糕的或者甚至无法工作这一点，就不会觉得奇怪了。
+
+如果高层的软件设计可以成为一个更加严格的工程过程，那该有多好呀，但是软件系统的真实情况不是严格的。软件非常的复杂，它依赖于太多的其他东西。或许，某些硬件没有按照设计者认为的那样工作，或者一个库例程具有一个文档中没有说明的限制。每一个软件项目迟早都会遇到这些种类的问题。这些种类的问题会在测试期间被发现（如果我们的测试工作做得好的话），之所以如此是因为没有办法在早期就发现它们。当它们被发现时，就迫使对设计进行更改。如果我们幸运，那么对设计的更改是局部的。时常，更改会波及到整个软件设计中的一些重要部分（莫非定律）。当受到影响的设计的一部分由于某种原因不能更改时，那么为了能够适应影响，设计的其他部分就必须得遭到破坏。这通常导致的结果就是管理者所认为的“随意编码”，但是这就是软件开发的现实。
+
+例如，在我最近工作的一个项目中，发现了模块A的内部结构和另一个模块B之间的一个时序依赖关系。糟糕的是，模块A的内部结构隐藏在一个抽象体的后面，而该抽象体不允许以任何方法把对模块B的调用合入到它的正确调用序列中。当问题被发现时，当然已经错过了更改A的抽象体的时机。正如所料，所发生的就是把一个日益增长的复杂的“修正”集应用到A的内部设计上。在我们还没有安装完版本1时，就普遍感觉到设计正在衰退。每一个新的修正很可能都会破坏一些老的修正。这是一个正规的软件开发项目。最后，我和我的同事决定对设计进行更改，但是为了得到管理层的同意，我们不得不自愿无偿加班。
+
+在任何一般规模的软件项目中，肯定会出现像这样的问题，尽管人们使用了各种方法来防止它的出现，但是仍然会忽视一些重要的细节。这就是工艺和工程之间的区别。如果经验可以把我们引向正确的方向，这就是工艺。如果经验只会把我们带入未知的领域，然后我们必须使用一开始所使用的方法并通过一个受控的改进过程把它变得更好，这就是工程。
+
+我们来看一下只是作为其中很小一点的内容，所有的程序员都知道，在编码之后而不是之前编写软件设计文档会产生更加准确的文档。现在，原因是显而易见的。用代码来表现的最终设计是惟一一个在构建/测试循环期间被改进的东西。在这个循环期间，初始设计保持不变的可能性和模块的数量以及项目中程序员的数量成反比。它很快就会变得毫无价值。
+
+在软件工程中，我们非常需要在各个层次都优秀的设计。我们特别需要优秀的顶层设计。初期的设计越好，详细设计就会越容易。设计者应该使用任何可以提供帮助的东西。结构图表、Booch 图、状态表、PDL等等——如果它能够提供帮助，就去使用它。但是，我们必须记住，这些工具和符号都不是软件设计。最后，我们必须创建真正的软件设计，并且是使用某种编程语言完成的。因此，当我们得出设计时，我们不应该害怕对它们进行编码。在必要时，我们必须应该乐于去改进它们。
+
+至今，还没有任何设计符号可以同时适用于顶层设计和详细设计。设计最终会表现为以某种编程语言编写的代码。这意味着在详细设计可以开始前，顶层设计符号必须被转换成目标编程语言。这个转换步骤耗费时间并且会引入错误。程序员常常是对需求进行回顾并且重新进行顶层设计，然后根据它们的实际去进行编码，而不是从一个可能没有和所选择的编程语言完全映射的符号进行转换。这同样也是软件开发的部分现实情况。
+
+也许，如果让设计者本人来编写初始代码，而不是后来让其他人去转换语言无关的设计，就会更好一些。我们所需要的是一个适用于各个层次设计的统一符号。换句话说，我们需要一种编程语言，它同样也适用于捕获高层的设计概念。C＋＋正好可以满足这个要求。C++是一门适用于真实项目的编程语言，同时它也是一个非常具有表达力的软件设计语言。C++允许我们直接表达关于设计组件的高层信息。这样，就可以更容易地进行设计，并且以后可以更容易地改进设计。由于它具有更强大的类型检查机制，所以也有助于检测到设计中的错误。这就产生了一个更加健壮的设计，实际上也是一个更好的工程化设计。
+
+最后，软件设计必须要用某种编程语言表现出来，然后通过一个构建/测试循环对其进行验证和改进。除此之外的任何其他主张都完全没有用。请考虑一下都有哪些软件开发工具和技术得以流行。结构化编程在它的时代被认为是创造性的技术。 Pascal使之变得流行，从而自己也变得流行。面向对象设计是新的流行技术，而C++是它的核心。现在，请考虑一下那些没有成效的东西。CASE工具，流行吗？是的；通用吗？不是。结构图表怎么样？情况也一样。同样地，还有Warner-Orr图、Booch图、对象图以及你能想起的一切。每一个都有自己的强项，以及惟一的一个根本弱点——它不是真正的软件设计。事实上，惟一一个可以被普遍认可的软件设计符号是PDL，而它看起来像什么呢？
+
+这表明，在软件业的共同潜意识中本能地知道，编程技术，特别是实际开发所使用的编程语言的改进和软件行业中任何其他东西相比，具有压倒性的重要性。这还表明，程序员关心的是设计。当出现更加具有表达力的编程语言时，软件开发者就会使用它们。
+
+同样，请考虑一下软件开发过程是如何变化的。从前，我们使用瀑布式过程。现在，我们谈论的是螺旋式开发和快速原型。虽然这种技术常常被认为可以“消除风险” 以及“缩短产品的交付时间”，但是它们事实上也只是为了在软件的生命周期中更早地开始编码。这是好事。这使得构建/测试循环可以更早地开始对设计进行验证和改进。这同样也意味着，顶层软件设计者很有可能也会去进行详细设计。
+
+正如上面所表明的，工程更多的是关于如何去实施过程的，而不是关于最终产品看起来的像什么。处在软件行业中的我们，已经接近工程师的标准，但是我们需要一些认知上的改变。编程和构建/测试循环是工程软件过程的中心。我们需要以像这样的方式去管理它们。构建/测试循环的经济规律，再加上软件系统几乎可以表现任何东西的事实，就使得我们完全不可能找出一种通用的方法来验证软件设计。我们可以改善这个过程，但是我们不能脱离它。
+
+最后一点：任何工程设计项目的目标是一些文档产品。显然，实际设计的文档是最重要的，但是它们并非惟一要产生的文档。最终，会期望某些人来使用软件。同样，系统很可能也需要后续的修改和增强。这意味着，和硬件项目一样，辅助文档对于软件项目具有同样的重要性。虽然暂时忽略了用户手册、安装指南以及其他一些和设计过程没有直接联系的文档，但是仍然有两个重要的需求需要使用辅助设计文档来解决。
+
+辅助文档的第一个用途是从问题空间中捕获重要的信息，这些信息是不能直接在设计中使用的。软件设计需要创造一些软件概念来对问题空间中的概念进行建模。这个过程需要我们得出一个对问题空间中概念的理解。通常，这个理解中会包含一些最后不会被直接建模到软件空间中的信息，但是这些信息却仍然有助于设计者确定什么是本质概念以及如何最好地对它们建模。这些信息应该被记录在某处，以防以后要去更改模型。
+
+对辅助文档的第二个重要需要是对设计的某些方面的内容进行记录，而这些方面的内容是难以直接从设计本身中提取的。它们既可以是高层方面的内容，也可以是低层方面内容。对于这些方面内容中的许多来说，图形是最好的描述方式。这就使得它们难以作为注释包含在代码中。这并不是说要用图形化的软件设计符号代替编程语言。这和用一些文本描述来对硬件科目的图形化设计文档进行补充没有什么区别。
+
+决不要忘记，是源代码决定了实际设计的真实样子，而不是辅助文档。在理想情况下，可以使用软件工具对源代码进行后期处理并产生出辅助文档。对于这一点，我们可能期望过高了。次一点的情况是，程序员（或者技术方面的编写者）可以使用一些工具从源代码中提取出一些特定的信息，然后可以把这些信息以其他一些方式文档化。毫无疑问，手工对这种文档保持更新是困难的。这是另外一个支持需要更具表达力的编程语言的理由。同样，这也是一个支持使这种辅助文档保持最小并且尽可能在项目晚期才使之变成正式的理由。同样，我们可以使用一些好的工具；不然的话，我们就得求助于铅笔、纸以及黑板。
+
+总结如下：
+实际的软件运行于计算机之中。它是存储在某种磁介质中的0和1的序列。它不是使用C++语言（或者其他任何编程语言）编写的程序。
+程序清单是代表软件设计的文档。实际上把软件设计构建出来的是编译器和连接器。
+构建实际软件设计的廉价程度是令人难以置信的，并且它始终随着计算机速度的加快而变得更加廉价。
+设计实际软件的昂贵程度是令人难以置信的，之所以如此，是因为软件的复杂性是令人难以置信的，并且软件项目的几乎所有步骤都是设计过程的一部分。
+编程是一种设计活动——好的软件设计过程认可这一点，并且在编码显得有意义时，就会毫不犹豫的去编码。
+编码要比我们所认为的更频繁地显现出它的意义。通常，在代码中表现设计的过程会揭示出一些疏漏以及额外的设计需要。这发生的越早，设计就会越好。
+因为软件构建起来非常廉价，所以正规的工程验证方法在实际的软件开发中没有多大用处。仅仅建造设计并测试它要比试图去证明它更简单、更廉价。
+测试和调试是设计活动——对于软件来说，它们就相当于其他工程学科中的设计验证和改进过程。好的软件设计过程认可这一点，并且不会试图去减少这些步骤。
+还有一些其他的设计活动——称它们为高层设计、模块设计、结构设计、构架设计或者诸如此类的东西。好的软件设计过程认可这一点，并且慎重地包含这些步骤。
+所有的设计活动都是相互影响的。好的软件设计过程认可这一点，并且当不同的设计步骤显示出有必要时，它会允许设计改变，有时甚至是根本上的改变，
+许多不同的软件设计符号可能是有用的——它们可以作为辅助文档以及工具来帮助简化设计过程。它们不是软件设计。
+软件开发仍然还是一门工艺，而不是一个工程学科。主要是因为缺乏验证和改善设计的关键过程中所需的严格性。
+最后，软件开发的真正进步依赖于编程技术的进步，而这又意味着编程语言的进步。C++就是这样的一个进步。它已经取得了爆炸式的流行，因为它是一门直接支持更好的软件设计的主流编程语言。
+C++在正确的方向上迈出了一步，但是还需要更大的进步。</blockquote>
+
+
+<blockquote><strong>后 记</strong>
+
+当我回顾几乎10年前所写的东西时，有几点让我印象深刻。第一点（也是和本书最有关的）是，现今，我甚至比那时更加确信我试图去阐述的要点在本质上的正确性。随后的一些年中，许多流行的软件开发方法增强了其中的许多观点，这支持了我的信念。最明显的（或许也是最不重要的）是面向对象编程语言的流行。现在，除了C++外，出现了许多其他的面向对象编程语言。另外，还有一些面向对象设计符号，比如：UML。我关于面向对象语言之所以得到流行是因为它们允许在代码中直接表现出更具表达力的设计的论点，现在看来有点过时了。
+
+重构的概念——重新组织代码基础，使之更加健壮和可重用——同样也和我的关于设计的所有方面的内容都应该是灵活的并且在验证设计时允许改变的论点相似。重构只是提供了一个过程以及一组如何去改善已经被证实具有缺陷的设计的准则。
+
+最后，文中有一个敏捷开发的总的概念。虽然极限编程是这些新方法中最知名的一个，但是它们都具有一个共同点：它们都承认源代码是软件开发工作中的最重要的产品。
+
+另一方面，有一些观点——其中的一些我在论文中略微谈到过——在随后的一些年中，对我来说变得更加重要。第一个是构架，或者顶层设计的重要性。在论文中，我认为构架只是设计的一部分内容，并且在构建/测试循环对设计进行验证的过程中，构架需要保持可变。这在本质上是正确的，但是回想起来，我认为我的想法有点不成熟。虽然构建/测试循环可能揭示出构架中的问题，但是更多的问题是常常由于改变需求而表现出来的。 一般来说，设计软件是困难的，并且新的编程语言，比如：Java或者C++，以及图形化的符号，比如：UML，对于不知道如何有效地使用它的人来说，都没有多大的帮助。此外，一旦一个项目基于一个构架构建了大量的代码，那么对该构架进行基础性的更改，常常相当于丢弃掉该项目并重新开始一个，这就意味着该项目没有出现过。即使项目和机构在根本上接受了重构的概念，但是他们通常仍然不愿意去做一些看起来就像是完全重写的事情。这意味着第一次就把它作对（或者至少是接近对）是重要的，并且项目变得越大，就越要如此。幸运的是，软件设计模式有助于解决这方面问题。
+
+还有其他一些方面的内容，我认为需要更多地强调一下，其中之一就是辅助文档，尤其是构架方面的文档。虽然源代码就是设计，但是试图从源代码中得出构架，可能是一个令人畏惧的体验。在论文中，我希望能够出现一些软件工具来帮助软件开发者自动地维护来自源代码的辅助文档。我几乎已经放弃了这个希望。一个好的面向对象构架通常可以使用几幅图以及少许的十几页文本描述出来。不过，这些图（和文本）必须集中于设计中的关键类和关系。糟糕的是，对于软件设计工具可能会变得足够聪明，以至于可以从源代码的大量细节中提取出这些重要方面的内容这一点，我没有看到任何真正的希望。这意味着还得必须由人来编写和维护这种文档。我仍然认为，在源代码完成后，或者至少是在编写源代码的同时去编文档，要比在编写源代码之前去编写文档更好一些。
+
+最后，我在论文的最后谈到了C++是编程——并且因此是软件设计——艺术的一个进步，但是还需要更大的进步。就算我完全没有看到语言中出现任何真正的编程进步来挑战C++的流行，那么在今天，我会认为这一点甚至要比我首次编写它时更加正确。
+
+——Jack Reeves, 2002年1月1日</blockquote>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/14/encoding/">你的网站还在用GB2312?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-14T00:00:00+08:00" pubdate data-updated="true">Nov 14<span>th</span>, 2008</time>
+        
+         | <a href="/blog/2008/11/14/encoding/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近朋友在导入数据数据的时候出现了很多的方块，显然这是一个编码错误的问题。</p>
+
+<p>这让我想起目前国内网站的一些情况，国内山寨网挺多，基本上站还都是使用GB2312作为默认编码，GB2312，看名字就很有中国特色，不过，像这种基础设置，还是不要做山寨版的好。全球是一家&#8211;地球村！当前UTF-8很好很强大。</p>
+
+<p>UTF-8现在是主流的宽字符集的解决方案，不仅是网站，现在很多源码，文本，xml等都使用UTF-8作为默认编码。</p>
+
+<p>在使用 UTF-8 时需要注意的是 BOM : Byte Order Mark</p>
+
+<p>UTF-8 BOM又叫UTF-8 签名,其实UTF-8 的BOM对UFT-8没有作用,是为了支援UTF-16,UTF-32才加上的BOM,BOM签名的意思就是告诉编辑器当前文件采用何种编码,方便编辑器 识别,但是BOM虽然在编辑器中不显示,但是会产生输出,就像多了一个空行</p>
+
+<p>我们在编辑UTF-8文件时，需要用用现代的，高效的编辑器来coding，如VIM, Notepad++等。至于Windows自带的notepad 当便签还行，干活就免了吧。</p>
+
+<p>另外在网页的meta信息中也要制定UTF-8作为编码。</p>
+
+<p>BTW：有些黄色网站的编码都用UTF-8了，不过他的meta却写着GB2312，防BOT or GFW</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/07/install-centos-linux-via-http/">局域网安装CentOS Linux</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-07T00:00:00+08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
+        
+         | <a href="/blog/2008/11/07/install-centos-linux-via-http/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>简介</strong></p>
+
+<p>这个星球上Linux发行版的老大哥目前还是Redhat。所以用Redhat做服务器端的操作系统，虽不说是最好，也算是更好的选择了。现在Redhat AS版本收费啦，咱们自个儿用就选<a href="http://www.centos.org" target="_blank">CentOS</a>吧，根正苗红。根据我自己的实际情况来介绍一下在没有光驱和网络启动芯片时通过局域网来安装CentOS。准确的来说是用Grub启动后用HTTP方式安装。</p>
+
+<p><strong>安装环境介绍</strong></p>
+
+<p><strong>服务器端介绍</strong>
+操作系统: <a href="http://www.ubuntu.com" target="_blank">ubuntu-8.10</a>
+Web Server: <a href="http://www.lighttpd.net" target="_blank">lighttpd-1.4.19</a>
+IP: 192.168.1.200</p>
+
+<p><strong>客户端介绍</strong>
+原有操作系统: ubuntu-8.04
+gurb 启动</p>
+
+<p><strong>安装前的准备</strong>
+首先我们需要客户端的启动文件 vmlinuz initrd.img 这两个文件可以在CentOS网站下载CentOS-netinstall.iso 里面的启动文件是最佳选择。
+然后准备CentOS安装文件，我选择的是dvd版的iso，这样可以节省很多更换光盘的步骤。</p>
+
+<p>挂载iso文件,为了减少访问权限相关的限制，我把目录挂载到/tmp/centos上。
+<code></p>
+
+<h1>mount -o loop /path/of/dvd.iso /tmp/centos</h1>
+
+<p></code>
+建立到web server目录的链接，我的默认路径是 /var/www
+<code></p>
+
+<h1>ln -s /tmp/centos /var/www/centos</h1>
+
+<p></code>
+做好以上步骤后在浏览器中检查是否能访问<code>http://localhost/centos</code>如果可以的话，服务器端的准备工作就做完了</p>
+
+<p><strong>客户端</strong>
+将启动文件 vmlinuz initrd.img 传送到客户端 /boot 目录下
+编辑 /boot/grub/menu.lst
+<code>
+title        CentOS
+root        hda(0,0)
+kernel     /boot/vmlinuz
+initrd      /boot/initrd.img
+</code>
+客户端准备工作就做好了，reboot</p>
+
+<p>安装并配置系统
+这些事情实在没有想说的兴趣了，手册上写的清清楚楚。在设置web site时，只要填写ip而不需要协议头http://，CentOS directory 填 /centos 其实也就是dvd的根目录，安装系统相关的文件都在那里。</p>
+
+<p>总结：</p>
+
+<p>Linux 的生命力的确很顽强，有各种各样的安装方法，然而最关键的就是<em>客户端如何启动以及安装源的位置</em>，因为我原有Linux系统并且使用grub启动，而且又有另外一台机器作为web server所以选择这种方式来安装。</p>
+
+<p>如果客户端是windows的话，需要安装一个grub4dos。</p>
+
+<p>btw: 其实Windows也可以通过网络安装，也很简单。我们追捧Linux的时候，也应该正视Windows今天的成就。相互学习才会有进步。Windows一直在改进！</p>
+
+<p>完</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/06/dotnet-globalization/">.Net 全球通用应用程序开发(一)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-06T00:00:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2008</time>
+        
+         | <a href="/blog/2008/11/06/dotnet-globalization/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>开发全球化的软件，毫无疑问，Microsoft是很有发言权的。在.NET环境中我们如何开发全球化的软件呢？首先来看看一些来自MSDN的建议，自己在这些建议中加上自己的理解。
+<a href="http://msdn.microsoft.com/zh-cn/library/w7x1y988.aspx" target="_blank">http://msdn.microsoft.com/zh-cn/library/w7x1y988.aspx</a></p>
+
+<p><strong> 全球化最佳做法</strong></p>
+
+<p>   1.  在内部使应用程序代码成为 Unicode。
+<em style="color:#996633">【Daniel】现在很多程序都使用UTF-8来编码，程序体积的增大已经不能构成什么影响了。</em></p>
+
+<p>   2.  使用 System.Globalization 命名空间提供的区域性识别类来操作和格式化数据。
+          * 对于排序，使用 SortKey 类和 CompareInfo 类。
+          * 对于字符串比较，使用 CompareInfo 类。
+          * 对于日期和时间格式化，使用 DateTimeFormatInfo 类。
+          <em> 对于数字格式化，使用 NumberFormatInfo 类。
+          </em> 对于公历和非公历，使用 Calendar 类或特定的 Calendar 实现之一。
+<em style="color:#996633">【Daniel】全球化带来的问题就是文化相关的冲突，如日历，日期显示的格式，钱币的符号，数字的格式化等。所以对这些文化相关的资源进行操作时就要使用上面提到的特有的操作。</em></p>
+
+<p>   3.   在适当的情况下，使用 System.Globalization.CultureInfo 类提供的区域性属性设置。使用 CultureInfo.CurrentCulture 属性来执行格式化任务，如日期和时间或数字的格式化。使用 CultureInfo.CurrentUICulture 属性来检索资源。请注意，CurrentCulture 和 CurrentUICulture 属性可以基于每个线程来设置。</p>
+
+<p>   4.   通过使用 System.Text 命名空间中的编码类，使应用程序能够与各种编码相互进行数据读写。不要采用 ASCII 数据。假定在用户可以输入文本的任何位置都将提供国际字符。例如，在服务器名、目录、文件名、用户名和 URL 中接受国际字符。
+<em style="color:#996633">【Daniel】ASCII 已经过时啦，UTF-8是向下兼容的。</em></p>
+
+<p>   5.   使用 UTF8Encoding 类时，出于安全原因，建议您使用此类提供的错误检测功能。要打开错误检测功能，请使用带有 throwOnInvalidBytes 参数的构造函数创建该类的实例，并将 throwOnInvalidBytes 的值设置为 true。
+<em style="color:#996633">【Daniel】UTF-8也有BOM和非BOM之分。</em></p>
+
+<p>   6.    尽可能将字符串按整个字符串处理，而不是按一系列个别字符处理。这在排序或搜索子字符串时尤为重要。这可以防止与分析组合字符有关的问题。</p>
+
+<p>   7.    使用 System.Drawing 命名空间提供的类来显示文本。
+<em style="color:#996633">【Daniel】用Drawing的方式就不存在字符显示的问题了。</em></p>
+
+<p>   8.    为保持操作系统间的一致性，不要允许用户设置重写 CultureInfo。使用接受 useUserOverride 参数的 CultureInfo 构造函数，并将该参数设置为 false。</p>
+
+<p>   9.    在国际操作系统版本上使用国际数据来测试应用程序功能。
+<em style="color:#996633">【Daniel】也就是用模拟真实环境来进行测试。</em></p>
+
+<p>  10.    如果安全决策基于字符串比较或大小写更改操作的结果，请通过显式指定 CultureInfo.InvariantCulture 属性来执行不区分区域性的操作。这种做法确保结果不会受 CultureInfo.CurrentCulture 的值的影响。有关说明不区分区域性的字符串比较如何产生不一致结果的示例，请参见自定义大小写映射和排序规则。</p>
+
+<p><strong> 本地化最佳做法</strong></p>
+
+<p>   1.  将所有可本地化的资源移动到单独的纯资源 DLL 中。可本地化的资源包括用户界面元素，如字符串、错误信息、对话框、菜单以及嵌入的对象资源。
+<em style="color:#996633">【Daniel】模块化。</em></p>
+
+<p>   2.  不要对字符串或用户界面资源进行硬编码。
+<em style="color:#996633">【Daniel】硬编码是一时之爽，高潮过后，随之而来的是生孩子的痛苦。</em></p>
+
+<p>   3.  不要将不可本地化的资源放在纯资源 DLL 中。否则会使翻译人员产生困惑。
+<em style="color:#996633">【Daniel】于人方便就是于己方便。</em></p>
+
+<p>   4.  不要使用在运行时从串联词组生成的复合字符串。复合字符串难以本地化，因为它们往往采用英语语法顺序，而此顺序并不适用于所有语言。
+<em style="color:#996633">【Daniel】带来的是界面显示的问题，本来界面上字符的位置和大小是固定的，如果动态生成的组合词，翻译后位置和大小发生变化咋办？</em></p>
+
+<p>   5.  避免不明确的构造，如“Empty Folder”，因为根据字符串组成部分的语法规则，这些字符串可能产生不同的翻译。例如，“empty”既可以是一个动词，也可以是一个形容词，因此在诸如意大利语或法语等语言中就可能导致不同的翻译。
+<em style="color:#996633">【Daniel】用词要精确，专业精神。</em></p>
+
+<p>   6.  避免在应用程序中使用包含文本的图像和图标。本地化这些图像和图标的成本是很大的。</p>
+
+<p>   7.  允许在用户界面中为字符串长度的扩展保留足够的空间。在某些语言中，词组可能另外需要百分之五十到百分之七十五的空间。
+<em style="color:#996633">【Daniel】未雨绸缪。</em></p>
+
+<p>   8.  使用 System.Resources.ResourceManager 类来根据区域性检索资源。</p>
+
+<p>   9.  使用 Microsoft Visual Studio 2005 创建 Windows 窗体对话框，以便可以使用 Windows 窗体资源编辑器 (Winres.exe) 对它们进行本地化。不要对 Windows 窗体对话框进行手动编码。</p>
+
+<p>  10. 安排进行专业本地化工作（翻译）。</p>
+
+<p>  11. 有关创建并本地化资源的完整说明，请参见“应用程序中的资源”。</p>
+
+<p> <strong>ASP.NET 应用程序的全球化最佳做法</strong></p>
+
+<p>   1.  在应用程序中显式设置 CurrentUICulture 和 CurrentCulture 属性。不要依赖于默认设置。</p>
+
+<p>   2.  请注意，ASP.NET 应用程序是托管应用程序，因此可以使用与其他托管应用程序相同的类，以根据区域性检索、显示和操作信息。</p>
+
+<p>   3.  注意在 ASP.NET 中可以指定以下三种编码类型：
+          <em>  requestEncoding 指定从客户端浏览器接收的编码。
+          </em>  responseEncoding 指定要发送到客户端浏览器的编码。在大多数情形下，这应与 requestEncoding 是相同的。
+          *  fileEncoding 指定用于 .aspx、.asmx 和 .asax 文件分析的默认编码。</p>
+
+<p>   4.  在 ASP.NET 应用程序中的以下三个位置指定 requestEncoding、responseEncoding、fileEncoding、culture 和 uiCulture 属性的值：
+          <em>  在 Web.config 文件的全球化一节中。此文件是 ASP.NET 应用程序的外部文件。有关更多信息，请参见 &lt;globalization&gt; 元素。
+          </em>  在页面指令中。请注意，当应用程序在页面中时，文件已经被读取。因此，指定 fileEncoding 和 requestEncoding 为时已晚。只有 uiCulture、Culture 和 responseEncoding 可以在页面指令中指定。
+          *  在应用程序代码中以编程方式指定。该设置可能随请求的不同而不同。同页面指令一样，到打开应用程序代码时，指定 fileEncoding 和 requestEncoding 为时已晚。只有 uiCulture、Culture 和 responseEncoding 可以在应用程序代码中指定。</p>
+
+<p>   5.  请注意，uiCulture 可以设置为浏览器接受语言。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/04/130km-day/">130Km-day</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-04T00:00:00+08:00" pubdate data-updated="true">Nov 4<span>th</span>, 2008</time>
+        
+         | <a href="/blog/2008/11/04/130km-day/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>缘起</strong></p>
+
+<p>徐家汇到金山城市沙滩, 在MSN上吼了一声，周末去哪里玩？除了老马积极响应外，其他人都告知周末闭门不出，谓之养身。自从十一假期回来，大家好像都很累的样子，都过了2周都还没休息够。</p>
+
+<p><strong>距离</strong></p>
+
+<p>这一天的行程总计130Km，自从有了码表以后，自行车出行的里程就精确的记录了下来。虽然中间几次误操作把当前的里程给清零了，不过还好带了个烂笔头，把每次清零前的记录保留了下来。到家以后，算了个加法于是乎约等于130km/day.</p>
+
+<p><strong>速度</strong></p>
+
+<p>最高时速41km/h，在沪杭公路上，路不是很宽，但是感觉很好。自己实在是忍不住想狂飙的冲动，也好释放一下自己的能量。瞬间自行车的速度就上到了41km/h，不过这个速度没保持到一分钟就下来了，后来几次再飚也没能上去。</p>
+
+<p>自行车也超速行驶。在途中的一座桥上，下坡的时候看到了限速牌，上写着35km/h。而此时我的码表显示在 37km/h左右，嘿嘿，还好交警此时不在附近，不然要开罚单了。</p>
+
+<p><strong>好日子</strong></p>
+
+<p>一路上遇到好几对新人，所以今天是一个好日子，如果不是好日子，干嘛那么多人结婚啊！:) 恭喜他们！</p>
+
+<p><strong>海水</strong></p>
+
+<p>闷头一直骑车，只要遇到桥，或者上坡我都冲刺上去，其实如果不冲刺上去，更辛苦。在进入金山以后又遇到一座桥，当然继续冲刺，当冲刺到桥顶时，眼前一片豁然开朗。宽阔的杭州湾，远处的2座小岛。也许是长时间的压抑，胸中像长舒了一口气一般。下了桥以后，在岸边停下，爬上堤坝。这里的海水是黄色的，水草、垃圾不时的被海水推向岸边。对蓝蓝大海的向往一下子没了。</p>
+
+<p>进入金山城市沙滩以后的海水就不同了，蓝蓝的，很清澈，呵呵，这里是被圈养的过滤过的海水！那的确是海水，因为它是咸的。抵挡不住海水的诱惑，我卷起裤脚就冲进了大海的怀抱。水比较凉。在水中一度的怀疑自己是不是在海水里，因为怎么看都像是在游泳池中，为了解除自己心中的疑惑，趁别人不注意，假装洗脸，趁机尝了一下！果然是海水。</p>
+
+<p>老马由于在青岛的海里泡过，就没有我这般的兴奋，懒懒的躺在沙滩旁边的草地上养神。</p>
+
+<p><strong>黑夜</strong></p>
+
+<p>4点半从金山城市沙滩出发，开始踏上回家的路。走到半程的时候，天已经黑了下来。和上次从朱家角回来时沪清平公路上路灯尽亮不同，路上有两段乌漆吗黑的路，汽车，自行车，电动车，行人，还有该死的拖拉机，让这两段路充满了紧张刺激。看来以后要安装车灯了。</p>
+
+<p><strong>收获</strong></p>
+
+<p>这次出行，装备还算齐全，至少有了眼镜和腰包。正是因为带了一个墨镜，等回到家中时，老婆发现我有些异样，眼睛周围是白的，而周围全黑了。:( 整了一个反熊猫眼，还好不是很严重，不然上班时羞于见人啊。另外的一个收获就是浑身的酸痛了。嘿嘿，这个才是我真正想要的。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/10/29/the-c-library/">The C Library</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-29T00:00:00+08:00" pubdate data-updated="true">Oct 29<span>th</span>, 2008</time>
+        
+         | <a href="/blog/2008/10/29/the-c-library/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>当我们学完C语言之后却发现不能用C语言写点什么东西。这种错觉严重的阻碍了大家在C语言道路上前进的步伐。和Java ，C# 一样C语言也有丰富的类库，而且都是经过了时间的考验。下面贴一些比较常用的开源C Library。</p>
+
+<p><strong>libc</strong>
+<a href="http://www.gnu.org/software/libc/libc.html" target="_blank">Home Page
+</a></p>
+
+<p>GNU C Library is one of the most important components of the GNU Hurd and most modern GNU/Linux distributions. It is used by almost all C programs and provides the most essential program interface.</p>
+
+<p><strong>Libstrfunc</strong>
+<a href="http://sourceforge.net/project/showfiles.php?group_id=16501" target="_blank">Home Page</a></p>
+
+<p>Handy library for manipulating strings, string arrays, buffers, CGI forms, configuration files, textual templates, regular expressions, date/time parsing, et cetera. It handles base64, quoted-printable, url_encode, mime-words and other encoded data.</p>
+
+<p><strong>Libcurl</strong>
+<a href="http://curl.haxx.se/libcurl/" target="_blank">Home Page</a></p>
+
+<p>&#8216;libcurl&#8217; client-side URL transfer library, supporting FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE and LDAP. It also supports HTTPS certificates, HTTP POST, HTTP PUT, FTP uploading, kerberos, HTTP form based upload, proxies, cookies, user+password authentication, file transfer resume, and http proxy tunneling, and has bindings for 21 languages.</p>
+
+<p><strong>Libxml2</strong>
+<a href="http://xmlsoft.org/" target="_blank">Home Page</a></p>
+
+<p>Libxml is the XML C library developed for the Gnome project. The library code is portable and modular; most of the extensions can be compiled out. Libxml implements a number of existing standards related to markup languages, including the XML standard, Namespaces in XML, XML Base, RFC 2396, XPath, XPointer, HTML4, XInclude, SGML Catalogs, and XML Catalogs.</p>
+
+<p>In most cases, libxml tries to implement the specifications in a relatively strict way. To some extent, it provides support for the following specifications, but doesn&#8217;t claim to implement them: DOM, FTP client, HTTP client, SAX, and DocBook SGML. Support for W3C XML Schemas is in progress.</p>
+
+<p><strong>netwib</strong>
+<a href="http://www.laurentconstantin.com/en/netw/netwib/" target="_blank">Home Page</a></p>
+
+<p>Netwib is a network library for administrators and hackers. Its objective is to let programmers easily create network programs. This library provides features for Ethernet, IP, UDP, TCP, ICMP, ARP, and RARP protocols. It supports spoofing, sniffing, client, and server creation. Furthermore, netwib contains high level functions dealing with data handling.</p>
+
+<p>This packages was formerly known as &#8216;lcrzo.&#8217;</p>
+
+<p><strong>Apache Portable Runtime (APR) project</strong>
+<a href="http://apr.apache.org/" target="_blank">Home Page</a></p>
+
+<p>The mission of the Apache Portable Runtime (APR) project is to create and maintain software libraries that provide a predictable and consistent interface to underlying platform-specific implementations.  The primary goal is to provide an API to which software developers may code and be assured of predictable if not identical behaviour regardless of the platform on which their software is built, relieving them of the need to code special-case conditions to work around or take advantage of platform-specific deficiencies or features.</p>
+
+<p>btw: Subversion 就是使用 APR 作为底层库的</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/10/28/moerdinglv/">摩尔定律</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-28T00:00:00+08:00" pubdate data-updated="true">Oct 28<span>th</span>, 2008</time>
+        
+         | <a href="/blog/2008/10/28/moerdinglv/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>托摩尔定律的福，如今的PC硬件实在是便宜啊！一般主流的PC也就是3-4k。我们这个价格拿到其它产品上去试试：</p>
+
+<p>一个单反相机，最低也要4k+</p>
+
+<p>一个智能手机，也不便宜2-4k+，比较下体积和功能，除了能打电话哪一点强过PC?</p>
+
+<p>所以嘛有钱还是买个PC玩，超级适合宅男！</p>
+
+<p>以上这些也是就是随便感慨一下，别太过认真的去比较。电子产品始终是消费品，就是图一个新鲜劲。过了瘾就完了。PC 可是我吃饭的家伙！</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/10/24/bruce-lee/">Bruce Lee</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-24T00:00:00+08:00" pubdate data-updated="true">Oct 24<span>th</span>, 2008</time>
+        
+         | <a href="/blog/2008/10/24/bruce-lee/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Bruce Lee （李振藩） 一直都是我的偶像。曾经认真的追随过他，却也忘记他很久了。现在央视热播的《李小龙传奇》又唤醒了自己。</p>
+
+<p>下面是一段采访 Bruce Lee （李振藩）的视频。让他亲自来介绍他的武学，哲学。</p>
+
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="425" height="344" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="allowFullScreen" value="true" /><param name="src" value="http://www.youtube.com/v/uXOtmhA6Nvw&amp;hl=zh_CN&amp;fs=1" /><embed type="application/x-shockwave-flash" width="425" height="344" src="http://www.youtube.com/v/uXOtmhA6Nvw&amp;hl=zh_CN&amp;fs=1" allowfullscreen="true"></embed></object>
+
+
+
+
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="425" height="344" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="allowFullScreen" value="true" /><param name="src" value="http://www.youtube.com/v/RRdTJi0v3fQ&amp;hl=zh_CN&amp;fs=1" /><embed type="application/x-shockwave-flash" width="425" height="344" src="http://www.youtube.com/v/RRdTJi0v3fQ&amp;hl=zh_CN&amp;fs=1" allowfullscreen="true"></embed></object>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/10/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/8/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>理解Drupal模块之Google - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="Google 是居家旅行、工作学习必备之搜索引擎，而且Google还可以给我们的网站带来收入。请看我细细道来： Google的爬虫自不用说，不知道哪天就过来爬了你的网站，可这太依赖于运气，我们需要主动一点，向Google提交我们的网站信息帮助Google更好的索引我们的网站内容(?_? &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2009/12/02/understand-the-google-module-drupal-modules">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">理解Drupal模块之Google</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-02T00:00:00+08:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2009</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Google 是居家旅行、工作学习必备之搜索引擎，而且Google还可以给我们的网站带来收入。请看我细细道来：</p>
+
+<p>Google的爬虫自不用说，不知道哪天就过来爬了你的网站，可这太依赖于运气，我们需要主动一点，向Google提交我们的网站信息帮助Google更好的索引我们的网站内容(?_? 咋就那么心甘情愿的交给Google呢)。同样Google为了方便我们提交资料，搞了个叫Sitemap的东西作为所有提交资料的规范格式。如此一说，我们对Drupal相关模块需求就了解了，我们需要一个能自动生成网站Sitemap的模块来供Google爬虫享用。</p>
+
+<p>在Drupal模块页搜索&#8221;sitemap&#8221;， 首先映入眼帘的就是我们需要的那个啦 :-) 。下载、上传、启用模块不用罗嗦。Drupal Sitemap　模块中有５个功能，其中　Sitemap　是核心功能，必须滴！剩下的在仔细阅读说明后酌情启用！在<a href="http://www.51xna.com/" target="_blank">51xna.com</a>我启用了　XML sitemap engines　和　XML sitemap node　两个功能。这两个功能的用法还是蛮简单的，仔细阅读说明即可。</p>
+
+<p>我们网站的资料都交给Google了，那么怎么知道网站都有哪些人来访问呢？这个问题Google也有解决方案，Google Analytics，顾名思义就是用来分析网站访问者的，如访问者的来源地、使用的浏览器、操作系统、访问页面、停留时间等等。</p>
+
+<p>Drupal也有相关的模块来满足我们的这个需要，再次到Drupal模块页搜索“Analytics”，然后。。。（省略若干苦力活）在设置页面填上Google Analytics的帐号即可，其他的设置仔细阅读说明酌情操作。</p>
+
+<p>最后，我们要从Google那里弄点米米养小站了。题外话，你该不是真的以为Google就是一个搜索引擎吧？其实Google是一广告机器，详细点说Google是一个跟广告有关的赚钱机器。Google Adsense 就是这部机器的关键部件之一。我们在Google Adsense上申请个账户，然后在自己的网站上提供广告位，然后Google利用你提供的广告位放广告，如果有人点击这些广告位上的广告，Google就按照专门的计算方式来给你分成，注意啦，分的是$美元。所以弄个Adsense的模块放在网站上是有必要的。</p>
+
+<p>Drupal那里也有Google Adsense的相关模块（真的是要什么有什么:-)）</p>
+
+<p>Adsense模块的功能还挺多，有7个。AdSense core 这个是核心模块必须启用，Managed ads 管理广告滴，负责显示广告区块的后面详述，其他的功能带 old 的说明是不推荐使用的。</p>
+
+<p>进入到 首页 › 管理 › 站点设置 › AdSense 有一个Publish ID，这是用来输入Google Adsense帐号的，必须滴！现在用 Managed ads 来管理广告啦。在 首页 › 管理 › 站点设置 › AdSense 中设置 Adsense Blocks，这里输入一个正整数，用来表示你准备在页面上放多少个广告位的，先设置一个练练手。这时在 首页 › 管理 › 站点构建 › 区块 中就可以看到一个AdSense: unconfigured 0 的待设置的区块，在配置选项中配置好相应的设置以后，把这个区块放到某个地方，保存收工！</p>
+
+<p>现在网站就变成了自动提交资料到Google等搜索引擎、可分析网站访问信息、以及放置广告位收费半赚钱的机器了，那一半呢？当然是网站内容和用户来贡献的咯！</p>
+
+<p>最后来句广告：<a href="http://www.tairan.net/">tairan.net</a>也放置了Google Adsense广告位！</p>
+
+<p>EOF</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-02T00:00:00+08:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2009</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tairan.github.com/blog/2009/12/02/understand-the-google-module-drupal-modules/" data-via="" data-counturl="http://tairan.github.com/blog/2009/12/02/understand-the-google-module-drupal-modules/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/11/30/understand-the-book-module-drupal-modules/" title="Previous Post: 理解Drupal模块之Book">&laquo; 理解Drupal模块之Book</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/12/15/guo-jin-min-tui/" title="Next Post: 国进民退">国进民退 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

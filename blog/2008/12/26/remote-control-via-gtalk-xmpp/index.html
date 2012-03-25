@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Remote Control via GTalk (XMPP) - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="想远程控制家里的电脑？却因IP地址动态分配(花生壳可以解决)，远程连接速度慢，机器暴露在外网怕不安全，等种种原因无法理想的实现。 现在我们就另辟蹊径使用Gtalk来远程控制家里的电脑 基本思路如下
+Gtalk基于XMPP这个开放的协议。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2008/12/26/remote-control-via-gtalk-xmpp">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Remote Control via GTalk (XMPP)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-26T00:00:00+08:00" pubdate data-updated="true">Dec 26<span>th</span>, 2008</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>想远程控制家里的电脑？却因IP地址动态分配(花生壳可以解决)，远程连接速度慢，机器暴露在外网怕不安全，等种种原因无法理想的实现。</p>
+
+<p>现在我们就另辟蹊径使用Gtalk来远程控制家里的电脑</p>
+
+<p>基本思路如下
+Gtalk基于XMPP这个开放的协议。那么我们也基于XMPP协议开发一个客户端就可以和Gtalk进行通讯，可以发送和接收来自Gtalk的消息后，再进行扩展，做成一个shell(命令解释器)。当我们用Gtalk给客户端发送消息后，客户端接收消息进行解释并处理。这样就完成了远程控制的家里电脑的任务。</p>
+
+<p>具体实现
+本人才采用的是.NET技术，使用agsXMPP这个开源的封装了XMPP协议的类库。我们基于这个类库就可以和Gtalk通讯了。
+下面附上源码，这里只是实现使用Gtalk发送消息，客户端接收到消息后自动将接收的消息再发送回去。</p>
+
+<pre lang="csharp">
+using System;
+
+using agsXMPP;
+using agsXMPP.protocol.client;
+
+namespace XMPPClient
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            XmppClientConnection xmpp = new XmppClientConnection();
+
+            xmpp.Server = "gmail.com";
+            xmpp.Username = "your_username";
+            xmpp.Password = "your_password";
+            xmpp.ConnectServer = "talk.google.com";
+            xmpp.SocketConnectionType = agsXMPP.net.SocketConnectionType.Direct;
+            xmpp.ClientVersion = "1.0";
+            xmpp.AutoRoster = true;
+
+            xmpp.Open();
+
+            Console.WriteLine("connected.");
+
+            xmpp.Show = agsXMPP.protocol.client.ShowType.away;
+            xmpp.OnLogin += new ObjectHandler(xmpp_OnLogin);
+            xmpp.OnMessage += new MessageHandler(xmpp_OnMessage);
+
+            Console.ReadKey();
+        }
+
+        static void xmpp_OnRosterItem(object sender, agsXMPP.protocol.iq.roster.RosterItem item)
+        {
+            Console.WriteLine(string.Format("{0} was found", item.Jid));
+        }
+
+        static void xmpp_OnMessage(object sender, agsXMPP.protocol.client.Message msg)
+        {
+            Message response = new Message();
+            response.To = msg.From;
+            response.Type = MessageType.chat;
+            response.Body = string.Format("{0}", msg.Body);
+            //replay
+            (sender as XmppClientConnection).Send(response);
+        }
+
+        static void xmpp_OnLogin(object sender)
+        {
+            Console.WriteLine(string.Format("{0} login.", (sender as XmppClientConnection).Username));
+        }
+    }
+}
+</pre>
+
+
+<p>后面的工作就是扩展了，既然能够接收到消息，那么再实现一个消息解释器就可以根据发送过来的消息来做一些事情了。理论上我们能控制这台机器上的所有资源！</p>
+
+<p>Note:
+这个想法源自同事(老江)的灵感，他现在正基于此实现远程控制家中的电脑用BT，电驴等方式下载电影，只是他还要把WCF掺和进来一起玩，所以做的比较复杂。我这里化繁为简，只是实现一个可扩展的Shell也是要一番功夫的。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-26T00:00:00+08:00" pubdate data-updated="true">Dec 26<span>th</span>, 2008</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tairan.github.com/blog/2008/12/26/remote-control-via-gtalk-xmpp/" data-via="" data-counturl="http://tairan.github.com/blog/2008/12/26/remote-control-via-gtalk-xmpp/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/12/22/get-faster-gmail/" title="Previous Post: Get faster Gmail">&laquo; Get faster Gmail</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/12/31/when-a-child-is-born/" title="Next Post: When A Child is Born">When A Child is Born &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>记阿里软件开放平台－－淘宝API - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="现在很多的internet站点都开放了API，吸引广大的程序员和有眼光的商人利用host站点的资源来进行扩展开发。这样会带来不少的好处。1. host提供者可以免费的获取广大的资源(有技术能力的人)来为他扩展系统，从而提高host用户的粘度，并且host并需要为此负担更多的风险，还可以更便捷的收购 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2008/09/16/the-api-of-tobao">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">记阿里软件开放平台－－淘宝API</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-16T00:00:00+08:00" pubdate data-updated="true">Sep 16<span>th</span>, 2008</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>现在很多的internet站点都开放了API，吸引广大的程序员和有眼光的商人利用host站点的资源来进行扩展开发。这样会带来不少的好处。<br />1. host提供者可以免费的获取广大的资源(有技术能力的人)来为他扩展系统，从而提高host用户的粘度，并且host并需要为此负担更多的风险，还可以更便捷的收购！<br />2. 寻找更好的创意。俗话说三个臭皮匠顶个诸葛亮，何况隐藏在&#8221;民间“的程序/创意高手不计其数！<br />3. 让草根更容易赚到第一桶金。创业的成本是跟高的，host提供API并共享了庞大的用户群，让一些有能力的个人或小公司得以付出比较少的成本就能将技术转化成生产力！<br /><br />基于以上和更多的诱惑，淘宝网也开放了自己的API。<br /><br />这个中秋节有一半的时间在倒腾这个淘宝的API。<br />首先，阅读文档，这是入门的不二之选。我认为淘宝的文档实在太少，而且文档的发布也不怎么正规。随便找个不不知道是什么身份的人在淘宝的论坛里发个帖子就算是文档的发布了。文档中的示例代码残缺不全，以前看ThinkPHP文档的时候也是这个感觉。<br /><br />阅读文档之后，实现一个demo。我选择的是淘宝的web版本的API，API调用的方式为REST。另外我需要一个虚拟主机用来托管程序，这里我选择了google的 app engine。所以python也就成了我的主要开发语言。<br /><br />在淘宝的文档中介绍了.net,java, php 的示例代码。我选择python来实现其实也并不困难。东西准备的差不多了，我们开始实验下吧。在众多杂乱无章的文档中，我看到了些说明。在开发之前要验证一下淘宝API的有效性。如调用 http://sipdev.alisoft.com/sip/rest?sip_apiname=alisoft.validateUser 则会返回xml格式的数据。内容大致是需要appkey。 就这个URL我折腾了好久阿。win+ie, win+firefox, linux+firefox 几个平台我都尝试访问，可是返回的却始终是ContentLength＝0的东西！而淘宝生产环境的API，http://sipd.alisoft.com/sip/rest?sip_apiname=alisoft.validateUser倒是能时不时的返回几个文档中说的结果。<br /><br />至此只好用淘宝生产环境的API来开发了。<br /><br />使用淘宝API需要生成一个MD5的签名用来认证。生成签名的步骤是，将code，appkey,appname等属性以及其值拼接成一个字符串后用MD5生成一个32位的字符串。我们都知道MD5签名时，内容有任何细微的差别生成的code都不一样。所以拼接这个字符串一定要小心小心再小心，不要多，不要少，注意区分大小写。<br /><br />生成签名后就是通过REST来调用API了。<br /><br />完整使用淘宝API还需要作很多工作，虽然文档比较烂，但总比没有的好。多看看，兴许能捡到什么有用的信息。<br /><br />BTW：我的第一个淘宝认证API调用失败了，最后的erro是签名不正确。如果谁热心愿意帮助我一下，我把代码发过去帮我review一下！谢谢！</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-16T00:00:00+08:00" pubdate data-updated="true">Sep 16<span>th</span>, 2008</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tairan.github.com/blog/2008/09/16/the-api-of-tobao/" data-via="" data-counturl="http://tairan.github.com/blog/2008/09/16/the-api-of-tobao/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/09/09/save-labor/" title="Previous Post: 保存劳动成果">&laquo; 保存劳动成果</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/09/17/strong-support-for-web-standards/" title="Next Post: 强烈支持Web标准">强烈支持Web标准 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

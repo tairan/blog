@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The note of install Hyper-V on Windows 2008 Server - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="Windows 2008 Server 上安装和使用 Hyper-V 笔记 安装 Hyper-V 有几个硬性要求
+1. CPU 支持 Virtualization
+2. 宿主操作系统需要是 64bit 在安装过程中有几个需要注意的地方
+1. 宿主操作系统的Location必须是United &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2009/02/04/the-note-of-install-hyper-v-on-windows-2008-server">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">The Note of Install Hyper-V on Windows 2008 Server</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-04T00:00:00+08:00" pubdate data-updated="true">Feb 4<span>th</span>, 2009</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>Windows 2008 Server 上安装和使用 Hyper-V 笔记</h1>
+
+
+<p>安装 Hyper-V 有几个硬性要求
+1. CPU 支持 Virtualization
+2. 宿主操作系统需要是 64bit</p>
+
+<p>在安装过程中有几个需要注意的地方
+1. 宿主操作系统的Location必须是United States的，否则 Hyper-V Virtual Machine Management Service不能启动
+2. 如果CPU 支持 Virtualization 却不能启动 Guest 操作系统，那么需要检查主板BIOS中是否将 Virtualization 打开，BIOS已经打开也不行的话，那么升级下BIOS就可以了。我的 HP dc5750 就是升级到最新的BIOS才行的</p>
+
+<p>Hyper-V Guest 操作系统的支持
+Hyper-V 和 VPC Server 相比是明确提出支持 Linux 的，可这并不代表所有的 Linux 发行版都能不错的运行在 Hyper-V 上面。下面是 Microsoft 提供的支持 Linux 列表，更多的支持访问 http://www.microsoft.com/windowsserver2008/en/us/hyperv-supported-guest-os.aspx</p>
+
+<pre>
+Linux Distributions (VMs configured with 1 virtual processor only)
+      SUSE Linux Enterprise Server 10 with Service Pack 2 x86 Edition
+      SUSE Linux Enterprise Server 10 with Service Pack 2 x64 Edition
+      SUSE Linux Enterprise Server 10 with Service Pack 1 x86 Edition
+      SUSE Linux Enterprise Server 10 with Service Pack 1 x64 Edition
+</pre>
+
+
+<p>经过多个发行版安装测试，<span style="background-color:yellow">Ubuntu 8.10, Slackware 12.2, CentOS 5 是无法安装的</span>。ArchLinux 倒是可以不错的运行在 Hyper-V 上面。
+安装 Linux 时需要注意的是，网络设备需要使用 <span style="background-color:yellow">Legacy Network Adapter</span></p>
+
+<p>总结
+Hyper-V 比 Virtual PC Server 是一个很大的进步，在实际中使用 Hyper-V 还有很长的路要走，Hyper-V 支持的 Guest 系统都好贵，而且 Hyper-V 本身就只能在一个很贵的 Windows 2008 Server 上使用！还是使用 Linux 作为 Host 划算，而且更自由！</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-04T00:00:00+08:00" pubdate data-updated="true">Feb 4<span>th</span>, 2009</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tairan.github.com/blog/2009/02/04/the-note-of-install-hyper-v-on-windows-2008-server/" data-via="" data-counturl="http://tairan.github.com/blog/2009/02/04/the-note-of-install-hyper-v-on-windows-2008-server/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/01/13/windows-7-beta/" title="Previous Post: Windows-7 beta">&laquo; Windows-7 beta</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/02/13/dont-up-to-date/" title="Next Post: Don't up-to-date">Don't up-to-date &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

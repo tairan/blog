@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>一些关于subversion的记录 - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="强制用户写日志 有两种方法可以防止用户在不写日志的情况下进行提交操作。一种方式只对TortoiseSVN有效，另外一种方法对任何Subversion的客户端都有效，但是需要直接访问服务器。 服务器端的钩子脚本(Hook-script)如果能够直接访问服务器，可以安装一个pre-commit钩子脚本 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2008/07/03/some-notes-of-subversion">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">一些关于subversion的记录</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-03T00:00:00+08:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2008</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2 class="title" style="clear:both;">强制用户写日志</h2>
+
+
+<p>有两种方法可以防止用户在不写日志的情况下进行提交操作。一种方式只对TortoiseSVN有效，另外一种方法对任何Subversion的客户端都有效，但是需要直接访问服务器。</p>
+
+
+<div class="sect2" lang="zh-cn"><div class="titlepage"><div><div><h3 class="title">服务器端的钩子脚本(Hook-script)</h3></div></div></div><p>如果能够直接访问服务器，可以安装一个pre-commit钩子脚本，通过这个脚本可以阻止所有空白日志或者日志太简短的提交操作。</p><p>In the repository folder on the server, there&#8217;s a sub-folder <code class="filename">hooks</code> which contains some example hook scripts you can use. The file <code class="filename">pre-commit.tmpl</code> contains a sample script which will reject commits if no log message is supplied, or the message is too short. The file also contains comments on how to install/use this script. Just follow the instructions in that file.</p><p>除了TortoiseSVN，如果还要同时使用其他的Subversion客户端，推荐使用这种方法。缺点是提交是被服务器端拒绝的，因此用户会看到一个错误消息。客户端无法在提交之前就知道会被拒绝。如果希望在日志的内容达到足够长之前，TortoiseSVN 的 <span class="guibutton">OK</span> 按钮处于无效的状态，请使用下面的方法。</p></div>
+
+
+<div class="sect2" lang="zh-cn"><div class="titlepage"><div><div><h3 class="title">工程(Project)属性</h3></div></div></div><p>TortoiseSVN 使用属性来控制它的一些特性。这其中有一个 <code class="literal">tsvn:logminsize</code> 属性。</p><p>如果给一个文件夹设置了这个属性，在提交对话框里的日志信息达到属性里定义的长度之前，提交对话框的 <span class="guibutton">OK</span> 按钮会处于无效状态。</p><p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;</p><h2 class="title" style="clear:both;">项目设置</h2><div class="figure"><p class="title"><b>图 5.30. 资源管理器属性页，Subversion 页面</b></p><div class="figure-contents"><div><img src="http://www.subversion.org.cn/images/Properties.png" alt="资源管理器属性页，Subversion 页面" /></div></div></div><p><br />有时你可能想得到关于一个文件/目录的更多的细节信息而不仅是一个覆盖的标志。 你能得到Subversion的属性对话框中浏览到的所有信息。只需选择指定文件或目录，然后在文件菜单中选择<span class="guimenu">Windows Menu</span> → <span class="guimenuitem">properties</span>(注意: 这是浏览器提供的标准属性菜单，而不是TortoiseSVN 子菜单的其中之一)。在TortoiseSVN 属性对话框中已经为在Subversion控制下的文件/目录增加新的属性页。在这里你能看到所有的关于选择文件/目录的相关信息。</p><div class="sect2" lang="zh-cn"><div class="titlepage"><div><div><h3 class="title">Subversion 属性</h3></div></div></div><div class="figure"><p class="title"><b>图 5.31. Subversion 属性页</b></p><div class="figure-contents"><div><img src="http://www.subversion.org.cn/images/PropertyList.png" alt="Subversion 属性页" /></div></div></div><p><br /> You can read and set the Subversion properties from the Windows properties dialog, but also from <span class="guimenu">TortoiseSVN</span> → <span class="guimenuitem">properties</span> and within TortoiseSVN&#8217;s status lists, from <span class="guimenu">Context menu</span> → <span class="guimenuitem">properties</span>.</p><p>You can add your own properties, or some properties with a special meaning in Subversion. These begin with <code class="literal">svn:</code>. <code class="literal">svn:externals</code> is such a property; see how to handle externals in <a class="xref" href="http://www.subversion.org.cn/tsvndoc/tsvn-dug-import.html#tsvn-dug-import-4" title="引用的工程">“引用的工程”一节</a>.</p><div class="sect3" lang="zh-cn"><div class="titlepage"><div><div><h4 class="title">svn:keywords</h4></div></div></div><p>Subversion 支持类似 CVS 的关键字扩展，用来在文件中嵌入文件名称和版本信息。当前支持的关键字有：</p><div class="variablelist"><dl><dt><span class="term">$Date$</span></dt><dd><p>已知最后提交的日期。它基于你更新工作副本时获得的信息。它<span class="emphasis"><em>不</em></span>检查版本库查找最新的修改。</p></dd><dt><span class="term">$Revision$</span></dt><dd><p>已知最后提交的版本。</p></dd><dt><span class="term">$Author$</span></dt><dd><p>已知最后提交的作者。</p></dd><dt><span class="term">$HeadURL$</span></dt><dd><p>此文件在版本库中的 URL。</p></dd><dt><span class="term">$Id$</span></dt><dd><p>前述四个关键字的压缩组合。</p></dd></dl></div><p>To find out how to use these keywords, look at the <a class="ulink" href="http://svnbook.red-bean.com/en/1.4/svn.advanced.props.special.keywords.html" target="_top"><em class="citetitle">svn:keywords section</em></a> in the Subversion book, which gives a full description of these keywords and how to enable and use them.</p></div><p>For more information about properties in Subversion see the <a class="ulink" href="http://svnbook.red-bean.com/en/1.4/svn.advanced.props.html" target="_top"><em class="citetitle">Special Properties</em></a>.</p><div class="sect3" lang="zh-cn"><div class="titlepage"><div><div><h4 class="title">Adding and Editing Properties</h4></div></div></div><div class="figure"><p class="title"><b>图 5.32. 增加属性</b></p><div class="figure-contents"><div><img src="http://www.subversion.org.cn/images/PropertyAdd.png" alt="增加属性" /></div></div></div><p><br />为了增加新属性，先单击<span class="guilabel">增加&#8230;</span>，从组合框中选择需要的属性名称，或者输入你自定义的名称，然后在下面的编辑框内输入取值。有多个取值的属性，例如忽略列表，肯呢个输入多行。单极<span class="guibutton">确认</span>将属性增加到属性列表。</p><p>如果你想一次性设置许多文件的属性，在资源管理器中选择文件/文件夹，然后选择<span class="guimenu">上下文菜单</span> → <span class="guimenuitem">属性</span>。</p><p>如果你想设置当前文件夹内的<span class="emphasis"><em>全部</em></span>文件和文件夹，选中<span class="guilabel">递归</span>检查框。</p><p>一些属性，例如<code class="literal">svn:needs-lock</code>只能用于文件，所以它们在文件夹的属性下拉列表内不会出现。你仍旧可以递归的设置目录树中所有文件的属性，但是需要你自己输入属性名称。</p><p>如果你想编辑一个已有属性，在已有属性列表中选择它，然后单击<span class="guibutton">编辑&#8230;</span>即可。</p><p>如果你想删除已有属性，在已有属性列表中选择它，然后单击<span class="guibutton">删除</span>即可。</p><p>属性<code class="literal">svn:externals</code>可以用来下载位于同一版本库或不同版本库的其它工程。阅读<a class="xref" href="http://www.subversion.org.cn/tsvndoc/tsvn-dug-import.html#tsvn-dug-import-4" title="引用的工程">“引用的工程”一节</a>以获得更多信息。</p></div><div class="sect3" lang="zh-cn"><div class="titlepage"><div><div><h4 class="title">Exporting and Importing Properties</h4></div></div></div><p>Often you will find yourself applying the same set of properties many times, for example <code class="literal">bugtraq:logregex</code>. To simplify the process of copying properties from one project to another, you can use the Export/Import feature.</p><p>From the file or folder where the properties are already set, use <span class="guimenu">TortoiseSVN</span> → <span class="guimenuitem">properties</span>, select the properties you wish to export and click on <span class="guibutton">Export&#8230;</span>. You will be prompted for a filename where the property names and values will be saved.</p><p>From the folder(s) where you wi
+
+sh to apply these properties, use <span class="guimenu">TortoiseSVN</span> → <span class="guimenuitem">properties</span> and click on <span class="guibutton">Import&#8230;</span>. You will be prompted for a filename to import from, so navigate to the place you saved the export file previously and select it. The properties will be added to the folders non-recursively.</p><p>If you want to add properties to a tree recursively, follow the steps above, then in the property dialog select each property in turn, click on <span class="guibutton">Edit&#8230;</span>, check the <span class="guilabel">Apply property recursively</span> box and click on <span class="guibutton">OK</span>.</p><p>The Import file format is binary and proprietary to TortoiseSVN. Its only purpose is to transfer properties using Import and Export, so there is no need to edit these files.</p></div><div class="sect3" lang="zh-cn"><div class="titlepage"><div><div><h4 class="title">Binary Properties</h4></div></div></div><p>TortoiseSVN可以处理文件的二进制属性。使用<span class="guibutton">保存&#8230;</span>到文件读取二进制属性值。使用十六进制编辑器或其它适当的工具创建文件，然后用从文件<span class="guibutton">加载&#8230;</span>设置二进制值为此文件的内容。</p><p>尽管二进制文件不经常使用，它们在一些程序中是有用的。举例来说，如果你存储了巨大的图形文件，或者用程序加载的文件巨大，你可能想将缩略图作为属性存储，于是你可以快速的预览。</p></div><div class="important" style="margin-left:.5in;margin-right:.5in;"><h3 class="title">提交属性</h3><p>Subversion 属性是受版本控制的。在你改变或增加属性后必须提交。</p></div><div class="tip" style="margin-left:.5in;margin-right:.5in;"><h3 class="title">属性冲突</h3><p>如果因为其他用户已经提交了同样的属性，提交时出现冲突，Subversion 会产生一个 <code class="filename">.prej</code> 文件。在你解决冲突后，请删除此文件。</p></div><div class="tip" style="margin-left:.5in;margin-right:.5in;"><h3 class="title">自动属性设置</h3><p>你可以设置当文件和文件夹加入版本库时，自动设置属性。阅读<a class="xref" href="http://www.subversion.org.cn/tsvndoc/tsvn-dug-settings.html" title="TortoiseSVN的设置">“TortoiseSVN的设置”一节</a>以获得更多信息。</p></div></div><div class="sect2" lang="zh-cn"><div class="titlepage"><div><div><h3 class="title">TortoiseSVN Project Properties</h3></div></div></div><p>TortoiseSVN 有自己专用的几个属性，它们都有<code class="literal">tsvn:</code>前缀。</p><div class="itemizedlist"><ul type="disc"><li><p><code class="literal">tsvn:logminsize</code>设置提交日志的最小长度。如果你输入的日志短于预设值，提交会被禁止。这个属性对于提醒你为每次提交提供一个适当的描述信息非常有用。如果不设置这个属性，或者设置为0，那么就允许空提交信息。</p><p><code class="literal">tsvn:lockmsgminsize</code>设置锁定日志的最小长度。如果你输入的日志短于预设值，加锁会被禁止。这个属性对于提醒你为每次加锁提供一个适当的描述信息非常有用。如果不设置这个属性，或者设置为0，那么就允许空加锁信息。</p></li><li><p><code class="literal">tsvn:logwidthmarker</code>用 在要求日志信息被格式化为在最大宽度(典型是80字符)处换行非常有用。设置此属性为大于0的值会在日志消息对话框中做两件事: 放置一个标记指示最大宽度，和禁止自动换行，于是你可以看到输入的信息是否太长。注意: 这个特性仅在你选择的消息使用固定宽度字体时才能正确工作。</p></li><li><p><code class="literal">tsvn:logtemplate</code>在需要定义日志消息格式化规则的工程中使用。在你开始提交时，这个属性的多行消息会被插入日志消息编辑框。你可以编辑它以便包含需要的信息。注意: 如果你使用了<code class="literal">tsvn:logminsize</code>属性，请确认这个长度大于模版的长度，不然就会失去其保护作用。</p></li><li><p>Subversion allows you to set “<span class="quote">autoprops</span>” which will be applied to newly added or imported files, based on the file extension. This depends on every client having set appropriate autoprops in their subversion configuration file. <code class="literal">tsvn:autoprops</code> can be set on folders and these will be merged with the user&#8217;s local autoprops when importing or adding files.</p><p>如果本地 autoprops 与 <code class="literal">tsvn:autoprops</code> 冲突，项目设置优先(因为它们是针对此项目的)。</p></li><li><p>In the Commit dialog you have the option to paste in the list of changed files, including the status of each file (added, modified, etc). <code class="literal">tsvn:logfilelistenglish</code> defines whether the file status is inserted in English or in the localized language. If the property is not set, the default is <code class="literal">true</code>.</p></li><li><p>TortoiseSVN can use spell checker modules which are also used by OpenOffice and Mozilla. If you have those installed this property will determine which spell checker to use, i.e. in which language the log messages for your project should be written. <code class="literal">tsvn:projectlanguage</code> sets the language module the spell checking engine should use when you enter a log message. You can find the values for your language on this page: <a class="ulink" href="http://msdn2.microsoft.com/en-us/library/ms776260.aspx" target="_top"><em class="citetitle">MSDN: Language Identifiers</em></a>.</p><p>你可以用十进制输入取值，如果用<code class="literal">0x</code>前缀的话，也可以用十六进制。例如英语(美国英语)可以输入<code class="literal">0x0409</code>或者<code class="literal">1033</code>。</p></li><li><p>The property <code class="literal">tsvn:logsummary</code> is used to extract a portion of the log message which is then shown in the log dialog as the log message summary.</p><p>The value of the <code class="literal">tsvn:logsummary</code> property must be set to a one line regex string which contains one regex group. Whatever matches that group is used as the summary.</p><p>An example: <code class="literal">[SUMMARY]:s+(.*)</code> Will catch everything after “<span class="quote">[SUMMARY]</span>” in the log message and use that as the summary.</p></li><li><p>当你想增加新属性时，你可以从组合框的下拉列表选取，也可以输入你喜欢的任何属性名称。如果你的项目使用了自定义属性，并且想让这些属性出现在组合框的下拉列表中(避免输入时拼写错误)，你可以使用<code class="literal">tsvn:userfileproperties</code>和<code class="literal">tsvn:userdirproperties</code>创建自定义属性列表。对目录应用这些属性，当你编辑其任何子项属性时，你自定义的属性将会在预定义属性名称列表中出现。</p></li></ul></div><p>Some <code class="literal">tsvn:</code> properties require a <code class="literal">true/false</code> value. TortoiseSVN also understands <code class="literal">yes</code> as a synonym for <code class="literal">true</code> and <code class="literal">no</code> as a synonym for <code class="literal">false</code>.</p><p>TortoiseSVN can integrate with some bug tracking tools. This uses project properties that start with <code class="literal">bugtraq:</code>. Read <a class="xref" href="http://www.subversion.org.cn/tsvndoc/tsvn-dug-bugtracker.html" title="Integration with Bug Tracking Systems / Issue Trackers">“Integration with Bug Tracking Systems / Issue Trackers”一节</a> for further information.</p><p>It can also integrate with some web-based repository browsers, using project properties that start with <code class="literal">webviewer:</code>. Read <a class="xref" href="http://www.subversion.org.cn/tsvndoc/tsvn-dug-repoviewer.html" title="与基于 WEB 的版本库浏览器集成"
+
+>“与基于 WEB 的版本库浏览器集成”一节</a> for further information.</p><div class="important" style="margin-left:.5in;margin-right:.5in;"><h3 class="title">Set the project properties on folders</h3><p>These special project properties must be set on <span class="emphasis"><em>folders</em></span> for the system to work. When you commit a file or folder the properties are read from that folder. If the properties are not found there, TortoiseSVN will search upwards through the folder tree to find them until it comes to an unversioned folder, or the tree root (eg. <code class="literal">C:</code>) is found. If you can be sure that each user checks out only from e.g <code class="filename">trunk/</code> and not some sub-folder, then it is sufficient to set the properties on <code class="filename">trunk/</code>. If you can&#8217;t be sure, you should set the properties recursively on each sub-folder. A property setting deeper in the project hierarchy overrides settings on higher levels (closer to <code class="filename">trunk/</code>).</p><p>For project properties <span class="emphasis"><em>only</em></span> you can use the <span class="guilabel">Recursive</span> checkbox to set the property to all sub-folders in the hierarchy, without also setting it on all files.</p></div><p>When you add new sub-folders using TortoiseSVN, any project properties present in the parent folder will automatically be added to the new child folder too.</p><div class="caution" style="margin-left:.5in;margin-right:.5in;"><h3 class="title">小心</h3><p>Although TortoiseSVN&#8217;s project properties are extremely useful, they only work with TortoiseSVN, and some will only work in newer versions of TortoiseSVN. If people working on your project use a variety of Subversion clients, or possibly have old versions of TortoiseSVN, you may want to use repository hooks to enforce project policies. project properties can only help to implement a policy, they cannot enforce it.</p><p><br /></p><p>引用:http://www.subversion.org.cn/tsvndoc/tsvn-dug-propertypage.html<br /></p></div></div></div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-03T00:00:00+08:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2008</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tairan.github.com/blog/2008/07/03/some-notes-of-subversion/" data-via="" data-counturl="http://tairan.github.com/blog/2008/07/03/some-notes-of-subversion/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/06/30/freebsd%25e8%25ae%25be%25e7%25bd%25ae%25e4%25bb%25a3%25e7%2590%2586/" title="Previous Post: FreeBSD设置代理">&laquo; FreeBSD设置代理</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/07/04/some-linux-commands-for-accounts-management/" title="Next Post: Linux用户管理的一些命令">Linux用户管理的一些命令 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
