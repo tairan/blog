@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>理解Drupal模块之Book - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="在选择模块之前，要先弄清楚自己需要一个什么样的功能，然后再去找有没有合适的模块来实现自己所要功能。 那么我想要一个什么样的功能呢？ 我需要在网站上转载一些别人的连载文章，一个系列的连载作为一篇完整的文章，系列连载的每个部分就如同书中的章节一样，有着上下文的关系。这样，从我的需求来看， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2009/11/30/understand-the-book-module-drupal-modules">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">理解Drupal模块之Book</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-30T00:00:00+08:00" pubdate data-updated="true">Nov 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>在选择模块之前，要先弄清楚自己需要一个什么样的功能，然后再去找有没有合适的模块来实现自己所要功能。</p>
+
+<p>那么我想要一个什么样的功能呢？</p>
+
+<p>我需要在网站上转载一些别人的连载文章，一个系列的连载作为一篇完整的文章，系列连载的每个部分就如同书中的章节一样，有着上下文的关系。这样，从我的需求来看，一个制作书籍内容的模块就比较适合我。</p>
+
+<p>需求确定了，开始找可以满足需求的模块。<sup>_^</sup> 可喜的是 Drupal 本身就内置了一个Book模块，在中文版里翻译为“手册”。</p>
+
+<p>Book 模块使用还是比较简单的，像添加一条Story一样添加好标题和内容后，然后需要额外操作就是编辑“手册纲要”（ 中文版的翻译）。在“手册纲要”部分有两个选项，一个是手册，另一个是权重。</p>
+
+<p>“手册”，可以把它理解成为一本书的书名，如果书名不存在则选择“创建一个新的手册”，否则选择一个已经存在的书名。当选择创建一个新手册的时候，当前文章的标题就会成为这个手册的名称，也就是书名。</p>
+
+<p>权重，就是在同级别的书本中，权重越大，那么在排序的时候就会排的越靠前。</p>
+
+<p>到此，剩下的工作就是添加文章了，体力活o(∩_∩)o&#8230;哈哈！～ 大家如果想看我的劳动成果请到这里<a href="http://www.51xna.com" target="_blank">www.51XNA.com</a></p>
+
+<p>EOF</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-30T00:00:00+08:00" pubdate data-updated="true">Nov 30<span>th</span>, 2009</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/11/24/drupal-overview/" title="Previous Post: 近距离Drupal概览">&laquo; 近距离Drupal概览</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/12/02/understand-the-google-module-drupal-modules/" title="Next Post: 理解Drupal模块之Google">理解Drupal模块之Google &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

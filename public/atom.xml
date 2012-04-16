@@ -1,0 +1,900 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tairan's Story]]></title>
+  <link href="http://tairan.github.com/atom.xml" rel="self"/>
+  <link href="http://tairan.github.com/"/>
+  <updated>2012-04-16T15:11:34+08:00</updated>
+  <id>http://tairan.github.com/</id>
+  <author>
+    <name><![CDATA[Tairan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Go 调用 Windows API]]></title>
+    <link href="http://tairan.github.com/blog/2012/04/15/the-go-with-win32-api/"/>
+    <updated>2012-04-15T10:23:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2012/04/15/the-go-with-win32-api</id>
+    <content type="html"><![CDATA[<p>Go 通过 <a href="http://golang.org/cmd/cgo/">cgo</a> 可以利用现有C语言库</p>
+
+<p>例如在 Windows 中使用 Go 调用 Win32 API</p>
+
+<p>首先安装必要的工具</p>
+
+<ol>
+<li><a href="http://golang.org">Go</a></li>
+<li><a href="http://mingw.org">MingW</a></li>
+</ol>
+
+
+<figure class='code'><figcaption><span>项目文件完成后的布局 </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$GOPATH
+</span><span class='line'>    +- src
+</span><span class='line'>        +- w32api
+</span><span class='line'>            +- kernel.go
+</span><span class='line'>        +- testapp
+</span><span class='line'>            +- main.go
+</span><span class='line'>    +- bin # go install testapp
+</span><span class='line'>        +- testapp.exe
+</span><span class='line'>    +- pkg # go install w32api
+</span><span class='line'>        +- windows_386
+</span><span class='line'>    +- testapp.exe</span></code></pre></td></tr></table></div></figure>
+
+
+<p>包装 Windows API</p>
+
+<figure class='code'><figcaption><span>kernel.go  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">package</span> <span class="n">w32api</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// #define WIN32_LEAN_AND_MEAN</span>
+</span><span class='line'><span class="c1">// #include &lt;windows.h&gt;</span>
+</span><span class='line'><span class="k">import</span> <span class="s">&quot;C&quot;</span>
+</span><span class='line'><span class="k">import</span> <span class="s">&quot;syscall&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">func</span> <span class="n">GetCurrentDirectory</span><span class="p">()</span> <span class="nb">string</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">bufLen</span> <span class="p">:=</span> <span class="n">C</span><span class="p">.</span><span class="n">GetCurrentDirectoryW</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nil</span><span class="p">);</span> <span class="n">bufLen</span> <span class="p">!=</span> <span class="mi">0</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">buf</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="nb">uint16</span><span class="p">,</span> <span class="n">bufLen</span><span class="p">)</span>
+</span><span class='line'>            <span class="k">if</span> <span class="n">bufLen</span> <span class="p">:=</span> <span class="n">C</span><span class="p">.</span><span class="n">GetCurrentDirectoryW</span><span class="p">(</span><span class="n">bufLen</span><span class="p">,</span> <span class="p">(*</span><span class="n">C</span><span class="p">.</span><span class="n">WCHAR</span><span class="p">)(&amp;</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span> <span class="n">bufLen</span> <span class="p">!=</span> <span class="mi">0</span> <span class="p">{</span>
+</span><span class='line'>                        <span class="k">return</span> <span class="n">syscall</span><span class="p">.</span><span class="n">UTF16ToString</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>注意</em>：</p>
+
+<pre><code>在 import "C" 和 // #include &lt;windows.h&gt; 之间不能有空行
+</code></pre>
+
+<p>编译并安装</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>go build w32api
+</span><span class='line'>go install w32api
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>调用</p>
+
+<figure class='code'><figcaption><span>main.go </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">package</span> <span class="n">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">import</span> <span class="s">&quot;w32api&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="p">(</span><span class="n">w32api</span><span class="p">.</span><span class="n">GetCurrentDirectory</span><span class="p">())</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>go build testapp
+</span><span class='line'>go install testapp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Troubleshooting</h2>
+
+<p>can&#8217;t load package: package w32api: import &#8220;w32api&#8221;: cannot find package
+设置好环境变量 GOPATH</p>
+
+<p>exec gcc: exec: &#8220;gcc&#8221;: executable file not found in %PATH%
+安装 MingW 并将 bin 目录加入到环境变量 PATH 中</p>
+
+<h2>参考</h2>
+
+<p><a href="http://www.cnblogs.com/AllenDang/archive/2012/02/21/2361197.html">使用CGO封装Windows API</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[我的 Kindle 3]]></title>
+    <link href="http://tairan.github.com/blog/2011/12/02/kindle-3-for-me/"/>
+    <updated>2011-12-02T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2011/12/02/kindle-3-for-me</id>
+    <content type="html"><![CDATA[<p>经常阅读的人应该入手一部电子阅读器，在信息时代我们的时间都已经分割成若干的碎片，阅读的场所随时都在变化，此外出门随手带上几本书也是常有的事情，如果书籍电子化了，随身带上一个小图书馆也不是什么难事。</p>
+
+<p>根据自己的喜好，我选择了 Amazon 的 Kindle 3，最近 Kindle 4 touch 也出来了，如果也需要的话可以考虑入手一部。在使用 Kindle 3 的过程中我遇到了一些事情，现在记录下来。</p>
+
+<p>我买的是 Kindle 3.5.1 WIFI 广告版，主要的原因是价格，虽然 Kindle 的价格已经比较低廉，但是工资有限需要用钱的地方又很多，所以选择了既能阅读又少花钱的版本。很多人担心广告版会到处铺满广告影响使用，实际上广告只会出现在2个地方：一个是待机屏幕，另一个是 Collection 的下脚，也就是所有书籍目录的下面，不是某一本书的目录。广告的内容大都是一些打折信息，曾经有人出钱买 Kindle 上的 Mac 打折促销代码。广告画面设计的也挺精美的，待机的时候就当换桌面背景了。</p>
+
+<p>刚入手 Kindle ，一个很重要的初始用途是用来看技术文档，比如 RFC， 因为贪心，把所有 RFC 的 PDF 格式文档大约 6000+ 的文件一次放进 Kindle ，悲剧发生了，Kindle 罢工，会重启，无法响应。 后来实际的实践证明，在 Kindle 里一次放入很多书籍是一个巨大的错误，Kindle 的计算能力有限，书籍多了不易查找，一次放入很多书，自己都不会怎么看，完全背离的电子书最初的用途：<strong>阅读</strong>。对于我来讲，一次在 Kindle 中保有 10-20 本已经足够。</p>
+
+<p>经过这段时间的使用，发现 Kindle 3 并不适合阅读技术书籍，尤其是A4尺寸的 PDF 文件。全屏，竖着看字体太小，横着看一屏无法显示整页，字体放大到任何尺寸后也都会一屏无法显示整页，用5way键移动很痛苦。也许 Kindle Touch 出来后会改善？</p>
+
+<p>柳暗花明又一村，看技术文档不方便，可看其他的人文书籍简直就是天生佳品。一本接着一本，总觉得书籍来源太少。毕竟 Kindle 3 还没有正式进入景德镇，中文书籍依赖网络上各个站点提供的盗版，那感觉就是想花钱买正版却没有货。现在也有些网友准备做正版阅读计划，可那也是才开始，还不知道能否突破景德镇的限制。我也设想做一个电子书分享平台，将目前没有版权或者是自由版权的书整理成某种中间格式，然后生成各种电子阅读器的版本。这潭水太深，这个想法也只是停留在想法这里。</p>
+
+<p>在决定买 Kindle 之前也考察过盛大的锦书，从价格来讲，锦书很有竞争力。但是有两个原因让我放弃了，第一是锦书的云中书城都是所谓的网络文学，99%的作品绝对是猴子打出的汉字。即锦书无法提供有价值的正版书籍购买渠道。第二是锦书配套的环境太差，所谓的管理软件云梯，在英文 Windows 系统上到处乱吗，bug 满天飞，各种限制。花钱买电子书不是为了折腾的，既然花钱就要有好服务，比起 Amazon 的 Email deliver 和 Kindle 支持的各种文档以及配套软件差太远。</p>
+
+<p>Kindle 在使用 WIFI 的时候有个问题，如果 WIFI 信道使用大于 10 的时候，它无法搜索到 WIFI 信号。Mac OS X lion 也有这个问题。路由器上的无线信道设置成自动的或者1-9都可以解决这个问题。</p>
+
+<p>Kindle 还在使用中，如果遇到其他问题再继续记录。 Enjoy reading. :-)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[独立程序员接定制软件开发项目总结]]></title>
+    <link href="http://tairan.github.com/blog/2011/06/28/dev-for-custom-software/"/>
+    <updated>2011-06-28T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2011/06/28/dev-for-custom-software</id>
+    <content type="html"><![CDATA[<p>定制软件开发中陷阱重重，主要的原因是客户对自己的需求不清楚。很奇怪吧？ 客户竟然对自己想要什么东西说不清楚。事实上，在软件开发领域这是常有的事情。软件这玩意抽象，看得见摸不着，甚至看都看不见。让对技术一无所知的人来描述自己想要什么样的软件，太困难了。 这样的事实对乐天派的程序员来讲就是一个噩梦，这里引用西乔姐在 Twitter 上发表的一段话：</p>
+
+<blockquote><a href="http://twitter.com/arthur369">@arthur369</a>: 千万不要相信那些在谈需求的时候说：“做一个和XX一样的就行了” 的人。其实这种人最好就不要和他一起做事。因为最后结果只有2种，1、你白做了（需求一定会变动数次）；2、做出来一个垃圾。” </blockquote>
+
+
+<p>最近我就接到一个这样的项目，刚开始的版本是对照着某软件的前一个发行版做，然后又变成了要具有此软件当前版本的某些功能，最后又发现客户的客户已经有一个类似的软件，于是乎又开始向模仿此软件+改进的方向前进，漫漫长路多折腾，如此多的波折才算拿到最终的需求。真正的需求拿到了开始加班加点的做了，可麻烦的事情还有。</p>
+
+<p>这是一个远程的项目，我在南边，客户在北面, 还好在同一个国家，都说中国话。沟通的次数那叫一个寒碜，三、五天都不一定能接上头，接头的方式基本是邮件和IM，电联不多，软件本身的开发经费就不高，如果直接电联估计都支援给中国移动了。</p>
+
+<p>在项目进行中第一次改变需求的时候，我是做好了心理准备的，毕竟那么多前辈的经验摆在那里。此时我在想借由着自己快速迭代，不断的改进软件原型来拿到真正的需求，理论上这种方式是可行的，总会拿到最终的需求，然后做下去就是了。可现实是残酷的，没有充足的时间，即使你承接项目不要多少钱，客户那边随着时间的流逝也会损失很多本该赚到的利润，咱都是凡人，耗不起呐。</p>
+
+<p>和此类不甚明白软件开发的客户打交道还有个问题，软件里面的实现似乎并那么重要，漂亮好用的UI才是让他们看起来软件是如此美妙的东西。作为独立工作的程序员，大多对外在美没有多少的品味，黑客们更是喜欢默默无闻、稳定可靠后台运行的程序。缺少在美的层次上的交流，后端代码交流更是一团糟，客户说在这里加个东西然后这样动，你后端的东西写的不好则会伤筋动骨。</p>
+
+<p>总之，定制软件开发的项目成本很高，劳神费力不讨好。因为程序员不但要保证有一个很快的开发速度来适应软件的变化，同时也要担负起教育客户的重任，还要培养出对美欣赏的品味。通常此类软件开发过程中得到的物质报酬不多，好处是对于软件开发的新手来讲，通过那么几次定制软件开发的折腾可以快速成长，怎么说也能成为一个快速山寨的熟手。如果你是一个拿着不错的薪水的在职人员，我看还是算了，与其浪费如此之多的精力和少的可怜的报酬，还不如好好钻研自己本身工作上的业务，或者干脆多陪陪身边的人吧。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[为Fedora 15安装64位的FlashPlayer - Update]]></title>
+    <link href="http://tairan.github.com/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/"/>
+    <updated>2011-06-20T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15</id>
+    <content type="html"><![CDATA[<p><strong>Update</strong>
+现在Adobe已经提供正式版本下载 <a href="http://get.adobe.com/flashplayer/" target="_blank">http://get.adobe.com/flashplayer/</a></p>
+
+<hr>
+
+
+<p>总的来说，复制下面的代码并执行就可以将64位的flashplayer安装到fedora 15 x86_64上去了。截至目前为止，Adobe 依然没有官方的正式版flashplayer 64bit版本释放出来，只有在http://labs.adobe.com 能拿到测试版本。不管怎样，测试版本在fedora上工作的也不错。:-)</p>
+
+<p><strong>INSTALL</strong></p>
+
+<pre lang="bash">
+#!/usr/bin/env bash
+
+FLASH=http://download.macromedia.com/pub/labs/flashplayer10/flashplayer10_2_p3_64bit_linux_111710.tar.gz
+
+cd /tmp
+wget -c $FLASH
+tar zxf flashplayer10_2_p3_64bit_linux_111710.tar.gz
+
+# apply plugins for firefox
+cp libflashplayer.so /usr/lib64/mozilla/plugins/libflashplayer.so
+
+# remove cache
+rm -rf libflashplayer.so
+rm -rf flashplayer10_2_p3_64bit_linux_111710.tar.gz
+</pre>
+
+
+<p><strong>UNINSTALL</strong></p>
+
+<pre lang="bash">
+rm -rf /usr/lib64/mozilla/plugins/libflashplayer.so
+</pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[转战亚马逊EC2]]></title>
+    <link href="http://tairan.github.com/blog/2011/04/14/move-on-amazon-ec2/"/>
+    <updated>2011-04-14T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2011/04/14/move-on-amazon-ec2</id>
+    <content type="html"><![CDATA[<p>EC2 Nginx PHP FastCGI MySQL WordPress</p>
+
+<p>关于 Amazon EC2 的教程已经铺天盖地了，有英文也有<a href="http://www.baidu.com.ru/archives/556.html">中文</a>。现在EC2对新注册的用户有优惠，及Micro Instance级别的会有1年的<a href="http://aws.amazon.com/free/">免费</a>份额。注意只是对新注册用户，如果你已经注册了 AWS 账户，即使并没有开通任何服务也不属于新注册用户，意思就是只要你使用就没有免费的。这一点我是用了$2美金的账单换来的教训。<a href="http://www.poemcode.net/2011/04/aws-free-usage-tier/">网上也有其他同学遇到</a>，看来不仔细阅读文档就是没文化的代表。这里是账单查询地址<a href="https://aws-portal.amazon.com/gp/aws/developer/account/index.html?ie=UTF8&action=activity-summary">https://aws-portal.amazon.com/gp/aws/developer/account/index.html?ie=UTF8&amp;action=activity-summary</a> 一旦发现产生莫名其妙的费用，赶紧查。</p>
+
+<p>我这次使用 Amazon EC2 的目的是把即将到期的博客迁移到这里，并且让手中的一些闲置域名也利用起来。其中还有一个更重要的目的就是为部署一个很重要的网站，基于Django的。</p>
+
+<p>首先要做的是迁移博客。
+进入 EC2 后需要安装一些软件，因为Micro Instance只能使用Amazon Linux(redhat系)，所以包管理器使用的是yum。</p>
+
+<pre lang="bash">
+sudo yum install mysql mysql-libs mysql-server php php-mysql spawn-fcgi nginx
+</pre>
+
+
+<p>启动MySQL后，并更改root用户的密码</p>
+
+<pre lang="bash">
+sudo service mysqld start
+/usr/bin/mysqladmin -u root -p -h localhost password 'newpassword'
+</pre>
+
+
+<p>配置 Nginx， 在这里我遇到了一些问题，折腾了一天才搞定。这里要十分的感谢网友 <a href="http://www.douban.com/people/hfw_1987/">hfw_1984</a> 的帮助。遇到的问题主要集中在fastcgi部分，如果要让Nginx支持我博客的URL格式如http://www.tairan.net/index.php/2011/03/30/follow-the-right-way/ 则必须参照以下配置：</p>
+
+<pre lang="config">
+    location ~ ^.+\.php {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;  # 这一行必须放在 SCRIPT_FILENAME 上面，否则会被覆盖。
+        fastcgi_param   SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        #fastcgi_param   PATH_INFO   $fastcgi_path_info; # 这两行并不需要
+        #fastcgi_param   PATH_TRANSLATED $document_root$fastcgi_path_info;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_pass 127.0.0.1:9000;
+    }
+</pre>
+
+
+<p>Micro Instance 默认提供的Nginx Version: 0.8.53</p>
+
+<p>以上就是这两天的战果，还有其他的一些东西已经被写成自动化脚本，为方便备份数据，再次迁移、部署提供方便。</p>
+
+<p>总的来说在墙内，使用EC2也不错，性价比不是最好，但是绝对值得试用。:-)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[守规矩才能行的方便]]></title>
+    <link href="http://tairan.github.com/blog/2011/03/30/follow-the-right-way/"/>
+    <updated>2011-03-30T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2011/03/30/follow-the-right-way</id>
+    <content type="html"><![CDATA[<p>规矩是无处不在的，使用工具也有使用工具的规矩，就像你不能拿个榔头去拧螺丝一样。 就算是软件也有其使用的规矩， 经常看到有人抱怨某个软件怎么样的难用，其实大多数情况下他是用使用其他软件的习惯去使用另一个软件，也就是因为没有遵守使用此软件的规矩而带来的诸多不便。当然也有极少部分的软件真的很难用，那么就打破规矩，重新建立一个。</p>
+
+<p>举几个例子，
+Windows 上的软件管理，如果不用第三方的软件管理工具的话，那么使用MSI安装，卸载就是它的规矩。
+Debian/Ubuntu 则是 apt-get 进行软件的管理，如果你使用咒语的话 ./configure &amp; make &amp; make install 那么就要自己去管理软件的诸多文件。
+Mercurial 如果你要删除或者移动文件那么就使用 hg rm / hg mv 的命令来做，而不是直接的 rm / mv</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[如何判断程序是安装后第一次执行]]></title>
+    <link href="http://tairan.github.com/blog/2011/03/26/is-first-run/"/>
+    <updated>2011-03-26T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2011/03/26/is-first-run</id>
+    <content type="html"><![CDATA[<p>有时我们需要在程序第一次启动的时候进行一些初始化工作，如何识别程序是部署后第一次运行呢？ .net framework就提供了这样的功能。</p>
+
+<p>参考这里 <a href="http://msdn.microsoft.com/zh-cn/library/system.deployment.application.applicationdeployment.isfirstrun.aspx">http://msdn.microsoft.com/zh-cn/library/system.deployment.application.applicationdeployment.isfirstrun.aspx </a></p>
+
+<p>这里还有更多的关于.net 程序部署相关的技术说明 。<a href="http://msdn.microsoft.com/zh-cn/library/system.deployment.application.aspx">http://msdn.microsoft.com/zh-cn/library/system.deployment.application.aspx</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[如何在Alwaysdata上部署Django应用]]></title>
+    <link href="http://tairan.github.com/blog/2011/02/24/how-to-deploy-django-app-on-alwaysdata/"/>
+    <updated>2011-02-24T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2011/02/24/how-to-deploy-django-app-on-alwaysdata</id>
+    <content type="html"><![CDATA[<p>Alwaysdata是一个法国的ISP，提供相当不错的VPS，共享主机等服务，而且免费的项目也相当的好，可惜你需要在墙外才能享受到如此高档的服务。</p>
+
+<p>在Alwaysdata的<a href="http://wiki.alwaysdata.com/wiki/Deploying_a_Django_App" target="_blank">wiki</a>上已经详细说明了如何部署Django的应用，但是如果一丝不苟的依葫芦画瓢你未必能一次成功，因为这篇文档还遗漏了一点。</p>
+
+<p>你还需要在project的根目录中放一个<strong>.htaccess</strong> 如下</p>
+
+<pre>
+project
+     |-- apps
+     |-- public
+            |-- django.fcgi
+            |-- .htaccess
+     |-- .htaccess
+     |-- settings.py
+     |-- manage.py
+</pre>
+
+
+<p>而这个 <strong>.htaccess</strong> 的内容是：</p>
+
+<pre lang="config">
+AddHandler fastcgi-script .fcgi
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ public/django.fcgi/$1 [QSA,L]
+</pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[读《创业者》]]></title>
+    <link href="http://tairan.github.com/blog/2010/11/29/note-of-founders-at-work/"/>
+    <updated>2010-11-29T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/11/29/note-of-founders-at-work</id>
+    <content type="html"><![CDATA[<p>这本书我读的是中文版，现在我还是无法流畅的阅读英文版以及购买英文版对于墙内的我来说也是在是不方便。既然是翻译版，那么总会有几个人跳出来说翻译的不好，我认为翻译的质量固然重要，但是你不能因为还不至于影响阅读的小毛病来排斥一本好书。</p>
+
+<p><img alt="Founders at work" src="http://img3.douban.com/mpic/s1994753.jpg" title="Founders at work"  /> <a href="http://book.douban.com/subject/1966719/" target="_blank">英文版</a> <a href="http://book.douban.com/subject/3506599/" target="_blank">中文版</a></p>
+
+<p>曾经在书店蹲点看过第一篇关于Paypal的，其他的都是跳着看的，因为这本书对32个不同的创业者的采访，所以跳着看是最合适的。你喜欢谁就可以先看谁！</p>
+
+<p>这本书里，我最喜欢的几个人是：<a href="http://zh.wikipedia.org/zh-hans/%E6%96%AF%E8%92%82%E5%A4%AB%C2%B7%E6%B2%83%E5%85%B9%E5%B0%BC%E4%BA%9A%E5%85%8B">史蒂夫·沃兹尼亚克</a>、<a href="http://en.wikipedia.org/wiki/David_Heinemeier_Hansson">大卫·海涅米尔·汉森</a> 、<a href="http://en.wikipedia.org/wiki/Joel_Spolsky">乔尔·斯波斯基</a>、<a href="http://en.wikipedia.org/wiki/Evan_Williams_(entrepreneur)">埃文·威廉姆斯</a>、<a href="http://en.wikipedia.org/wiki/Mena_Grabowski_Trott">梅娜·特洛特</a>。当然其他的人我也很喜欢，但是这几个人对现在的我来说，影响颇深。</p>
+
+<p>在我眼里，史蒂夫·沃兹尼亚克简直就是一个完美的黑客，好吧，你可以把Apple I当作一个玩具，但是Apple II对个人计算机产生了划时代的影响，正是史蒂夫·沃兹尼亚克一个人独立完成的Apple II，从硬件组装设计到操作系统以及编程语言等。我最欣赏史蒂夫·沃兹尼亚克对待计算机的态度：如果没有那就自己设计一个吧。另一方面，史蒂夫·沃兹尼亚克的人格魅力也很强悍。就是一超脱的大侠，自己专注技术的同时并不去计较物质上的所得，也许你觉得他赚了很多钱，并不单纯，可赚钱对他来说真的只是副产品。所以他会将自己的股份分给40位他认为对苹果有贡献却没有得到股份的工程师。</p>
+
+<p>埃文·威廉姆斯和梅娜·特洛特要放在一起才会更有味道，他们分别是Blogger和TypePad的创始人。Blogger最终被Google收购，目前被挡在墙外。而Blogger在被收购之前的发展并不是一帆风顺的，因为埃文·威廉姆斯开不起员工的工资，把公司解散了，成了孤家寡人。但是埃文·威廉姆斯并没有放弃，带着Blogger扛过来了，而且他还创建了Twitter，当然这个也是墙外的。TypePad在发展的过程中好像并没有比Blogger惨，但是这对程序员夫妻过的也不是一帆风顺。虽然没有得到被大牌收购的命运，但是他们写的优秀的博客程序赢得了众多的付费用户。他们不但运营着TypePad，还创造了一个很强大的独立博客程序MovableType。有意思的是埃文·威廉姆斯和梅娜·特洛特都在很糟糕的环境下坚持了下来。</p>
+
+<p>大卫·海涅米尔·汉森和乔尔·斯波斯基是我目前的指路明灯！大卫·海涅米尔·汉森是2005年的开源软件评选出来的年度最佳黑客，他们的团队不仅创造了划时代的RubyOnRails，而且运营的产品也很成功。乔尔·斯波斯基更是大名鼎鼎的著名小公司的领头羊。他们两个人让我看到了希望，公司并不一定要大，要上市，重要的是要让公司健康的运行，良好的舒适的工作环境，不错的盈利能力，即使是小公司也会活的很滋润。这种小公司的发展模式很适合互联网时代的程序员。这就是我看到的希望！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[论人生]]></title>
+    <link href="http://tairan.github.com/blog/2010/10/26/that-is-life/"/>
+    <updated>2010-10-26T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/10/26/that-is-life</id>
+    <content type="html"><![CDATA[<p>这篇文章已经躺在我的硬盘中一个月有余，题目起的有点大，正因此我总是觉得自己写出来的东西不够深刻。不过我还是先把它放出来，现在不放又不知道多久才能放出来。借此希望能够引起一些看客的共鸣，最好能得到一些中肯的建议，让我完善自己的思想。</p>
+
+<p>文章全文如下：</p>
+
+<h1>论人生</h1>
+
+<p>在岔路口
+爱丽丝问猫：我该选择哪一条路？
+猫：那要看你去什么地方？
+爱丽丝：随便什么地方都行。
+猫：那你选择任何一条路都可以。</p>
+
+<p>人生就是岔路口的选择题，一条是随便走一条路，另一条是选择一条通向自己目的地的路。</p>
+
+<p>不管你做出什么选择都没有对和错，人生就是如此，出生后一步步地走向死亡。</p>
+
+<p>当你随便选择一条路，可能你在认为这是顺其自然，路通向何方走着瞧。我认为这是很浪漫的选择，能顺其自然则不会感受到被自然规律所束缚的痛苦。然而做出这样的选择，则说明你有足够的信心和一份不用为物质所担忧的心。如果没有这些，这个浪漫的选择会被现实打击地粉碎，并不断的折磨你。当你认为你是在顺其自然的时候，请回忆一下，你是否为之前的一个决定，例如没有得到更好的收入、浪费了好机会而后悔？如果你回答是，那么你真的没有足够的能力去浪漫。</p>
+
+<p>如果选择的是另一条通向自己目的地的路，恭喜你，你选择了一条充满荆棘的痛苦之路，但当你接近或者达到终点的时候会充满着幸福。选择这一条路，在世人眼中你是功利地，世俗的。其实我说这是条现实之路，当然现实并不是说让你势利，而是脚踏实地的一步步的前进。人的能力总是有限的，如果你认不清自己的能力，那么通常你会高估自己，而高估自己的结果就是不断的碰壁。</p>
+
+<p>在人生的路上，很多人遇到的问题是在这两条路门口徘徊，想浪漫，但没有资本，想现实，却不知目的地是何方。</p>
+
+<p>一颗聪明的大脑加上一笔丰厚的遗产足以让你做出浪漫的选择。如果你没有那么还是现实一点比较好，意欲带来的痛苦总是自己心甘情愿忍受的。</p>
+
+<p>实事求是的做出自己的选择，无论是在宝马车里哭，还是在自行车上笑都应该是无怨无悔的。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[安全与易用]]></title>
+    <link href="http://tairan.github.com/blog/2010/10/21/security-and-ease-of-use/"/>
+    <updated>2010-10-21T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/10/21/security-and-ease-of-use</id>
+    <content type="html"><![CDATA[<p>今天在公司里出现了一件事情，让我认真的思考了下Windows平台的易用性和安全。</p>
+
+<p>事情是这样的，我们需要远程登录到一台德语的机器上工作。为了设置可以同时有两个相同用户名的用户远程登录，我们修改了组策略。两个德语文盲想当然的把一个和英语环境相同位置的选项给禁止了，然而那是拒绝远程用户登录的选项。刚改好的时候还很高兴马上用另外一台机器远程登录试用，很不幸将另外一个已经在上面的用户踢掉后自己也无法登录。</p>
+
+<p>根据以前使用Windows的经验加上问Google，发现Windows远程维护是如此的强大。不仅仅是远程注册表编辑，还可以远程编辑组策略，AD，等等一大堆的东西。这一切在MMC中就可以完成。</p>
+
+<p>如此强大的远程管理，却把我引入到为什么Windows不安全的地方去了。因为如果这是在Linux上把唯一的SSH关闭了，我还真的没辙。</p>
+
+<p>在Windows上的这些远程控制是可以管理的，你可以选择让它不提供这些服务，然而这一切是Windows的默认设置。没有不安全的系统，只有不靠谱的管理员。默认开启了如此之多的远程服务，又遇到了不靠谱的管理员，在互联网上这个服务器绝对是挂了。</p>
+
+<p>为什么是互联网？互联网就是一个狂野丛林，一不小心就成了别人口中的美味。既然那么危险，为什么Windows还开启了那么多的默认服务？让我们来看看Windows的主要用户吧。企业用户，企业内部和外界的联系至少有道墙，或者根本就不和外界联系。个人用户，虽然它们经常暴露在外面，但是即使他们受到伤害，通常损失也不会太大。这两种用户都有共同点，就是不太关心计算机的技术问题。</p>
+
+<p>了解了Windows的使用者，那么Microsoft&reg;有足够的理由开启这些默认服务，让他们的客户更简单的使用Windows，如果遇到问题，可以让IT远程配置即可。这一切的代价就是开启了很多潜在风险。Microsoft&reg;的人当然不都是傻瓜，解决不了问题，只是这个世界有条准则就是做的越多错的越多。在你不真正了解Windows的时候冒然用它作为互联网服务器，那你会得到很多不错的教训！</p>
+
+<p>在这里我并不是声讨Microsoft&reg;和Windows，而是想提醒自己和大家，浅尝辄止害死人！你懂的。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用App Engine跟踪ADSL外网IP]]></title>
+    <link href="http://tairan.github.com/blog/2010/10/12/get-adsl-ip-use-app-engine/"/>
+    <updated>2010-10-12T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/10/12/get-adsl-ip-use-app-engine</id>
+    <content type="html"><![CDATA[<p>在家使用ADSL拨号上网，并使用一台电脑作为Home Server，这样以来可以在工作的时候发现什么好东西，就可以远程连接到家中的电脑进行下载，也可以在家托管自己的代码仓库等，工作学习生活都不耽误。</p>
+
+<p>使用ADSL有个问题，ADSL使用DHCP服务动态分配的，可能每一次拨号得到的IP都不一样。为了跟踪当前所获得的IP地址，我设计了一个简单的IP跟踪解决方案。下面是结构图：</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/5074577609/" title="iptracker by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4032/5074577609_08161fc511.jpg" width="500" height="375" alt="iptracker" /></a></p>
+
+<p>整个架构分为3个部分
+1. Home Server, 定时向 App Engine 发送请求告知自己当前的外网IP
+2. Google App Engine, 管理用户和IP地址
+3. 用户, 提供预定义的口令后就可以看到当前Home Server的外网IP</p>
+
+<p>我的Home Server使用的是 Gentoo Linux, 每一个小时向 App Engine 发送一次请求，如果使用Windows XP，可以使用系统自带的计划任务，但计划任务的最小执行单位是每天。</p>
+
+<p>Home Server 发送请求，是通过 cURL 来实现的，Windows 需要单独下载。我推荐在Windows上安装 <a href="http://github.com/bmatzelle/gow/wiki" target="_blank">GoW</a> 来使用*nix命令提供的便利。</p>
+
+<pre lang="bash" line="1">
+curl http://xxx.appspot.com/collector?key=GUID
+</pre>
+
+
+<p>App Engine 预置了一个字典，用来记录使用者的信息以及GUID</p>
+
+<pre lang="python" line="1">
+auth_data = {'auth_name': GUID}
+</pre>
+
+
+<p>用户访问 http://xxx.appspot.com/ ，填入自己的 auth_name 提交即可看到 App Engine 最后一次接收到IP信息。</p>
+
+<p>这只是一个简单的解决方案，暂时够我使用。有兴趣研究 Google App Engine 的朋友可以来交流。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[夜爆上下班的路]]></title>
+    <link href="http://tairan.github.com/blog/2010/10/06/walk-in-night/"/>
+    <updated>2010-10-06T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/10/06/walk-in-night</id>
+    <content type="html"><![CDATA[<p>日复一日，周复一周，月复一月的走上下班的路。在非上下班时间那条路又是什么样子的？这个夜晚，我走在上下班的路上，欣赏着这条日日相见的马路。</p>
+
+<p>晚上9点，我坐上了每天上班的178路公交，9点11分汽车开动直达龙华车站。其实上班的时候我是在终点站的前一站下车的，这次把上下班的路延长，沿着178路大站车的路线夜爆。9点50分从龙华车站开始步行到徐家汇，那里是我这次夜爆的起点。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/5055215213/" title="IMAG0435 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4147/5055215213_c928e5fa90.jpg" width="500" height="375" alt="IMAG0435" /></a>
+<a href="http://www.flickr.com/photos/40936183@N07/5055215835/" title="IMAG0436 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4109/5055215835_9f3a4ffe8f.jpg" width="500" height="375" alt="IMAG0436" /></a></p>
+
+<p>假日里，此时徐家汇的人头依然很多。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/5055834050/" title="IMAG0438 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4147/5055834050_7f22a5db8b.jpg" width="500" height="375" alt="IMAG0438" /></a></p>
+
+<p>走在天钥桥路上，被一位MM以俯视的姿态搭讪问路，我表示压力很大。</p>
+
+<p>过了体育馆，补充了一些事物和水，继续上路。一路上哼着小曲，脑袋轻松了许多。不知不觉地就走到了上班的地方。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/5055834474/" title="IMAG0439 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4150/5055834474_1cb70953ba.jpg" width="375" height="500" alt="IMAG0439" /></a></p>
+
+<p>离开的公司所在地，终于近距离的看到每天经过的那个雕塑厂，很多的雕塑放在门口。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/5055216863/" title="IMAG0440 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4153/5055216863_b79bb0237e.jpg" width="500" height="375" alt="IMAG0440" /></a></p>
+
+<p>市区渐渐远去，在出市区的一路上到处飘荡着孤魂，三三两两，无所事事。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/5055217193/" title="IMAG0441 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4106/5055217193_3ec7952e91.jpg" width="375" height="500" alt="IMAG0441" /></a></p>
+
+<p>植物园，很多人的结婚记忆都在这里。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/5055217479/" title="IMAG0442 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4108/5055217479_294a90bcc1.jpg" width="375" height="500" alt="IMAG0442" /></a></p>
+
+<p>正式的提示你正在往化工厂的方向。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/5055217931/" title="IMAG0443 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4112/5055217931_0855ab955b.jpg" width="375" height="500" alt="IMAG0443" /></a></p>
+
+<p>已经午夜，脚力有些不支，体力虽然还可对付，却难以阻挡瞌睡虫来袭。趁着夜宵车的点，在夜爆的半路我坐车回来了，虽然已是12点半，夜宵车上挤满了从市中心回家的人。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/5055218215/" title="IMAG0444 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4089/5055218215_3f73c9e51b.jpg" width="375" height="500" alt="IMAG0444" /></a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[读Facebook]]></title>
+    <link href="http://tairan.github.com/blog/2010/09/18/note-of-the-facebook/"/>
+    <updated>2010-09-18T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/09/18/note-of-the-facebook</id>
+    <content type="html"><![CDATA[<p>时机到了。</p>
+
+<p>我经常去怀疑那些企业成长的神话故事，难道他们真的是一夜长大的吗？《<a href="http://book.douban.com/subject/4820899/" target="_blank">Facebook</a>》用翔实的采访加上作者的精彩演绎，给我们讲解了Facebook是如何爆炸式的成长的。一开始看这本书的时候有一些不适应，因为用中文来翻译老外写的书总感觉词汇的使用是那么的别扭。好在Facebook的精彩故事让我忽略了本书的措辞。尽管本书的作者一开始在前言就告诉我们说，这本书的写作并没有的到马克本人的任何交流，但马克身边的人们也足以让我们来描绘出马克的大致轮廓。</p>
+
+<p>马克，作为Facebook的主要缔造者, 他在高中阶段就被传言曾拒绝微软百万年薪的邀请，初入哈佛就撰写了好友课程配对系统，受到了不错的欢迎。在开发Facebook之前马克写了若干个爬虫，分别从哈佛大学各个宿舍楼的学生信息系统中爬取了大量学生信息，并搞了一个“辣妹排行榜”(Facemash)程序中在学校里广为传播(有很多负面消息)。这些足以证明马克是一个不错的程序员，一个不错的Geek，这些正是开发Facebook最基本的技术保障。</p>
+
+<p>爱德华多，Facebook最初的推动者。作为马克在哈佛不多的朋友当中，他的经济头脑让他有了一些资金，而这些正是Facebook最初的支撑。没有这些资金，即使在初期，马克的学费绝对无法满足Facebook快速增长的胃口。并且有了这些资金，才有可能让马克一开始就专注程序的开发。</p>
+
+<p>肖恩，也许中国人对他很陌生，至少我以前没有听说过他，但是他在美国可是个神话级人物。在加入Facebook之前，他缔造了两个互联网重量级产品。虽然最终他被资本家赶出了自己创立的公司，但是他的经验是Facebook助推器，有着火箭加速的助推力。在肖恩的引荐下，Facebook获得了Paypal创始人的投资，并让马克结识了互联网界的巨鳄们，这些将Facebook引入了一个可以快速膨胀的轨道。</p>
+
+<p>Facebook诞生之前已经有了不少的交友网站，正是这些已经存在的不温不火的交友网站给马克提供了借鉴，避免重复他们的错误的经验，并从他们那里看到了他们缺少的东西。Facemash的火爆证明了马克自己的设想，而孪生兄弟的一次程序开发的相约让马克开动了编写Facebook代码的机器。</p>
+
+<p>Facebook的成长没有什么神话，是一个个的环节组成的，这些环节都紧密的链接在一起，缺少任何一个都无法促成今天的Facebook。马克在哈佛结识了爱德华多，创立了Facebook，而Facebook初期的成功吸引了肖恩的加入，在肖恩的指引下，Facebook登上了火箭发射架并真正的起飞了。</p>
+
+<p>Facebook的成功是一个团队的成功，并不是马克一个人的。即使作为Geek的马克的技术再牛B，没有这些战友的帮助也无法让Facebook攀上今天的高度。也许这是从后往前看，好似每个点都恰如其分的发生在那里。我相信在<strong>事情正在发生的时候，他们都努力在自己的岗位上做着自己认为最好的事情，当时机来到，一切准备就绪开始起飞。</strong></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[面试总结兼谈外包公司]]></title>
+    <link href="http://tairan.github.com/blog/2010/08/29/find-the-job/"/>
+    <updated>2010-08-29T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/08/29/find-the-job</id>
+    <content type="html"><![CDATA[<p>终于又上班了，这是虎年以来第一次上班。在正式确定上班之前在上海待了近一个半月，加上之前南通尝试的几次面试，这次面试的周期有两个月。在这两个月的时间内约平均一周2次面试，从时间上讲还是算密集。正所谓在家靠父母，出门靠朋友，如此之多的面试机会大部分是朋友介绍的HR，少数是在51job上投简历获得的。</p>
+
+<p>现在已经上班，之前的面试经历需要总结，给自己和大家一个交代，同时也给其他找工作的人一点参考。</p>
+
+<p>面试公司的类别
+因为我前一份工作的关系，这次面试的大部分是外包公司，外包公司又以微软外包为主，其中有一家是承包国内电信类型的项目。另外的是一些是电子商务类型的公司。</p>
+
+<p>外包公司看上去规模都不小，有的还有自己的办公楼，而电子商务类型的公司责依附在其他传统行业上，软件开发只是他们的一个部门，团队比较小。10人左右。</p>
+
+<p>面试的内容
+国内外包公司喜欢让你动手，管他三七二十一看你能不能干活是第一，不管什么手段，整出来就行，至于代码质量，他们除了在乎SQL外，其他的能用就行。我在半年没有摸微软系的代码的条件下去面试，竟然做不出什么东西，活生生的被鄙视。</p>
+
+<p>在微软外包公司的面试的模式就是英语+算法。
+英语，这是基本的沟通技能，有些团队跟老外联系紧密，需要口语，而另一些则主要通过邮件联系。无论如何英语是必备的，至少能看，能写邮件。</p>
+
+<p>算法，原来我认为只要能解决问题就行，经过这次的面试，我觉得算法还是很重要的，重要的不是会背那几个固定的算法，而是在你写代码解决问题的时候需要尽可能的少写代码，尽可能的少占用程序运行的时间和空间。当然，如果你一直写Hello World是可以不用在乎算法。</p>
+
+<p>在算法方面有几个几种常见的面试题：
+1. 以单词为单位反转字符串，如&#8221;I am Daniel Wang!&#8221; => &#8220;!Wang Daniel am I&#8221;
+2. 从字符串转换成数字， 如&#8221;123&#8221; => 123
+3. 剔除有序数组中重复的值。如[1, 2, 2, 3, 4, 4, 4, 5] => [1, 2, 3, 4, 5]</p>
+
+<p>为什么选择外包公司
+外包公司是邪恶的，对于需要成长的程序员来说更甚。不明白的可以参考一下别人的看法 <a href="http://www.dbanotes.net/jobs/howto_choose_company_style.html" target="_blank">去大公司还是去小公司工作？</a> <a href="http://www.javaeye.com/topic/36355#178908" target="_blank">如何规划你的职业发展道路</a><a href="http://robbin.javaeye.com/blog/730223">去跨国公司还是去创业公司？</a></p>
+
+<p>为什么这次我还是主动的选择了外包公司？我很缺钱，我需要一个稳定的，不会占用我的业余时间的工作。这样的状况我需要维持2-3年，视具体情况而定吧。</p>
+
+<p>而外包公司能提供：
+在相同职位外包公司的待遇要略高于非外包公司，大约在1k-2k+的差别。
+外包公司所从事的工作内容技术含量较低，但是做事流程很专业。
+外包公司规模也不小，不差钱，在里面只要稍微努力就会获得不错的待遇。参考 <a href="http://www.ruanyifeng.com/blog/2010/08/not_working_hard_for_a_big_company.html">别为大公司拼命</a></p>
+
+<p>总之，一朝进入外包的门，要十二分的努力才出的去！</p>
+
+<p>PS:
+原本想深刻的吐一些口水出来，但是有些东西(自己的)不方便公开，加上自己又犯懒了，写了个流水账。文章里提到的链接应该可以让看官明白外包公司是邪恶的，如果还不明白，欢迎来信。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[夜袭上海]]></title>
+    <link href="http://tairan.github.com/blog/2010/07/26/go-to-shanghai-by-bike/"/>
+    <updated>2010-07-26T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/07/26/go-to-shanghai-by-bike</id>
+    <content type="html"><![CDATA[<p>有一个不算老的年轻人，他有一个很爱他的老婆，还有一个很可爱的女儿，通常有这样身份的人都很安稳，都在努力的工作，用辛苦工作赚来的钱来换一些闲暇时间陪伴家人。而我们这位年轻人的心里却不那么的安份，他总想以自己的方式来体验这个世界。他特别喜欢看有关英雄，独行侠的故事。两年前他喜欢上了骑自行车旅行，吹着风，看着路两旁的风景，享受着运动的乐趣。</p>
+
+<p>这一次是这位年轻人的初次长途旅行的尝试，他的计划是傍晚出发，骑行一夜，150公里的路程，大约早上可以到上海的住处。</p>
+
+<p>在这次旅行之前，他已经计划了很多次不同目的地的旅行，但是时间并没有给他机会，这次他终于抓住了机会。外面有风，是外围台风的影响，在他看来这点风还不足以让轮渡封航，他的老婆很心疼地挽留他，可他还是坚持上路了。</p>
+
+<p>我们的年轻人，有很多装备都是在为这一刻而准备的，配有运动绑带的MP3，车载手电筒，驼包，还有朋友赠送的那辆心爱的捷安特。这些装备很长时间都是静静地躺在储物柜中，但是我们的年轻人始终坚信会用到。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4830368006/" title="IMAG0379 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4135/4830368006_65f46ef304.jpg" width="500" height="375" alt="IMAG0379" /></a></p>
+
+<p>出发了，我们的年轻人听着MP3，开心的上路了。此时是下午6：30分。刚开始的一段路已经走了很多次，在路上虽然和原计划的路线有点偏差，但是这条路足够的熟悉，丝毫不影响什么。当到了s338公路的时候，征程才刚刚开始。这一次他要走和往常去南通相反的方向，朝着海门前进。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4830368008/" title="IMAG0386 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4117/4830368008_62355ab199.jpg" width="375" height="500" alt="IMAG0386" /></a></p>
+
+<p>一路向东，他在留意需要转向的路口，耳边的风声盖过了MP3中的音乐，天色渐渐的暗了下来，他带着的眼镜却让夜色显得有些明亮。天气不错，天上飘着云，有点风，温度是他喜欢的那种，受夏日台风外围影响后的上海的感觉。月亮也开始升起，很明亮，看着月亮，他知道没几天就是月半了。</p>
+
+<p>这次上路，年轻人并没有准备详细的地图，只是在一张A4的纸上记下从Google地图上查找的需要转弯的路口，他很自信自己的方位辨别能力，可经验告诉他如此简单的记录也会出错的，他将自己无法链接GPRS的手机在临行前使用wifi将路线缓存了一下，这样的准备他认为还算很充足。</p>
+
+<p>在骑行了很久还没看到转弯的方向时，他停了下来。直觉告诉他，路口就在附近，这时手机上的路线缓存用上了，果然路口就在附近，他刚走过。他再一次的暗爽，运气真好。掉头来到路口，这是一条小路，没有路名，没有路灯。他找了一个人打听一下，可那个人是外地人，也不清楚，只好去问路口卖熟菜的摊贩，摊贩告诉他这的确是海太汽渡的路，最近在修路，推荐他走另一条。很大，很好走的一条路，摊贩说，你一直向前，第一个路口右转就行，大约8公里。年轻人，心里掂量了下，按照摊贩所说的方向继续上路了。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4830368010/" title="IMAG0388 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4097/4830368010_fb8c19ddb0.jpg" width="375" height="500" alt="IMAG0388" /></a></p>
+
+<p>吹着风，年轻人很快的到达了转弯的地方。这真的是一条大路，是到海门市的主要通道，转弯处有很多商店，很是热闹。年轻人想去买一瓶盐汽水，这是他在旅行中最爱的一种饮料，味道不错而且还可以补充盐分。可这次他失望了，来之前去超市采购时没有买到盐汽水，这次依然没有找到。年轻人摸了摸口袋，然后拿了一罐可口可乐出来了。来到自行车旁，发现车载手电是爆闪的状态，随手关掉了。年轻人打开可口可乐，骑上自行车又上路了。</p>
+
+<p>这是一条向南的路，过往的车辆不算多，路况也不错，还有一路的路灯。年轻人手中的可乐喝完了，随手捏扁扔到了路边草丛中，在扔可乐罐的一瞬间他感觉到了一种轻松，并不强烈，但是他知道这是轻松的感觉。</p>
+
+<p>夜晚的路上不时有附近的居民出来散步，年轻人像一阵风一样从他们身边飘过。这条路很长，一路上都有路灯，他感慨，现在的生活都那么的富裕，想当初年轻人老家的小镇上安装的路灯到9点以后就会关闭，按照当时的说法是政府无力开支。</p>
+
+<p>年轻人欣赏着路两旁的风光，也在密切的留意一切指示路牌。当看到海门市的界牌时，他笑了，这么快就到了海门。继续前行，进入海门市，路旁他看到了去海太汽渡的指示。当他没有选择那条可以直达海太汽渡的小路时，也就意味着他到了这里要折回再走8公里，路有很多，难走的路近，好走的路远，代价差不多。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4830368012/" title="IMAG0389 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4081/4830368012_3218c5be90.jpg" width="375" height="500" alt="IMAG0389" /></a></p>
+
+<p>海太汽渡就在前面，年轻人开始感觉有点累了，转了几个弯，还是没有看到海太汽渡的影子，不过他从风中已经闻到了长江的味道。此时已经将近10点，他出发的时候告诉老婆自己会在老婆睡觉前到海太汽渡，为了让老婆放心他拿起了电话。电话中，他告诉老婆，他闻到了江风，汽渡就在前面，让老婆休息去。可他老婆却很是思念，说到了给她发短信。通话完毕，他继续上路。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4830368016/" title="IMAG0390 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4140/4830368016_617b9c8c77.jpg" width="375" height="500" alt="IMAG0390" /></a></p>
+
+<p>人在付出很多体力的时候，胃口会出奇的好，年轻人出发前吃过了晚饭，可是很快就饿了。三下五除二解决了一瓶矿泉水和一根火腿肠后一鼓作气来到了海太汽渡。年轻人开心极了，可是当车子来到渡口值班室，他发现有些不对劲。上前讯问后，才知真的封航了，而且还被告知开航时间未知，让他明早再来。“明早再来？”年轻人不甘心，既然都已经在路上了，怎么能再回头呢？ 跟老婆报告后，他还是决定在这里等候。为了掩饰心中的不甘，他将这个消息告诉他的那个整天吵着要嫁人的小徒弟。小徒弟天真的让我去找个如家待着，唉，这前不着村后不着店的地方。</p>
+
+<p>轮渡值班的哥们看我在外面徘徊，上前说，你是要等咯？你可以来值班室坐坐。年轻人心里庆幸，还是好人多。进入值班室，跟值班的哥们聊了起来。说对岸风大，封航了。一般8级以上的风才会封航。那哥们还说，你运气不好，如果早来半个钟头有个想过江的车刚才载了个摩托从苏通大桥走了。年轻人听了这话虽然有些不快，但是还是很乐观的期待能快些通航。</p>
+
+<p>夜，风大了起来，江水开始涨潮，很快就淹没岸边的宣传标语。周围没人，年轻人跑到江边撒了泡尿。漫漫长夜不能就这样干等着，年轻人想到了随身带来的书。年轻人总喜欢带书在身边，而且不止一本。他很渴望看书，可是真正看的却不多，他总是担心当想看书的时候手边没有书，于是他有点强迫症。手边没有几本书，他会觉得不安。这次他看的是《微软的秘密》。</p>
+
+<p>年轻人曾经很幸运的混进微软外围，并在里面工作了两年，他看着书，不断的和自己经历过的微软印证着。他一边看一边感叹微软当初的好时机，以及怪兽一样的微软是如此强大。微软在PC软件领域开创了自己的时代，定制了微软标准，可最近在网络时代，微软却有力使不上。</p>
+
+<p>书的内容很精彩，但是没有挡住瞌睡虫的侵扰，3点多了，年轻人睡着了，在睡着的时候他能感觉到自己睡的很香，而且还打着很响的呼噜。睡时间不长，汽笛声吵醒了他和另外的一个半夜换班后的中年值班员。他们循着汽笛出去，中年值班员告诉他，这是去崇明的船，去太仓的还不确定。年轻人很沮丧地回到了值班室。没多久汽笛声又再度想起，哈哈，要准备过江了。</p>
+
+<p>在船靠岸的间隙，中年值班员看到前面有个骑电瓶车的人，将她叫来问，买票了么？电瓶车说，多少？ 15块，转头又来问年轻人，买票没？年轻人随中年值班员进入值班室，小声的说，玻璃上贴的公告，散客5块。中年值班员说，你还有自行车，10块。年轻人对这种事情已经习惯了，于是讨价还价后5元买了票上船去。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4829769699/" title="IMAG0397 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4116/4829769699_089ef0c27c.jpg" width="375" height="500" alt="IMAG0397" /></a></p>
+
+<p>在船上，年轻人看到电瓶车也上来了。船开了以后，年轻人上去和电瓶车搭讪，原来电瓶车也是要去上海，而且从一个比年轻人还远20多公里的地方过来的。年轻人在心里又开始寻找自己的理论，男人年轻时容易冲动，女人则在不年轻的时候冲动。</p>
+
+<p>刚上船的时候天还是黑的，远处苏通大桥闪着灯光。没多会，天开始亮了，风浪不时将船左右的摇晃着，年轻人看着旁边的货车，总担心它要倒下来压到他，他开始打量着坐着的楼梯，掂量着万一危险就往上爬。虽然惊险，货车始终还是没有倒。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4830368058/" title="IMAG0393 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4099/4830368058_5e8bfd93f1.jpg" width="500" height="375" alt="IMAG0393" /></a></p>
+
+<p>在轮渡上，年轻人对自己的感觉发生了疑问，为什么苏通大桥看到了三次，每次角度都不一样。他甚至想到了鬼打墙，好在最后一次看到的时候也发现船要靠岸了。船靠岸后，电瓶车没有按照约定在岸上等待，直接走了。年轻人上前追了过去，因为电瓶车告诉他，自己从来没有走过这条路，也不知道该怎么走。年轻人追到电瓶车后，问她怎么打算的，她看出年轻人嫌电瓶车慢，说，你在前面走，她尽量跟上。</p>
+
+<p>年轻人以为电瓶车速度应该还可以，就放开使劲的踩，没多会就看不到电瓶车了。在一个路口，年轻人有些不放心，停下来喝点水，等了等电瓶车。电瓶车来了以后，年轻人告诉她，这条路直走然后左转就是去上海的一条直路。其实电子地图告诉年轻人这段路有几个地方需要转弯，可以节约一些路程，年轻人知道自己一时给电瓶车讲不明白，就告诉了她这条简单的路。</p>
+
+<p>早上5点多，太阳已经开始升起，很明亮的天。路上到上海60公里的标示，让年轻人相信再过2个多小时应该就可以到上海洗个澡睡上一觉。却不知，这才是煎熬的开始。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4829769703/" title="IMAG0398 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4093/4829769703_93a457f56f.jpg" width="375" height="500" alt="IMAG0398" /></a></p>
+
+<p>上半夜连续的狂奔，加上一宿没睡，年轻人的体力已经无法连续的快速骑行。路上遇到几座原来从不放在眼中的桥，年轻人却无力上去，只好下来推着走，这样还能缓解一下一直骑行的双腿。年轻人已经没有力气去注意时间，只觉得太阳越来越热，偶尔飘过的云遮住太阳的光芒都让年轻觉得好清凉。在走小路的时候，年轻人总是故意找一些阴凉的地方，而且年轻人开始幻想，不时的向路边有水的地方望去，总希望可以有个地方可以洗一洗。如果在多年以前，年轻人随时可以到水里，现在能轻易靠近的河边，水上都泛着油花。这就是我们的现代化。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4829769709/" title="IMAG0399 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4102/4829769709_48705c979a.jpg" width="500" height="375" alt="IMAG0399" /></a></p>
+
+<p>饥饿，炙热的阳光如影随形，年轻人好不容易找到路边一处阴凉地，补充了一下，也许有一分钟，一瓶水和半袋饼干被消灭了。年轻人不敢多停留，多停留一分钟就要承受更毒辣的太阳炙烤一分钟。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4829769713/" title="IMAG0400 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4118/4829769713_738a9511a0.jpg" width="375" height="500" alt="IMAG0400" /></a></p>
+
+<p>界牌，是年轻人最爱看到的。[江苏-上海]，年轻人已经没有多少力气，只在心里大喊，“上海，我来了”。望着上海的收费站，年轻人拍了张照片，沿着自行车道继续前进。通过卡口时，保障世博会安全的警察、武警并不去检查非机动车辆，年轻人还在盘算着怎么应付检查的空隙，就已经进入沪太路了。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4829769715/" title="IMAG0401 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4098/4829769715_1490de6966.jpg" width="500" height="375" alt="IMAG0401" /></a></p>
+
+<p>按照原计划，年轻人并没有在曾经坐大巴经过许多次的沪太路上停留多久就转入到旁边的蕰川路上去。来到上海，一切都不一样了，平坦的路面，详细的标志，这就是有钱的上海。在蕰川路上，年轻人看到了只有上海郊区才能看到的湛蓝的天空，朵朵白云，飘在天上。</p>
+
+<p><a href="http://www.flickr.com/photos/40936183@N07/4829769717/" title="IMAG0402 by tairan.wang, on Flickr"><img src="http://farm5.static.flickr.com/4118/4829769717_7ce0fc6b80.jpg" width="500" height="375" alt="IMAG0402" /></a></p>
+
+<p>年轻人以为沪太路很长，原来蕰川路也不短。太阳开始发威了，年轻人已经没有快速前进的力气，原来以为不远的距离，却走了很长时间。从蕰川路转到江杨北路后，年轻人记录的地图路线结束了，此时手机上的地图也不给力，因为连不上GPRS，Google地图需要打开两次才能让GPS正常工作。到了这里，Google给的路线显得一点也不经济，按照地图上，我需要到复旦那边然后过江去浦东。于是年轻人开始和自己的大后方沟通，老婆帮他查最佳路线，此时老婆在家里要照顾床上的老妈子，又要耐心的给老公查地图。本来查地图就不是女人的强项，在电话那头，老婆开始不耐烦起来。我们的年轻人，虽然很体谅她，可心里却嘀咕，她什么时候能心平气和的和在外面的老公说话？难道就不担心老公被太阳强暴后从自行车上摔下从此不起？埋怨只是暂时的，路还要继续。</p>
+
+<p>年轻人再一次凭着直觉相信，吴淞渡口就是他过江的地方。在询问了一对老夫妇后，也不顾答案并不十分确定，头也不回的前进了。路上他注意到一辆公路，有时在后，有时在前，在等红灯的时候年轻人和公路搭上话。公路也不知道吴淞渡口是否能到浦东。已经在路上的年轻人，还是选择了继续前进。</p>
+
+<p>在A20底下的泰和路上，一路到底就来到吴淞渡口，年轻人在这里终于补充到一瓶盐汽水，虽然不是他喜欢的延中牌，可这是凉的。在渡口年轻人再次向工作人员确定这是去浦东的轮渡时，被工作人员仔细的检查一遍。这是来上海一路上接受的唯一一次检查。世博，上海的安全检查多了很多。可这真的有用吗？最多也就是威慑作用，顺带多花一些经费改良和增加装备。</p>
+
+<p>浦东，我来了，年轻人感觉胜利在望。在渡船上年轻人给自己换了块黑色的镜片，原来黄色的镜片在白天太耀眼。顺便擦了擦脸上和脖子上的盐粒。</p>
+
+<p>下了渡船，年轻人找不到路，不知道该如何走。他开始留意路边，他觉得上海会有很多地方卖地图，一般卖报纸的地方就有。路两旁飘来鸡肉的香味，让年轻越发的感到饥饿。年轻人不敢停留，因为这一停留不知道何时才能到达。出了渡口没多远，年轻人就看到卖报纸的地方，而且的确有地图卖。买到地图，跟地图老板一起研究了路线，然后又上路了。就在看地图的那一会功夫，自行车座子已经滚烫了。</p>
+
+<p>买地图的这一条路叫江东路，一直走到浦东北路，然后再到五洲大道，转弯直走，东靖路就不远了。</p>
+
+<p>江东路不宽，过往的大卡车很多。路两旁开着很多店。在靠近江城路的一段，不少的工厂在路旁，有的地方还在修路。因为在轮渡上的少许休息，年轻人的体力好了不少，这段路走的很快。过了江城路，年轻人开始凭着路牌骑行，在上海只要看路牌就不会迷路，如果走过就更快。在这一段，绕来绕去，年轻人来到了杨高北路，看到了外高桥保税区。在路旁还看到高耸的麦当劳广告牌。</p>
+
+<p>外高桥南地铁站，让年轻人很兴奋，因为下面不远处他看到了平时经常坐的181路公交车的站牌，他开始数到家还有几站路。3站，是的还有3站路就到了。年轻人现在已经没有多少力气了，自行车的速度只能是平时散步时的那样。不过年轻人的意志力还是很强大的，在如此炙热太阳下，饥饿，口渴都没有让他中暑。看到上坡时，再一次的发起了冲锋。多年前，年轻人就养成了一种习惯，不管是跑步还是骑车，在最后阶段他总能凭着毅力向前冲刺。</p>
+
+<p>2站，1站，终点就在眼前。年轻人好饿，心里在盘算，是先到家洗澡，歇息后再出来，还是弄点吃的打包带回去？当到了平时坐车的地方，年轻人再按不住饥饿去买吃的去了。3个汉堡，3个肉串，一份凉皮。汉堡和肉串是现做的，几分钟的光景让年轻人感觉如此的漫长。</p>
+
+<p>拿上吃的，年轻人终于回到了在浦东的住处。三下五除二推掉身上的衣服后奔向浴室。</p>
+
+<p>中午12点，结束了，年轻人的第一次长途骑行就这样结束了。和计划偏差了很长时间，也多骑了几十公里，可我们的年轻人还是成功了。</p>
+
+<p>ps:
+老婆还是一个好编辑</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[我学习Kohana的方法]]></title>
+    <link href="http://tairan.github.com/blog/2010/06/23/my-way-for-learning-kohana/"/>
+    <updated>2010-06-23T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/06/23/my-way-for-learning-kohana</id>
+    <content type="html"><![CDATA[<p>Kohana 是一个PHP的开放框架，所以在学习之前需要深入了解PHP。另外Kohana也是一个遵循MVC模式的开发框架，同样在学习之前还需要深入了解什么是MVC，最好动手写过MVC模式的页面，一个练习也行。</p>
+
+<p>接下来我们从那里开始呢？</p>
+
+<p>在动手练习之前，需要阅读文档。先哲说：闲时读手册，忙时问Google。刚开始我们有充裕的时间，那么开始阅读文档吧。</p>
+
+<p>作为入门，属于<strong>Getting Started</strong>的文档需要优先阅读。通过阅读<a href="http://kohanaframework.org/guide/about.kohana" target="_blank">What is Kohana?</a>，来了解下Kohana都有哪些东西。而 <a href="http://kohanaframework.org/guide/about.mvc" target="_blank">Model View Controller</a>则告诉你Kohana使用了一种改良型的MVC模式。接下来 <a href="http://kohanaframework.org/guide/about.filesystem" target="_blank">Cascading Filesystem</a> 告诉你这个改良型的MVC模式是怎么工作的。最后通过阅读<a href="http://kohanaframework.org/guide/about.flow" target="_blank">Request Flow</a>来了解从浏览器发出请求后Kohana在服务器端是怎么处理的。okay，通过阅读以上的文档就入门了。</p>
+
+<p>阳明先生说，知是行之始，行是知之果，知行功夫不可离。意思是光看文档并不代表你知道，需要动手操练一番才算真知道。</p>
+
+<p>Kohana安装还是很容易的，将整个工程放到web服务器上就可以工作了。如果遇到问题跑不起来怎么办？Fix it! 安迪教授也说了，当你在工作过程中没有得到想要的东西时你就获得了经验。</p>
+
+<p>程序员动手的第一招是&#8221;Hello World&#8221;，Kohana已经提供了这一招，所以通过阅读源码来学习这一招是如何发出的，因为Kohana是改良的MVC(也就是HMVC)，那么需要多注意项目的目录结构，看看这些源文件是以什么样的方式组织的。在观摩Kohana提供的入门招数后，让我们来破解这个招式。尝试着修改文件名，类名，以及改变文件目录位置等来验证这一招在什么情况下会失效，这对你加深理解有帮助。</p>
+
+<p>入门招数，学了也拆了，开始模拟演练吧。</p>
+
+<p>新手入门第一课，留言板。很多前辈都推荐新手来实现一个留言板用以学习新的开发环境。动手之前，我们要有个蓝图，不用大，将期望了解的知识点囊括进去即可。web开发的知识点通常有，Session,Cookie的管理，数据库的操作，URL的管理，Ajax，表单验证，异常处理等。限定已经有了，那么就开始来实现留言板吧。</p>
+
+<p>演练开始我们就忙了起来，这时Google就发挥作用了，遇到疑难杂症问Google。作为修炼内力，阅读<a href="http://kohanaframework.org/guide/api">API</a>加深理解各个类是如何工作。</p>
+
+<p>最后，先哲也说了，尽信书不如无书。文档也有bug，当实际操作和文档描述的行为不相符的时候，那么我们就要玩外科手术了。这就是开源的好处，有bug直接解剖，肚皮划开后一目了然！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[快速建立HTTP Server共享文件]]></title>
+    <link href="http://tairan.github.com/blog/2010/05/28/shared-by-simplehttpserver/"/>
+    <updated>2010-05-28T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/05/28/shared-by-simplehttpserver</id>
+    <content type="html"><![CDATA[<p>Python内置了一个简单的Web服务器可以用来建立一个<em>HTTP Server</em>来共享某个目录下的文件，尤其是在Unix-Like+windows的混合网络中更是方便快捷。</p>
+
+<p><strong>Server</strong>
+假设 IP 为 192.168.1.1</p>
+
+<p>首先进入到需要共享的目录，如</p>
+
+<pre lang="bash">
+cd ~/share/
+</pre>
+
+
+
+
+<pre lang="bash">
+python -m SimpleHTTPServer 8000 #Python 2.6 
+</pre>
+
+
+<p><em>OR</em></p>
+
+<pre lang="bash">
+python -m http.server 8000 #Python 3.0
+</pre>
+
+
+<p><strong>Client</strong>
+访问http://192.168.1.1:8000就可以看到Server共享出来的文件了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[如何识别手机浏览器信息]]></title>
+    <link href="http://tairan.github.com/blog/2010/04/16/how-to-identify-mobile-browser/"/>
+    <updated>2010-04-16T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/04/16/how-to-identify-mobile-browser</id>
+    <content type="html"><![CDATA[<p>想作一个网站，根据不同的访问者提供不同的显示模板，如适合手机的模板，适合PC浏览器的模板。</p>
+
+<p> 从哪里识别访问者的信息，以及如何识别呢？</p>
+
+<p>依据 HTTP 协议，客户端浏览网页的时候会提供一些信息给服务器端。下面是PC浏览器访问时的 <a href="http://cn.php.net/manual/en/reserved.variables.server.php" target="_blank">$_SERVER</a> 的 dump 信息。</p>
+
+<pre lang="PHP">
+(array) Array
+(
+    [ALL_HTTP] => HTTP_CACHE_CONTROL:max-age=0
+HTTP_CONNECTION:keep-alive
+HTTP_CONTENT_LENGTH:0
+HTTP_ACCEPT:application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+HTTP_ACCEPT_CHARSET:ISO-8859-1,utf-8;q=0.7,*;q=0.3
+HTTP_ACCEPT_ENCODING:gzip,deflate,sdch
+HTTP_ACCEPT_LANGUAGE:en-US,en;q=0.8
+HTTP_COOKIE:__utmz=259664206.1262318873.1.1.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=51xna; __utma=259664206.724256099.1262318873.1262318873.1262318873.1
+HTTP_HOST:www.51xna.com
+HTTP_USER_AGENT:Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.9 Safari/533.2
+
+    [HTTPS] => off
+    [SCRIPT_NAME] => /private/Kohana/index.php
+    [HTTP_COOKIE] => __utmz=259664206.1262318873.1.1.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=51xna; __utma=259664206.724256099.1262318873.1262318873.1262318873.1
+    [AUTH_PASSWORD] => 
+    [AUTH_TYPE] => 
+    [AUTH_USER] => 
+    [CONTENT_LENGTH] => 0
+    [CONTENT_TYPE] => 
+    [PATH_TRANSLATED] => g:\wwwroot\51xna.com\wwwroot\mobile\index
+    [QUERY_STRING] => 
+    [REMOTE_ADDR] => 221.227.130.23
+    [REMOTE_HOST] => 221.227.130.23
+    [REMOTE_USER] => 
+    [REQUEST_METHOD] => GET
+    [SERVER_NAME] => www.51xna.com
+    [SERVER_PORT] => 80
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [SERVER_SOFTWARE] => Microsoft-IIS/6.0
+    [APPL_MD_PATH] => /LM/w3svc/798/ROOT
+    [APPL_PHYSICAL_PATH] => g:\wwwroot\51xna.com\wwwroot\
+    [INSTANCE_ID] => 798
+    [INSTANCE_META_PATH] => /LM/W3SVC/798
+    [LOGON_USER] => 
+    [REQUEST_URI] => /private/Kohana/index.php/mobile/index
+    [URL] => /private/Kohana/index.php/mobile/index
+    [SCRIPT_FILENAME] => g:\wwwroot\51xna.com\wwwroot\private\Kohana\index.php
+    [ORIG_PATH_INFO] => /private/Kohana/index.php/mobile/index
+    [PATH_INFO] => /mobile/index
+    [ORIG_PATH_TRANSLATED] => g:\wwwroot\51xna.com\wwwroot\private\Kohana\index.php\mobile\index
+    [DOCUMENT_ROOT] => g:\wwwroot\51xna.com\wwwroot
+    [PHP_SELF] => /private/Kohana/index.php
+    [HTTP_CACHE_CONTROL] => max-age=0
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_CONTENT_LENGTH] => 0
+    [HTTP_ACCEPT] => application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+    [HTTP_ACCEPT_CHARSET] => ISO-8859-1,utf-8;q=0.7,*;q=0.3
+    [HTTP_ACCEPT_ENCODING] => gzip,deflate,sdch
+    [HTTP_ACCEPT_LANGUAGE] => en-US,en;q=0.8
+    [HTTP_HOST] => www.51xna.com
+    [HTTP_USER_AGENT] => Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.9 Safari/533.2
+    [REQUEST_TIME] => 1271408243
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+</pre>
+
+
+<p>通常我们可以在HTTP_USER_AGENT中找到识别信息，其中PC浏览器的HTTP_USER_AGENT信息最全，很容易根据关键字来识别如&#8217;Chrome&#8217;, &#8216;Firefox&#8217; 等，部分手机浏览器也可以可以通过 &#8216;Windows Mobile&#8217;, &#8216;Windows Phone&#8217;, &#8216;SymbianOS&#8217;, &#8216;Nokia&#8217;, &#8216;Opera Mobi&#8217;, &#8216;Android&#8217;等关键字识别，这里有一个手机HTTP_USER_AGENT识别列表<a href="http://www.zytrax.com/tech/web/mobile_ids.html" target="_blank">http://www.zytrax.com/tech/web/mobile_ids.html</a>。但是有些手机上的浏览器并不提供HTTP_USER_AGENT信息。</p>
+
+<p>如今的智能手机大多都支持 XHTML 格式浏览，我们可以通过 HTTP_ACCEPT 来识别手机是否支持 XHTML 格式浏览。这里识别的关键字主要是 &#8216;application/xhtml+xml&#8217;。</p>
+
+<p>另外还有一种识别方式，通过查找用户的上网方式，通常手机用户走的是 GPRS 路线，但是这中识别方式并不可靠，可以作为一种辅助识别手段。</p>
+
+<p>对于只支持 WML 的手机目前我还没有解决，一些非智能手机在访问网站时会提示&#8221;不支持所访问的网站&#8221;。开始我以为是返回信息的问题，当我把返回信息严格按照WML格式输出时问题依然存在。不知道这种手机是通过什么方式访问互联网的。</p>
+
+<p>为所有用户提供不同的定制服务是一件不可能的完成任务，支持大多数就好。完美主义总是很浪费时间。</p>
+
+<p>最后感谢各位提供手机访问信息的童鞋们，让你们忍受在手机上输入如此之长的URL，实在辛苦！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[基于(LFS)构建一个属于自己的Linux(一)]]></title>
+    <link href="http://tairan.github.com/blog/2010/02/22/building-the-linux-for-myself/"/>
+    <updated>2010-02-22T00:00:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2010/02/22/building-the-linux-for-myself</id>
+    <content type="html"><![CDATA[<p>想挑战LFS很久了，终于从今天开始动工制作了。以前虽然没有动手开始创建LFS，但是也积累了不少的相关信息，一切都还算顺利。</p>
+
+<p>今天是第一天，主要的工作是编译工具链和一些系统工具为Building the LFS System作准备。</p>
+
+<p>准备HOST(宿主)系统，没有使用<a href="http://www.linuxfromscratch.org/livecd/" target="_blank">LFS-LiveCD</a>, 而是在虚拟机中安装<a href="http://www.linuxmint.com" target="_blank">LinuxMint</a>(没有特殊的含义)，在开始之前需要在LinuxMint中安装编译LFS的相关工具。</p>
+
+<pre lang="bash">
+sudo apt-get install build-essential bison
+</pre>
+
+
+<p>LFS 的版本为 6.5</p>
+
+<p>LFS 提供了一个文件, 其中包含了构建LFS所有用到的源码下载链接 <a href="http://www.linuxfromscratch.org/lfs/downloads/stable/LFS-BOOK-6.5-wget-list" target="_blank">LFS-BOOK-6.5-wget-list</a></p>
+
+<p>可以使用wget下载这些源码</p>
+
+<pre lang="bash">
+wget -c -t 2 -i LFS-BOOK-6.5-wget-list -o down.log
+</pre>
+
+
+<p>需要注意的是，Perl-5.10.0 的路径已经被移除，取而代之的是Perl-5.10.1。采用了新的版本Perl后，原来针对5.10.0的patch就不用了。</p>
+
+<p>依照LFS-BOOK的指示，编译起来还是很顺利的。如果英文不好可以对照着<a href="http://www.google.cn/search?hl=zh-CN&newwindow=1&rlz=1B6_____enCN355CN356&q=%E9%87%91%E6%AD%A5%E5%9B%BD&btnG=Google+%E6%90%9C%E7%B4%A2&aq=f&oq=">金步国</a>翻译的中文版的<a href="http://lamp.linux.gov.cn/Linux/LFS-6.2/index.html">LFS-BOOK-6.2</a></p>
+
+<p>通常编译的步骤如下，先解压源码包，如果有patch则应用patch</p>
+
+<pre lang="bash">
+patch -Np1 -i path_of_the_patch
+</pre>
+
+
+<p>之后就是念咒语</p>
+
+<pre lang="bash">
+./configure --prefix=/tools #需要根据文档指示
+make
+make install
+</pre>
+
+
+<p>具体的编译还是应该参照文档，除非你运气真的很背，否则都会通过的。</p>
+
+<p>编译是一件苦力活，根据机器的性能，也许会耗费你一天甚至更长的时间。其实也有自动化的操作，但是动手敲上一段咒语还是有很多额外的收获。</p>
+
+<p>到此，编译了N个程序后准备工作就告一段落了，编译的这些程序是新世界的基础，很重要、也很费时！ 接下来进入 <b>Building the LFS System</b></p>
+]]></content>
+  </entry>
+  
+</feed>

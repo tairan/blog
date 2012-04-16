@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>向下兼容 - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="向下兼容是好是坏？ 传说Microsoft就是因为良好的向下兼容的作风赢得了今天的市场。可有些时候，向下兼容会带来很多的包袱。 这几天一直在为安装操作系统的事情发愁。这也是我聊向下兼容的起因。 最近买了一套服务器，配置如下：（终于用上XEON了 ^_）
+ASUS P5BV-E
+INTEL XEON &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2009/04/24/downward-compatible">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">向下兼容</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-24T00:00:00+08:00" pubdate data-updated="true">Apr 24<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>向下兼容是好是坏？</p>
+
+<p>传说Microsoft就是因为良好的向下兼容的作风赢得了今天的市场。可有些时候，向下兼容会带来很多的包袱。</p>
+
+<p>这几天一直在为安装操作系统的事情发愁。这也是我聊向下兼容的起因。</p>
+
+<p>最近买了一套服务器，配置如下：（终于用上XEON了 ^_<sup>）</sup>
+ASUS P5BV-E
+INTEL XEON E3110
+KINGSTONE ECC DDR2 2G × 2
+Seagate ST3500320SV × 4
+Seventeam 500w</p>
+
+<p>冲着提高磁盘I/O的方向，准备做RAID 0。因预算紧张，没有买SCSI/SAS硬盘。
+安装操作系统时遇到问题了，因为Windows2003的安装光盘没有集成RAID的驱动程序，在安装操作系统的时候需要按F6来用软盘安装驱动程序。如今网龄稍微年轻的人可能都不曾见到软驱为何物，为啥还要用软驱来装驱动呢？在主板上保留软驱接口是一种向下兼容的行为。也许服务器上也还有很多的软驱存在，也许品牌服务器上还提供软驱。</p>
+
+<p>硬件提供商们能不能给个可选的方案，比如用光盘或者U盘来安装RAID驱动？</p>
+
+<p>没有软驱，我开始找另一种解决方案：自己集成带RAID驱动的系统安装光盘。
+做<a href="http://www.microsoft.com/china/windowsserver2003/default.mspx">Windows 2003</a>的集成光盘，一般都是采用配置OEM信息。手工集成OEM信息虽然简单，资料也多，但是毕竟手工容易出错。好在广大的程序员提供了好用的基于UI操作的集成工具 <a href="http://www.nliteos.com/">nlite </a>就是用来集成<a href="http://www.microsoft.com/china/windowsserver2003/default.mspx">Windows 2003</a>的好工具。如果要集成 VISTA 那么可以使用 <a href="http://www.vlite.net/">vlite</a>。在寻找集成工具的同时，我还发现一个好东西，就是下载操作系统更新补丁的工具，使用这个工具可以把操作系统历史的更新补丁下载到本地，然后配合 <a href="http://www.nliteos.com/">nlite</a>/<a href="http://www.vlite.net/">vlite </a>将补丁集成到安装光盘中。服务器嘛，安全第一！</p>
+
+<p>安装好操作系统，还要安装其他的驱动程序如网卡。当我把主板带的驱动光盘插入光驱后，一度让我以为是光驱坏掉了。其实我的光驱是一个CD-ROM，而驱动光盘是DVD，为什么要用DVD作为驱动载体发布呢？是因为数据量太大？我自己检查了一下，光盘中的数据才400多M！此时我又在想，为什么不考虑一下向下兼容呢？明明没有那么的数据，非要用个DVD来装，真不成DVD光驱比U盘的普及度还高？</p>
+
+<p>向下兼容/不兼容？是好是坏呢？这个还是要看市场，看大家有没有这个的需要！Python 3.0 就是迈出了不向下兼容的一步，是好是坏，让时间来说明吧。</p>
+
+<p>PS：这次买的硬盘，有一块中奖了。4块硬盘中开包的第一块硬盘就中奖了&#8211;坏的！我担心其他硬盘也有问题，就用 Linux 上的 badblocks 检查到半夜！淘宝上的卖家服务态度不错，硬盘已经发回去了。下周一就回到手里了。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-24T00:00:00+08:00" pubdate data-updated="true">Apr 24<span>th</span>, 2009</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/04/19/windows-live-admin-center/" title="Previous Post: Windows Live Admin Center">&laquo; Windows Live Admin Center</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/04/29/the-mask/" title="Next Post: 揭开"同学聚会"所谓的真实面目">揭开"同学聚会"所谓的真实面目 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

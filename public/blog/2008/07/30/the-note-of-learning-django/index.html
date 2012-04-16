@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The note of learning Django - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="django 学习笔记 使用 apache2.2 + mod_python 部署django 项目 #装载模块LoadModules python_module modules/mod_python.so#声明虚拟主机NameVirtualHost 127.0.0.1:80#定义虚拟主机&lt; &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2008/07/30/the-note-of-learning-django">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">The Note of Learning Django</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-30T00:00:00+08:00" pubdate data-updated="true">Jul 30<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>django 学习笔记</h1>
+
+
+<h2>使用 apache2.2 + mod_python 部署django 项目</h2>
+
+
+<br />#装载模块<br />LoadModules   python_module       modules/mod_python.so<br /><br />#声明虚拟主机<br />NameVirtualHost 127.0.0.1:80<br /><br />#定义虚拟主机<br />&lt;VirtualHost 127.0.0.1:80&gt;<br />&lt;Location /&gt;<br />    SetHandler python-program<br />    PythonHandler django.core.handlers.modpython<br />    SetEnv DJANGO_SETTINGS_MODULE mysite.settings         <br />    PythonDebug On<br />    PythonPath &#8220;[&#8216;D:workspace&#8217;] + sys.path&#8221;<br />&lt;/Location&gt;<br />&lt;/VirtualHost&gt;<br /><br />SetEnv DJANGO_SETTINGS_MODULE mysite.settings<br />此处是django project的settings文件，根据python import 包的机制，这个和 PythonPath 息息相关。<br />假设django project目录是 d:workspacemysite，设置PythonPath时如果是d:workspace， 那么在设置django project的settings时就是 mysite.settings<br />如果设置PythonPath为d:workspacemysite ，那么只要指定 settings 即可，而不需要mysite的包名了。<br />此处还影响着 settings.py 文件中的 ROOT_URLCONF<br /><br />#TODO使用虚拟目录部署<br /><br /><h2>配置 Django project 中的静态资源 css js jpg 等</h2>通过阅读他人的源码，把这个问题也明白了。传说 Django 不建议在 settings 设置 MEIDA_ROOT 等相关静态文件配置。那么我们在模板中如何使用这些文件呢。如，在模板中我们使用 /media/css/layout.css ，web server怎么样才能知道这个路径在什么地方呢？<br />当然，Django中提供了相应的解决办法:通过url映射。在urls.py中做一下设置<br />urlpatterns += patterns(&#8221;,<br />      (r&#8217;^media/(?P&lt;path&gt;.*)$&#8217;, &#8216;django.views.static.serve&#8217;, {&#8216;document_root&#8217;:&#8217;d:/templates/media&#8217;}),<br />)<br /><br />通过这样的映射，静态的资源的问题就解决了。:)<br /><br /><h1>Django URL dispatcher</h1>1. project 级别的 url 调用 app 级别的url<br /><br />此处要注意的是，project url + app url 才是真正的url，所以写url的正则表达式时，注意^ $两个符号<br /><br />2. 通过Url传递Get Request参数<br /><br />如果我们 detail(request, name) 的方法需要一个name参数，那么我们的正则表达式应该这样写 (r&#8217;^detail/P&lt;?name&gt;w+$&#8217;, &#8216;detail&#8217;)<br /><br />3. 快捷调用 view<br />在appproject.views中有个index方法 在patterns 中第一个参数指定view后，在以后的调用只需指定方法名即可<br />urlpatterns = patterns(&#8216;appproject.views&#8217;,<br />      (r&#8217;^$&#8217;, &#8216;index&#8217;),<br />)<br />
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-30T00:00:00+08:00" pubdate data-updated="true">Jul 30<span>th</span>, 2008</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/07/28/to-do-open-your-source/" title="Previous Post: 想提高自己的编程水平？--开源吧！">&laquo; 想提高自己的编程水平？--开源吧！</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/07/30/the-subversion-on-google/" title="Next Post: The Subversion on Google">The Subversion on Google &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

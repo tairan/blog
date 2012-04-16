@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Python中的lambda函数 - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="Python支持一种有趣的语法，它允许你快速定义单行的最小函数。这些叫做lambda函数，是从Lisp借鉴来的，可以用在任何需要函数的地方。 总的来说，lambda函数可以接收任意多个参数并且返回单个表达式的值。lambda函数不能包含命令，包含的表达式不能超过一个。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2008/08/25/lambda-in-python">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Python中的lambda函数</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-25T00:00:00+08:00" pubdate data-updated="true">Aug 25<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Python支持一种有趣的语法，它允许你快速定义单行的最小函数。这些叫做lambda函数，是从Lisp借鉴来的，可以用在任何需要函数的地方。    <ul> <li>总的来说，lambda函数可以接收任意多个参数并且返回单个表达式的值。lambda函数不能包含命令，包含的表达式不能超过一个。不要试图向lambda函数中塞入太多的东西；如果你需要更复杂的东西，应该定义一个普通函数，然后想让它多长就多长。（当然，太长的函数也是不推荐的）</li> <li>lambda函数是一种风格问题。不一定非要使用它们；任意能够使用它们的地方，都可以定义一个单独的普通函数来进行替换。一般将它们用在需要封装的特殊的，非重用代码上，避免令代码中充斥着大量的单行函数。</li> </ul>   lambda示例    <div id="uwfq" style="background-color:rgb(51,51,51);color:rgb(255,255,255);"><span style="color:#ffff00;"> 1 </span><span style="color:#87ceeb;"># 普通函数</span><br /><span style="color:#ffff00;"> 2 </span><span style="color:#f0e68c;"><b>def</b></span> <span style="color:#98fb98;">f</span>(x):<br /><span style="color:#ffff00;"> 3 </span>&nbsp;&nbsp;&nbsp;&nbsp;    <span style="color:#f0e68c;"><b>return</b></span> x<em><span style="color:#ffa0a0;">2</span><br /><span style="color:#ffff00;"> 4 </span><br /><span style="color:#ffff00;"> 5 </span>&gt;&gt;&gt;f(<span style="color:#ffa0a0;">3</span>)<br /><span style="color:#ffff00;"> 6 </span><span style="color:#ffa0a0;">6</span><br /><span style="color:#ffff00;"> 7 </span><br /><span style="color:#ffff00;"> 8 </span><span style="color:#87ceeb;"># lambda函数</span><br /><span style="color:#ffff00;"> 9 </span>func = <span style="color:#f0e68c;"><b>lambda</b></span> x: x</em><span style="color:#ffa0a0;">2</span><br /><span style="color:#ffff00;">10 </span>&gt;&gt;&gt;func(<span style="color:#ffa0a0;">3</span>)<br /><span style="color:#ffff00;">11 </span><span style="color:#ffa0a0;">6</span><br /><span style="color:#ffff00;">12 </span>&gt;&gt;&gt;(<span style="color:#f0e68c;"><b>lambda</b></span> x: x*<span style="color:#ffa0a0;">2</span>)(<span style="color:#ffa0a0;">3</span>)<br /><span style="color:#ffff00;">13 </span><span style="color:#ffa0a0;">6</span><br /></div></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-25T00:00:00+08:00" pubdate data-updated="true">Aug 25<span>th</span>, 2008</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/08/24/first/" title="Previous Post: 万里长征第一步">&laquo; 万里长征第一步</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/08/27/what-is-erp/" title="Next Post: [转]两分钟让你明白什么是ERP">[转]两分钟让你明白什么是ERP &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

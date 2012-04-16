@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>我学习Kohana的方法 - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="Kohana 是一个PHP的开放框架，所以在学习之前需要深入了解PHP。另外Kohana也是一个遵循MVC模式的开发框架，同样在学习之前还需要深入了解什么是MVC，最好动手写过MVC模式的页面，一个练习也行。 接下来我们从那里开始呢？ 在动手练习之前，需要阅读文档。先哲说：闲时读手册， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2010/06/23/my-way-for-learning-kohana">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">我学习Kohana的方法</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-23T00:00:00+08:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Kohana 是一个PHP的开放框架，所以在学习之前需要深入了解PHP。另外Kohana也是一个遵循MVC模式的开发框架，同样在学习之前还需要深入了解什么是MVC，最好动手写过MVC模式的页面，一个练习也行。</p>
+
+<p>接下来我们从那里开始呢？</p>
+
+<p>在动手练习之前，需要阅读文档。先哲说：闲时读手册，忙时问Google。刚开始我们有充裕的时间，那么开始阅读文档吧。</p>
+
+<p>作为入门，属于<strong>Getting Started</strong>的文档需要优先阅读。通过阅读<a href="http://kohanaframework.org/guide/about.kohana" target="_blank">What is Kohana?</a>，来了解下Kohana都有哪些东西。而 <a href="http://kohanaframework.org/guide/about.mvc" target="_blank">Model View Controller</a>则告诉你Kohana使用了一种改良型的MVC模式。接下来 <a href="http://kohanaframework.org/guide/about.filesystem" target="_blank">Cascading Filesystem</a> 告诉你这个改良型的MVC模式是怎么工作的。最后通过阅读<a href="http://kohanaframework.org/guide/about.flow" target="_blank">Request Flow</a>来了解从浏览器发出请求后Kohana在服务器端是怎么处理的。okay，通过阅读以上的文档就入门了。</p>
+
+<p>阳明先生说，知是行之始，行是知之果，知行功夫不可离。意思是光看文档并不代表你知道，需要动手操练一番才算真知道。</p>
+
+<p>Kohana安装还是很容易的，将整个工程放到web服务器上就可以工作了。如果遇到问题跑不起来怎么办？Fix it! 安迪教授也说了，当你在工作过程中没有得到想要的东西时你就获得了经验。</p>
+
+<p>程序员动手的第一招是&#8221;Hello World&#8221;，Kohana已经提供了这一招，所以通过阅读源码来学习这一招是如何发出的，因为Kohana是改良的MVC(也就是HMVC)，那么需要多注意项目的目录结构，看看这些源文件是以什么样的方式组织的。在观摩Kohana提供的入门招数后，让我们来破解这个招式。尝试着修改文件名，类名，以及改变文件目录位置等来验证这一招在什么情况下会失效，这对你加深理解有帮助。</p>
+
+<p>入门招数，学了也拆了，开始模拟演练吧。</p>
+
+<p>新手入门第一课，留言板。很多前辈都推荐新手来实现一个留言板用以学习新的开发环境。动手之前，我们要有个蓝图，不用大，将期望了解的知识点囊括进去即可。web开发的知识点通常有，Session,Cookie的管理，数据库的操作，URL的管理，Ajax，表单验证，异常处理等。限定已经有了，那么就开始来实现留言板吧。</p>
+
+<p>演练开始我们就忙了起来，这时Google就发挥作用了，遇到疑难杂症问Google。作为修炼内力，阅读<a href="http://kohanaframework.org/guide/api">API</a>加深理解各个类是如何工作。</p>
+
+<p>最后，先哲也说了，尽信书不如无书。文档也有bug，当实际操作和文档描述的行为不相符的时候，那么我们就要玩外科手术了。这就是开源的好处，有bug直接解剖，肚皮划开后一目了然！</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-23T00:00:00+08:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/05/28/shared-by-simplehttpserver/" title="Previous Post: 快速建立HTTP Server共享文件">&laquo; 快速建立HTTP Server共享文件</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/07/26/go-to-shanghai-by-bike/" title="Next Post: 夜袭上海">夜袭上海 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

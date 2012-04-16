@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>独立程序员接定制软件开发项目总结 - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="定制软件开发中陷阱重重，主要的原因是客户对自己的需求不清楚。很奇怪吧？ 客户竟然对自己想要什么东西说不清楚。事实上，在软件开发领域这是常有的事情。软件这玩意抽象，看得见摸不着，甚至看都看不见。让对技术一无所知的人来描述自己想要什么样的软件，太困难了。 这样的事实对乐天派的程序员来讲就是一个噩梦， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2011/06/28/dev-for-custom-software">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">独立程序员接定制软件开发项目总结</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-28T00:00:00+08:00" pubdate data-updated="true">Jun 28<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>定制软件开发中陷阱重重，主要的原因是客户对自己的需求不清楚。很奇怪吧？ 客户竟然对自己想要什么东西说不清楚。事实上，在软件开发领域这是常有的事情。软件这玩意抽象，看得见摸不着，甚至看都看不见。让对技术一无所知的人来描述自己想要什么样的软件，太困难了。 这样的事实对乐天派的程序员来讲就是一个噩梦，这里引用西乔姐在 Twitter 上发表的一段话：</p>
+
+<blockquote><a href="http://twitter.com/arthur369">@arthur369</a>: 千万不要相信那些在谈需求的时候说：“做一个和XX一样的就行了” 的人。其实这种人最好就不要和他一起做事。因为最后结果只有2种，1、你白做了（需求一定会变动数次）；2、做出来一个垃圾。” </blockquote>
+
+
+<p>最近我就接到一个这样的项目，刚开始的版本是对照着某软件的前一个发行版做，然后又变成了要具有此软件当前版本的某些功能，最后又发现客户的客户已经有一个类似的软件，于是乎又开始向模仿此软件+改进的方向前进，漫漫长路多折腾，如此多的波折才算拿到最终的需求。真正的需求拿到了开始加班加点的做了，可麻烦的事情还有。</p>
+
+<p>这是一个远程的项目，我在南边，客户在北面, 还好在同一个国家，都说中国话。沟通的次数那叫一个寒碜，三、五天都不一定能接上头，接头的方式基本是邮件和IM，电联不多，软件本身的开发经费就不高，如果直接电联估计都支援给中国移动了。</p>
+
+<p>在项目进行中第一次改变需求的时候，我是做好了心理准备的，毕竟那么多前辈的经验摆在那里。此时我在想借由着自己快速迭代，不断的改进软件原型来拿到真正的需求，理论上这种方式是可行的，总会拿到最终的需求，然后做下去就是了。可现实是残酷的，没有充足的时间，即使你承接项目不要多少钱，客户那边随着时间的流逝也会损失很多本该赚到的利润，咱都是凡人，耗不起呐。</p>
+
+<p>和此类不甚明白软件开发的客户打交道还有个问题，软件里面的实现似乎并那么重要，漂亮好用的UI才是让他们看起来软件是如此美妙的东西。作为独立工作的程序员，大多对外在美没有多少的品味，黑客们更是喜欢默默无闻、稳定可靠后台运行的程序。缺少在美的层次上的交流，后端代码交流更是一团糟，客户说在这里加个东西然后这样动，你后端的东西写的不好则会伤筋动骨。</p>
+
+<p>总之，定制软件开发的项目成本很高，劳神费力不讨好。因为程序员不但要保证有一个很快的开发速度来适应软件的变化，同时也要担负起教育客户的重任，还要培养出对美欣赏的品味。通常此类软件开发过程中得到的物质报酬不多，好处是对于软件开发的新手来讲，通过那么几次定制软件开发的折腾可以快速成长，怎么说也能成为一个快速山寨的熟手。如果你是一个拿着不错的薪水的在职人员，我看还是算了，与其浪费如此之多的精力和少的可怜的报酬，还不如好好钻研自己本身工作上的业务，或者干脆多陪陪身边的人吧。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-28T00:00:00+08:00" pubdate data-updated="true">Jun 28<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/" title="Previous Post: 为Fedora 15安装64位的FlashPlayer - Update">&laquo; 为Fedora 15安装64位的FlashPlayer - Update</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/12/02/kindle-3-for-me/" title="Next Post: 我的 Kindle 3">我的 Kindle 3 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

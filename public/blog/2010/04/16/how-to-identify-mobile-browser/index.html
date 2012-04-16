@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>如何识别手机浏览器信息 - Tairan's Story</title>
+  <meta name="author" content="Tairan">
+
+  
+  <meta name="description" content="想作一个网站，根据不同的访问者提供不同的显示模板，如适合手机的模板，适合PC浏览器的模板。 从哪里识别访问者的信息，以及如何识别呢？ 依据 HTTP 协议，客户端浏览网页的时候会提供一些信息给服务器端。下面是PC浏览器访问时的 $_SERVER 的 dump 信息。 (array) Array &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tairan.github.com/blog/2010/04/16/how-to-identify-mobile-browser">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Tairan's Story" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Tairan's Story</a></h1>
+  
+    <h2>「知之真切笃实处即是行，行之明觉精察处即是知，知行工夫不可离。」</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tairan.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">如何识别手机浏览器信息</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-16T00:00:00+08:00" pubdate data-updated="true">Apr 16<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>想作一个网站，根据不同的访问者提供不同的显示模板，如适合手机的模板，适合PC浏览器的模板。</p>
+
+<p> 从哪里识别访问者的信息，以及如何识别呢？</p>
+
+<p>依据 HTTP 协议，客户端浏览网页的时候会提供一些信息给服务器端。下面是PC浏览器访问时的 <a href="http://cn.php.net/manual/en/reserved.variables.server.php" target="_blank">$_SERVER</a> 的 dump 信息。</p>
+
+<pre lang="PHP">
+(array) Array
+(
+    [ALL_HTTP] => HTTP_CACHE_CONTROL:max-age=0
+HTTP_CONNECTION:keep-alive
+HTTP_CONTENT_LENGTH:0
+HTTP_ACCEPT:application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+HTTP_ACCEPT_CHARSET:ISO-8859-1,utf-8;q=0.7,*;q=0.3
+HTTP_ACCEPT_ENCODING:gzip,deflate,sdch
+HTTP_ACCEPT_LANGUAGE:en-US,en;q=0.8
+HTTP_COOKIE:__utmz=259664206.1262318873.1.1.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=51xna; __utma=259664206.724256099.1262318873.1262318873.1262318873.1
+HTTP_HOST:www.51xna.com
+HTTP_USER_AGENT:Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.9 Safari/533.2
+
+    [HTTPS] => off
+    [SCRIPT_NAME] => /private/Kohana/index.php
+    [HTTP_COOKIE] => __utmz=259664206.1262318873.1.1.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=51xna; __utma=259664206.724256099.1262318873.1262318873.1262318873.1
+    [AUTH_PASSWORD] => 
+    [AUTH_TYPE] => 
+    [AUTH_USER] => 
+    [CONTENT_LENGTH] => 0
+    [CONTENT_TYPE] => 
+    [PATH_TRANSLATED] => g:\wwwroot\51xna.com\wwwroot\mobile\index
+    [QUERY_STRING] => 
+    [REMOTE_ADDR] => 221.227.130.23
+    [REMOTE_HOST] => 221.227.130.23
+    [REMOTE_USER] => 
+    [REQUEST_METHOD] => GET
+    [SERVER_NAME] => www.51xna.com
+    [SERVER_PORT] => 80
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [SERVER_SOFTWARE] => Microsoft-IIS/6.0
+    [APPL_MD_PATH] => /LM/w3svc/798/ROOT
+    [APPL_PHYSICAL_PATH] => g:\wwwroot\51xna.com\wwwroot\
+    [INSTANCE_ID] => 798
+    [INSTANCE_META_PATH] => /LM/W3SVC/798
+    [LOGON_USER] => 
+    [REQUEST_URI] => /private/Kohana/index.php/mobile/index
+    [URL] => /private/Kohana/index.php/mobile/index
+    [SCRIPT_FILENAME] => g:\wwwroot\51xna.com\wwwroot\private\Kohana\index.php
+    [ORIG_PATH_INFO] => /private/Kohana/index.php/mobile/index
+    [PATH_INFO] => /mobile/index
+    [ORIG_PATH_TRANSLATED] => g:\wwwroot\51xna.com\wwwroot\private\Kohana\index.php\mobile\index
+    [DOCUMENT_ROOT] => g:\wwwroot\51xna.com\wwwroot
+    [PHP_SELF] => /private/Kohana/index.php
+    [HTTP_CACHE_CONTROL] => max-age=0
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_CONTENT_LENGTH] => 0
+    [HTTP_ACCEPT] => application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+    [HTTP_ACCEPT_CHARSET] => ISO-8859-1,utf-8;q=0.7,*;q=0.3
+    [HTTP_ACCEPT_ENCODING] => gzip,deflate,sdch
+    [HTTP_ACCEPT_LANGUAGE] => en-US,en;q=0.8
+    [HTTP_HOST] => www.51xna.com
+    [HTTP_USER_AGENT] => Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.9 Safari/533.2
+    [REQUEST_TIME] => 1271408243
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+</pre>
+
+
+<p>通常我们可以在HTTP_USER_AGENT中找到识别信息，其中PC浏览器的HTTP_USER_AGENT信息最全，很容易根据关键字来识别如&#8217;Chrome&#8217;, &#8216;Firefox&#8217; 等，部分手机浏览器也可以可以通过 &#8216;Windows Mobile&#8217;, &#8216;Windows Phone&#8217;, &#8216;SymbianOS&#8217;, &#8216;Nokia&#8217;, &#8216;Opera Mobi&#8217;, &#8216;Android&#8217;等关键字识别，这里有一个手机HTTP_USER_AGENT识别列表<a href="http://www.zytrax.com/tech/web/mobile_ids.html" target="_blank">http://www.zytrax.com/tech/web/mobile_ids.html</a>。但是有些手机上的浏览器并不提供HTTP_USER_AGENT信息。</p>
+
+<p>如今的智能手机大多都支持 XHTML 格式浏览，我们可以通过 HTTP_ACCEPT 来识别手机是否支持 XHTML 格式浏览。这里识别的关键字主要是 &#8216;application/xhtml+xml&#8217;。</p>
+
+<p>另外还有一种识别方式，通过查找用户的上网方式，通常手机用户走的是 GPRS 路线，但是这中识别方式并不可靠，可以作为一种辅助识别手段。</p>
+
+<p>对于只支持 WML 的手机目前我还没有解决，一些非智能手机在访问网站时会提示&#8221;不支持所访问的网站&#8221;。开始我以为是返回信息的问题，当我把返回信息严格按照WML格式输出时问题依然存在。不知道这种手机是通过什么方式访问互联网的。</p>
+
+<p>为所有用户提供不同的定制服务是一件不可能的完成任务，支持大多数就好。完美主义总是很浪费时间。</p>
+
+<p>最后感谢各位提供手机访问信息的童鞋们，让你们忍受在手机上输入如此之长的URL，实在辛苦！</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tairan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-16T00:00:00+08:00" pubdate data-updated="true">Apr 16<span>th</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/02/22/building-the-linux-for-myself/" title="Previous Post: 基于(LFS)构建一个属于自己的Linux(一)">&laquo; 基于(LFS)构建一个属于自己的Linux(一)</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/05/28/shared-by-simplehttpserver/" title="Next Post: 快速建立HTTP Server共享文件">快速建立HTTP Server共享文件 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/28/dev-for-custom-software/">独立程序员接定制软件开发项目总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/20/install-flashplayer-64bit-for-fedora-15/">为Fedora 15安装64位的FlashPlayer - Update</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tairan">@tairan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tairan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Tairan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tairan';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
