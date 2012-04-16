@@ -9,10 +9,8 @@
   <meta name="author" content="Tairan">
 
   
-  <meta name="description" content="Windows 2008 Server 上安装和使用 Hyper-V 笔记 安装 Hyper-V 有几个硬性要求
-1. CPU 支持 Virtualization
-2. 宿主操作系统需要是 64bit 在安装过程中有几个需要注意的地方
-1. 宿主操作系统的Location必须是United &hellip;">
+  <meta name="description" content="不要最新的！ 貌似很多程序员都喜欢尝新，不停的追赶这语言那技术。此时之前，我也是其中的一份子，而且还比较狂热。这几天遇到的一些事情让我懂得，最新的不一定是最合适的。 说说是什么事情让我停止狂热的追赶最新的东西吧：
+现在Python 3.0 已经发布一段时间了， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +65,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/02/13/dont-up-to-date/">Don&#8217;t Up-to-date</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-13T00:00:00+08:00" pubdate data-updated="true">Feb 13<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>不要最新的！</strong></p>
+
+<p>貌似很多程序员都喜欢尝新，不停的追赶这语言那技术。此时之前，我也是其中的一份子，而且还比较狂热。这几天遇到的一些事情让我懂得，最新的不一定是最合适的。</p>
+
+<p>说说是什么事情让我停止狂热的追赶最新的东西吧：
+现在Python 3.0 已经发布一段时间了，并且大叔告诉我们现在还有很多周边软件没有跟上，所以除非是新项目，还是保守点选择2.6 比较合适。于是乎，就选择2.6.1吧
+谁知 安装 trac 以及相关软件的时候，有个装不上，&gt;_&lt; 因为忘记记录存档想不起是哪个软件了，真对不起自己和大家！</p>
+
+<p>再说说Apache吧，一直都选择2.2.x来玩，搭建SVN服务器等。CollabNet 做的集成包真的很好用，安装也简单！可用这个Apache2.2 安装 MOD_SCGI 却死活启动不了服务，从Google的结果来看，虽然有人提出自己编译MOD_SCGI for Apache 2.2，可也是意淫了一下说：“应该很容易”，&#8211; 谁不知道在Windows 上玩这些成本有多高！
+无奈退而求其次，有换了个Apache2.0.x用用。</p>
+
+<p><span style="background-color:yellow"><strong>盲目的求新会走很多弯路</strong>。</span>不过也能获得一些经验！ 兰迪教授说：<span style="background-color:yellow">当得不到想得到的东西时，就得到了经验。</span></p>
+
+<p>虽说不要最新的，也没说一直守旧不前进，使用开源软件时最好用当前版本的前一个次版本最佳。 一来是软件经过了一段时间的考验，二是周边的软件也都跟上了。不至于走两步退一步。</p>
+
+<p>===========================
+Trac + Apache + SCGI 的安装方法比较容易，性能稳定方面自己倒是没有测试过。主要参考了这篇文章 <a href="http://onezstudio.blogspot.com/2006/09/getting-started-with-subversion-trac.html">Subversion无痛起步 &#8212; Trac 0.10b1 + Apache 2</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -628,51 +678,6 @@ Browsers are getting faster and better at running web applications like Google M
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/11/29/good-eye/">Good Eye!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-29T00:00:00+08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>曾经有人问 bill gates，怎么样才能像他一样？bill 回答说：”眼光要好“。的确，bill 在大型机横行的年代看到了PC的未来，所以才有Microsoft<sup>®</sup>今天的成绩。</p>
-
-<p>然而，什么样才叫好眼光？在2千多年前，就有人总结出来了。下面的文章是引自《战国策》
-这里主要是杜赫劝说周王该如何拉拢人心。
-文中<strong>黑体字</strong>部分说的是，把钱花在已经名声显赫的人身上，人家并不会瞧得起你；而你把钱花在普通人身上，而你对那些人又指望不上，又浪费钱财。你只有把钱用在目前穷困潦倒、将来一定成大器的人身上，不一定花在已经声明显赫的人身上，才能实现自己的愿望。</p>
-
-<blockquote>
-<h2>杜赫欲重景翠于周</h2>
-杜赫欲重景翠于周，谓周君曰：“ 君之国小，尽君子重宝珠玉以事诸侯，不可不察也。譬之如张罗者，张于无鸟之所，则终日无所得矣；张于多鸟处，则又骇鸟矣；必张于有鸟无鸟之际，然后能多得鸟矣。<strong>今君将施于大人，大人轻君；施于小人，小人无可以求，又费财焉。君必施于今之穷士，不必且为大人者，故能的欲矣。</strong>”</blockquote>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -690,6 +695,10 @@ Browsers are getting faster and better at running web applications like Google M
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
       </li>
     
@@ -703,10 +712,6 @@ Browsers are getting faster and better at running web applications like Google M
     
       <li class="post">
         <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
       </li>
     
   </ul>

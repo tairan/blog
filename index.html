@@ -9,7 +9,19 @@
   <meta name="author" content="Tairan">
 
   
-  <meta name="description" content="经常阅读的人应该入手一部电子阅读器，在信息时代我们的时间都已经分割成若干的碎片，阅读的场所随时都在变化，此外出门随手带上几本书也是常有的事情，如果书籍电子化了，随身带上一个小图书馆也不是什么难事。 根据自己的喜好，我选择了 Amazon 的 Kindle 3，最近 Kindle 4 touch &hellip;">
+  <meta name="description" content="Go 通过 cgo 可以利用现有C语言库 例如在 Windows 中使用 Go 调用 Win32 API 首先安装必要的工具 Go
+MingW 项目文件完成后的布局 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+$GOPATH +- src +- w32api +- kernel.go +- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +76,170 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-15T10:23:00+08:00" pubdate data-updated="true">Apr 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Go 通过 <a href="http://golang.org/cmd/cgo/">cgo</a> 可以利用现有C语言库</p>
+
+<p>例如在 Windows 中使用 Go 调用 Win32 API</p>
+
+<p>首先安装必要的工具</p>
+
+<ol>
+<li><a href="http://golang.org">Go</a></li>
+<li><a href="http://mingw.org">MingW</a></li>
+</ol>
+
+
+<figure class='code'><figcaption><span>项目文件完成后的布局 </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$GOPATH
+</span><span class='line'>    +- src
+</span><span class='line'>        +- w32api
+</span><span class='line'>            +- kernel.go
+</span><span class='line'>        +- testapp
+</span><span class='line'>            +- main.go
+</span><span class='line'>    +- bin # go install testapp
+</span><span class='line'>        +- testapp.exe
+</span><span class='line'>    +- pkg # go install w32api
+</span><span class='line'>        +- windows_386
+</span><span class='line'>    +- testapp.exe</span></code></pre></td></tr></table></div></figure>
+
+
+<p>包装 Windows API</p>
+
+<figure class='code'><figcaption><span>kernel.go  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">package</span> <span class="n">w32api</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// #define WIN32_LEAN_AND_MEAN</span>
+</span><span class='line'><span class="c1">// #include &lt;windows.h&gt;</span>
+</span><span class='line'><span class="k">import</span> <span class="s">&quot;C&quot;</span>
+</span><span class='line'><span class="k">import</span> <span class="s">&quot;syscall&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">func</span> <span class="n">GetCurrentDirectory</span><span class="p">()</span> <span class="nb">string</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">bufLen</span> <span class="p">:=</span> <span class="n">C</span><span class="p">.</span><span class="n">GetCurrentDirectoryW</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nil</span><span class="p">);</span> <span class="n">bufLen</span> <span class="p">!=</span> <span class="mi">0</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">buf</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="nb">uint16</span><span class="p">,</span> <span class="n">bufLen</span><span class="p">)</span>
+</span><span class='line'>            <span class="k">if</span> <span class="n">bufLen</span> <span class="p">:=</span> <span class="n">C</span><span class="p">.</span><span class="n">GetCurrentDirectoryW</span><span class="p">(</span><span class="n">bufLen</span><span class="p">,</span> <span class="p">(*</span><span class="n">C</span><span class="p">.</span><span class="n">WCHAR</span><span class="p">)(&amp;</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span> <span class="n">bufLen</span> <span class="p">!=</span> <span class="mi">0</span> <span class="p">{</span>
+</span><span class='line'>                        <span class="k">return</span> <span class="n">syscall</span><span class="p">.</span><span class="n">UTF16ToString</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>注意</em>：</p>
+
+<pre><code>在 import "C" 和 // #include &lt;windows.h&gt; 之间不能有空行
+</code></pre>
+
+<p>编译并安装</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>go build w32api
+</span><span class='line'>go install w32api
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>调用</p>
+
+<figure class='code'><figcaption><span>main.go </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">package</span> <span class="n">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">import</span> <span class="s">&quot;w32api&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="p">(</span><span class="n">w32api</span><span class="p">.</span><span class="n">GetCurrentDirectory</span><span class="p">())</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>go build testapp
+</span><span class='line'>go install testapp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Troubleshooting</h2>
+
+<p>can&#8217;t load package: package w32api: import &#8220;w32api&#8221;: cannot find package
+设置好环境变量 GOPATH</p>
+
+<p>exec gcc: exec: &#8220;gcc&#8221;: executable file not found in %PATH%
+安装 MingW 并将 bin 目录加入到环境变量 PATH 中</p>
+
+<h2>参考</h2>
+
+<p><a href="http://www.cnblogs.com/AllenDang/archive/2012/02/21/2361197.html">使用CGO封装Windows API</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -562,56 +738,6 @@ RewriteRule ^(.*)$ public/django.fcgi/$1 [QSA,L]
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/10/21/security-and-ease-of-use/">安全与易用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-10-21T00:00:00+08:00" pubdate data-updated="true">Oct 21<span>st</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天在公司里出现了一件事情，让我认真的思考了下Windows平台的易用性和安全。</p>
-
-<p>事情是这样的，我们需要远程登录到一台德语的机器上工作。为了设置可以同时有两个相同用户名的用户远程登录，我们修改了组策略。两个德语文盲想当然的把一个和英语环境相同位置的选项给禁止了，然而那是拒绝远程用户登录的选项。刚改好的时候还很高兴马上用另外一台机器远程登录试用，很不幸将另外一个已经在上面的用户踢掉后自己也无法登录。</p>
-
-<p>根据以前使用Windows的经验加上问Google，发现Windows远程维护是如此的强大。不仅仅是远程注册表编辑，还可以远程编辑组策略，AD，等等一大堆的东西。这一切在MMC中就可以完成。</p>
-
-<p>如此强大的远程管理，却把我引入到为什么Windows不安全的地方去了。因为如果这是在Linux上把唯一的SSH关闭了，我还真的没辙。</p>
-
-<p>在Windows上的这些远程控制是可以管理的，你可以选择让它不提供这些服务，然而这一切是Windows的默认设置。没有不安全的系统，只有不靠谱的管理员。默认开启了如此之多的远程服务，又遇到了不靠谱的管理员，在互联网上这个服务器绝对是挂了。</p>
-
-<p>为什么是互联网？互联网就是一个狂野丛林，一不小心就成了别人口中的美味。既然那么危险，为什么Windows还开启了那么多的默认服务？让我们来看看Windows的主要用户吧。企业用户，企业内部和外界的联系至少有道墙，或者根本就不和外界联系。个人用户，虽然它们经常暴露在外面，但是即使他们受到伤害，通常损失也不会太大。这两种用户都有共同点，就是不太关心计算机的技术问题。</p>
-
-<p>了解了Windows的使用者，那么Microsoft&reg;有足够的理由开启这些默认服务，让他们的客户更简单的使用Windows，如果遇到问题，可以让IT远程配置即可。这一切的代价就是开启了很多潜在风险。Microsoft&reg;的人当然不都是傻瓜，解决不了问题，只是这个世界有条准则就是做的越多错的越多。在你不真正了解Windows的时候冒然用它作为互联网服务器，那你会得到很多不错的教训！</p>
-
-<p>在这里我并不是声讨Microsoft&reg;和Windows，而是想提醒自己和大家，浅尝辄止害死人！你懂的。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -627,6 +753,10 @@ RewriteRule ^(.*)$ public/django.fcgi/$1 [QSA,L]
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
       </li>
     
@@ -640,10 +770,6 @@ RewriteRule ^(.*)$ public/django.fcgi/$1 [QSA,L]
     
       <li class="post">
         <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
       </li>
     
   </ul>

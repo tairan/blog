@@ -4,7 +4,7 @@
   <title><![CDATA[Tairan's Story]]></title>
   <link href="http://tairan.github.com/atom.xml" rel="self"/>
   <link href="http://tairan.github.com/"/>
-  <updated>2012-03-25T15:48:38+08:00</updated>
+  <updated>2012-04-16T15:11:34+08:00</updated>
   <id>http://tairan.github.com/</id>
   <author>
     <name><![CDATA[Tairan]]></name>
@@ -12,6 +12,143 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Go 调用 Windows API]]></title>
+    <link href="http://tairan.github.com/blog/2012/04/15/the-go-with-win32-api/"/>
+    <updated>2012-04-15T10:23:00+08:00</updated>
+    <id>http://tairan.github.com/blog/2012/04/15/the-go-with-win32-api</id>
+    <content type="html"><![CDATA[<p>Go 通过 <a href="http://golang.org/cmd/cgo/">cgo</a> 可以利用现有C语言库</p>
+
+<p>例如在 Windows 中使用 Go 调用 Win32 API</p>
+
+<p>首先安装必要的工具</p>
+
+<ol>
+<li><a href="http://golang.org">Go</a></li>
+<li><a href="http://mingw.org">MingW</a></li>
+</ol>
+
+
+<figure class='code'><figcaption><span>项目文件完成后的布局 </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$GOPATH
+</span><span class='line'>    +- src
+</span><span class='line'>        +- w32api
+</span><span class='line'>            +- kernel.go
+</span><span class='line'>        +- testapp
+</span><span class='line'>            +- main.go
+</span><span class='line'>    +- bin # go install testapp
+</span><span class='line'>        +- testapp.exe
+</span><span class='line'>    +- pkg # go install w32api
+</span><span class='line'>        +- windows_386
+</span><span class='line'>    +- testapp.exe</span></code></pre></td></tr></table></div></figure>
+
+
+<p>包装 Windows API</p>
+
+<figure class='code'><figcaption><span>kernel.go  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">package</span> <span class="n">w32api</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// #define WIN32_LEAN_AND_MEAN</span>
+</span><span class='line'><span class="c1">// #include &lt;windows.h&gt;</span>
+</span><span class='line'><span class="k">import</span> <span class="s">&quot;C&quot;</span>
+</span><span class='line'><span class="k">import</span> <span class="s">&quot;syscall&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">func</span> <span class="n">GetCurrentDirectory</span><span class="p">()</span> <span class="nb">string</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">bufLen</span> <span class="p">:=</span> <span class="n">C</span><span class="p">.</span><span class="n">GetCurrentDirectoryW</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nil</span><span class="p">);</span> <span class="n">bufLen</span> <span class="p">!=</span> <span class="mi">0</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">buf</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="nb">uint16</span><span class="p">,</span> <span class="n">bufLen</span><span class="p">)</span>
+</span><span class='line'>            <span class="k">if</span> <span class="n">bufLen</span> <span class="p">:=</span> <span class="n">C</span><span class="p">.</span><span class="n">GetCurrentDirectoryW</span><span class="p">(</span><span class="n">bufLen</span><span class="p">,</span> <span class="p">(*</span><span class="n">C</span><span class="p">.</span><span class="n">WCHAR</span><span class="p">)(&amp;</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span> <span class="n">bufLen</span> <span class="p">!=</span> <span class="mi">0</span> <span class="p">{</span>
+</span><span class='line'>                        <span class="k">return</span> <span class="n">syscall</span><span class="p">.</span><span class="n">UTF16ToString</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>注意</em>：</p>
+
+<pre><code>在 import "C" 和 // #include &lt;windows.h&gt; 之间不能有空行
+</code></pre>
+
+<p>编译并安装</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>go build w32api
+</span><span class='line'>go install w32api
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>调用</p>
+
+<figure class='code'><figcaption><span>main.go </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">package</span> <span class="n">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">import</span> <span class="s">&quot;w32api&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="p">(</span><span class="n">w32api</span><span class="p">.</span><span class="n">GetCurrentDirectory</span><span class="p">())</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>go build testapp
+</span><span class='line'>go install testapp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Troubleshooting</h2>
+
+<p>can&#8217;t load package: package w32api: import &#8220;w32api&#8221;: cannot find package
+设置好环境变量 GOPATH</p>
+
+<p>exec gcc: exec: &#8220;gcc&#8221;: executable file not found in %PATH%
+安装 MingW 并将 bin 目录加入到环境变量 PATH 中</p>
+
+<h2>参考</h2>
+
+<p><a href="http://www.cnblogs.com/AllenDang/archive/2012/02/21/2361197.html">使用CGO封装Windows API</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[我的 Kindle 3]]></title>
@@ -757,49 +894,6 @@ make install
 <p>编译是一件苦力活，根据机器的性能，也许会耗费你一天甚至更长的时间。其实也有自动化的操作，但是动手敲上一段咒语还是有很多额外的收获。</p>
 
 <p>到此，编译了N个程序后准备工作就告一段落了，编译的这些程序是新世界的基础，很重要、也很费时！ 接下来进入 <b>Building the LFS System</b></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[天才，榜样]]></title>
-    <link href="http://tairan.github.com/blog/2010/02/20/genius-is-example/"/>
-    <updated>2010-02-20T00:00:00+08:00</updated>
-    <id>http://tairan.github.com/blog/2010/02/20/genius-is-example</id>
-    <content type="html"><![CDATA[<p>每次看到这些大牛们的事迹，心难免都要加速跳动。爱迪生说没有那1%的灵感即使是99%的汗水也不一定能成功，可是付出那99%的汗水也是必要的，不然1%的灵感也只是耍耍小聪明而已！</p>
-
-<p>相信Fabrice Bellard也一定是在不断的挥洒着汗水来实现那1%的灵感。</p>
-
-<blockquote>
-<a href="http://www.programmer.com.cn/1903/" target="_blank">计算的威力，智慧的传奇</a>
-
-—— Fabrice Bellard
-
-作者：吕娜
-
-这个世界从来不缺天才，只缺乏利用天分坚持理想和信念不断创新的人，这些人用恒心和努力缔造一个又一个传奇。法国人Fabrice Bellard 就是这样一个了不起的程序员。
-
-Fabrice Bellard1972年生于法国，曾就读于巴黎高等综合理工学院和法国电信研究院。对计算机有着浓厚兴趣的他，高中时就崭露头角，编写出了LZEXE，这是DOS上第一个广泛使用的文件压缩程序。
-
-Fabrice Bellard是一位计算机奇才，在业界有着重要的影响。1996年他编写了一个简洁但是完整的C编译器和一个Java虚拟机Harissa。Fabrice Bellard发明的TinyCC是GNU/Linux环境下最小的ANSI C语言编译器，是目前号称编译速度最快的C编译器。Fabrice Bellard杰作众多且涉及广泛，1998年编写了一个简洁的OpenGL实现TinyGL，2003年开发了Emacs克隆QEmacs，2005年还设计了一个廉价的数字电视系统。
-
-Fabrice Bellard的一个重要杰作是在Linux内核上写了一个CPU模拟器QEMU，这套开放源码的模拟器软件与Bochs、PearPC近似，但具有后两者所不具备的高速度及跨平台等特性。QEMU可以在不同的机器上运行独自开发的操作系统与软件，经由KQEMU这个开源的加速器，能模拟至接近真实电脑的速度。QEMU构思巧妙， 效率极高， 在借助核心态的KQEMU加速器之后，模拟代码的执行速度甚至能够接近真实机器。QEMU已成为目前使用最广泛的模拟器，KVM和Google Android的模拟器都是基于QEMU的。
-
-Fabrice Bellard 可谓博学多才，他另外一个重量级项目是FFmpeg。FFmpeg 单词中的FF 指的是Fast Forward，FFmpeg这个2000年发起著名的开源多媒体播放器项目， 是MPlayer的姊妹项目。这是一个如此重要的成就，没有这个项目，就没有我们今天广为使用的暴风影音等播放器。这个多平台、多功能的多媒体编码解码器由Fabrice Bellard发起并管理，现在是由Michael Niedermayer在进行维护。
-
-天才的创新经常是离经叛道式的超越，Fabriced Bellard的一些项目让人感觉疯狂。比如他曾有一个项目是将带有VGA显卡的PC改装成DVB-T的信号发射器。这样一来，为了防止泄密，公司不仅要封声卡插口，还要焊上显卡插口。
-
-Fabrice Bellard在圆周率算法方面也有着惊人的成就，1997年FabriceBellard提出最快圆周率算法公式。在计算圆周率的过程中，Fabrice Bellard使用改良后的查德诺夫斯基方程算法来进行圆周率的计算，并使用贝利-波温-劳夫算法来验证计算的结果。为了纪念他对圆周率算法所作出的杰出贡献，Fabrice Bellard所使用的改良型算法被命名为Fabrice Bellard算法，这种算法是目前所有圆周率算法中最快的一种，这个计算N位PI的公式比传统的BBQ算法要快47%。
-
-2009年的最后一天，Fabrice Bellard宣布另一重大突破：他用桌面电脑打破了由超级计算机保持的圆周率运算记录。这是一个壮举， 他将PI计算到了小数点后2.7万亿位！更令人惊讶的是， 他使用的不过是价格不到2000欧元的个人PC，仅用了116天，就计算出了PI的小数点后第2.7万亿位，超过了由目前排名世界第47位的T2K Open超级计算机于2009年8月17日创造的世界纪录。新纪录比原纪录多出1200亿位，然而，他使用的这台桌面电脑的配置仅为：2.93GHz Core i7 CPU，6GB内存，7.5TB硬盘!
-
-不过这次为了加快计算完成的速度保住排名第一的位置，Fabrice Bellard使用了9台联网的电脑来对数据进行验证， 若使用一台电脑来验证计算结果的话， 则需要额外增加13天的计算时间。
-
-Fabrice Bellard在圆周率方面的辉煌成就， 使他创造多次圆周率单一位计算的世界纪录（计算10的整次幂位） ， 也曾因此而登上《科学美国人》法文版。
-
-<img src="http://www.programmer.com.cn/wp-content/uploads/2010/02/%E5%90%8D%E4%BA%BA%E5%A0%821.gif" alt="Fabrice Bellard" />
-
-（本文来自《程序员》杂志2010年2月刊）</blockquote>
-
 ]]></content>
   </entry>
   

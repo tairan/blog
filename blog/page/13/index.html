@@ -9,7 +9,7 @@
   <meta name="author" content="Tairan">
 
   
-  <meta name="description" content="强制用户写日志 有两种方法可以防止用户在不写日志的情况下进行提交操作。一种方式只对TortoiseSVN有效，另外一种方法对任何Subversion的客户端都有效，但是需要直接访问服务器。 服务器端的钩子脚本(Hook-script)如果能够直接访问服务器，可以安装一个pre-commit钩子脚本 &hellip;">
+  <meta name="description" content="玩过传令兵游戏游戏吗？大家站成一排，教练把一句话悄悄的告诉给队伍第一个人，然后由第一个人把话传给第二个人，然后第二个人传给第三个人，以此类推。当传到随后一个人的时候，第一个人的话已经变得面目全非了。如果队伍中的人数越多，那么效果就更明显。 如今大家都在为利益在努力的工作着(基本都是金钱的利益)， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +70,82 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2008/07/08/the-media-is-only-a-messenger/">媒体只是个传话的</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-08T00:00:00+08:00" pubdate data-updated="true">Jul 8<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>玩过传令兵游戏游戏吗？大家站成一排，教练把一句话悄悄的告诉给队伍第一个人，然后由第一个人把话传给第二个人，然后第二个人传给第三个人，以此类推。当传到随后一个人的时候，第一个人的话已经变得面目全非了。如果队伍中的人数越多，那么效果就更明显。</p>
+
+
+<br /><p>如今大家都在为利益在努力的工作着(基本都是金钱的利益)，媒体工作者也是的。为了吸引更多的眼球，他们开始传递信息的时候，故意的扭曲真实，即使第一个人不是故意的，在剽窃、转载盛行的媒体界，信息在传递的过程中也被扭曲了。</p><br /><p>所以<strong>作为资讯的接收者，应该具有分辨的能力。</strong></p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/04/some-linux-commands-for-accounts-management/">Linux用户管理的一些命令</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-04T00:00:00+08:00" pubdate data-updated="true">Jul 4<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>useradd        #添加用户<br />adduser        #添加用户<br />passwd         #为用户设置密码<br />usermod      #修改用户命令，可以通过usermod 来修改登录名、用户的家目录等等<br />pwcov           #同步用户从/etc/passwd 到/etc/shadow<br />pwck             #pwck是校验用户配置文件/etc/passwd 和/etc/shadow 文件内容是否合法或完整<br />pwunconv      #是pwcov 的立逆向操作，是从/etc/shadow和 /etc/passwd 创建/etc/passwd ，然后会删除 /etc/shadow 文件<br />finger            #查看用户信息工具<br />id                      #查看用户的UID、GID及所归属的用户组<br />chfn                  #更改用户信息工具<br />su                     #用户切换工具<br />sudo             #sudo 是通过另一个用户来执行命令（execute a command as another user），su 是用来切换用户，然后通过切换到的用户来完成相应的任务，但sudo 能后面直接执行命令，比如sudo 不需要root 密码就可以执行root 赋与的执行只有root才能执行相应的命令；但得通过visudo 来编辑/etc/sudoers来实现<br />visudo          #visodo 是编辑 /etc/sudoers 的命令；也可以不用这个命令，直接用vi 来编辑 /etc/sudoers 的效果是一样的<br />sudoedit      #和sudo 功能差不多<br /><br />groupadd     #添加用户组<br />groupdel             #删除用户组<br />groupmod            #修改用户组信息<br />groups         #显示用户所属的用户组<br />grpck<br />grpconv       #通过/etc/group和/etc/gshadow 的文件内容来同步或创建/etc/gshadow ，如果/etc/gshadow 不存在则创建<br />grpunconv       #通过/etc/group 和/etc/gshadow 文件内容来同步或创建/etc/group ，然后删除gshadow文件</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2008/07/03/some-notes-of-subversion/">一些关于subversion的记录</a></h1>
     
     
@@ -121,6 +197,53 @@ sh to apply these properties, use <span class="guimenu">TortoiseSVN</span> → <
   <header>
     
       <h1 class="entry-title"><a href="/blog/2008/06/30/freebsd-set-proxy/">FreeBSD设置代理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-30T00:00:00+08:00" pubdate data-updated="true">Jun 30<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>FreeBSD设置代理, 在FreeBSD中默认安装的是CSH，所以设置代理时应该使用 setenv</p>
+
+<p>setenv HTTP_PROXY xxx.xxx.xxx.xxx:port
+setenv FTP_PROXY xxx.xxx.xxx.xxx:port</p>
+
+<p>这里只能只能使用IP地址。</p>
+
+<p>BASH 的设置如下
+expor HTTP_PROXY=http://proxy.host.url:port</p>
+
+<p>btw：
+经过几次安装FreeBSD实战后，慢慢对FreeBSD有些认识了。继续努力！</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/06/30/freebsd%25e8%25ae%25be%25e7%25bd%25ae%25e4%25bb%25a3%25e7%2590%2586/">FreeBSD设置代理</a></h1>
     
     
       <p class="meta">
@@ -402,266 +525,6 @@ a b键替代<br />‘S / ^ [ ] / / g’ 删除行首所有t a b键<br />‘s / [
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/05/19/my-vimrc/">我的 Vim 环境设置</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-05-19T00:00:00+08:00" pubdate data-updated="true">May 19<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>为了保证知识的连续性，所以我选择了vim。并且慢慢的开始习惯。。。但是这样也带来一个后果，就是总是在编辑的时候想按&lt;esc&gt;或者&lt;i&gt;来切换命令和编辑模式。:)<br />我的配置文件还是有一些个人特色的，毕竟被Windows侵蚀多年，有些习惯还不是一时半会能改过来的，所以就把Windows上的一些编辑快捷键也加入进来了。<br /></p>
-
-<pre lang="vim" line="1">
-    "
-    " Simplify settings for VIM 7.x or later
-    "
-    " Copyright (c) 2008, 2009 Tairan Wang All Rights Reserved.
-    "
-    " Tairan Wang <tairan.wang(at)gmail.com>
-    "
-    " $Id: vimrc 38 2009-02-06 03:16:59Z Tairan.Wang $
-    "
-
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    " General
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    " Get out of VI's compatibale mode.
-    set nocompatible
-
-    " Set how many lines of history VIM har to remember
-    set history=400
-
-    " Enable filetype plugin
-    filetype plugin on
-    filetype indent on
-
-    " Set to auto read when a file is changed from the outside
-    set autoread
-
-    " Have the mouse enabled all the time:
-    set mouse=a
-
-    " Reset the menu languge.
-    source $VIMRUNTIME/delmenu.vim
-    set langmenu=none
-    source $VIMRUNTIME/menu.vim
-
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    " Fileformats
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    set encoding=utf-8
-    set fileencoding=utf-8
-    " Favorite filetype
-    " set fileencodings=ucs-bom,utf-8,gbk,big5
-    set fileencodings=utf-8,gbk,big5
-
-    " Compatible windows notepad mode
-    source $VIMRUNTIME/mswin.vim
-    behave mswin
-
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    " Color and Fonts
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    " Enable syntax heightlight
-    syntax enable
-    syntax on
-
-    set cursorline
-
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    " Indent
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    " C-style indeting
-    set cindent
-    " Auto indent
-    set autoindent
-    " Smart indent
-    set smartindent
-    " Wrap lines
-    set wrap
-
-    set showmatch
-
-    " Display line number
-    set number
-    set ruler
-
-    set listchars=tab:>>,eol:$,trail:-
-    set list
-
-    " Setting the smart tab
-    set shiftwidth=4
-    set tabstop=4
-    set sts=4
-    set expandtab
-    set smarttab
-
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    " Files and backups
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    set nobackup
-    set nowritebackup
-    set bsdir=buffer
-    set autochdir
-
-    set noar
-
-    " Ignore case when searching
-    set ignorecase
-    set incsearch
-
-    set ambiwidth=double
-
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    " Close pair automatic
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""
-    :inoremap ( ()<ESC>i
-    :inoremap ) <c-r>=ClosePair(')')<CR>
-    :inoremap { {}<ESC>i
-    :inoremap } <c-r>=ClosePair('}')<CR>
-    :inoremap [ []<ESC>i
-    :inoremap ] <c-r>=ClosePair(']')<CR>
-    :inoremap " ""<ESC>i
-    :inoremap ' ''<ESC>i
-
-
-    function! ClosePair(char)
-     if getline('.')[col('.') - 1] == a:char
-         return "\<Right>"
-     else
-         return a:char
-     endif
-    endfunction
-
-
-    if has("gui_running")
-        map <C-Tab> :tabnext<CR>
-        imap <C-Tab> <Esc>:tabnext<CR>
-
-        colorscheme desert
-
-        set columns=120
-        set lines=50
-
-        set guioptions-=T
-        set guioptions+=m
-    else
-        map <C-K><C-T> :tabnext<CR>
-        imap <C-K><C-T> <Esc>:tabnext<CR>
-
-        colorscheme default
-    endif
-
-    if has("win32")
-        au GUIEnter * simalt ~x
-    endif
-
-    au VimEnter * NERDTreeToggle
-
-    " Open and close the NERD_tree.vim separately
-    nmap <F7> <ESC>:NERDTreeToggle<RETURN>
-</pre>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/05/19/focus-typos-appear/">焦点访谈出现错别字？</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-05-19T00:00:00+08:00" pubdate data-updated="true">May 19<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>2008/05/19 的焦点访谈节目出现 &#8211; 举国志哀<br />而节目中的相关媒体新闻用字确是 &#8211; 举国致哀<br /><br />是错别字，还是各有其意？<br /><br />在天涯看到一位网友出来解释：[转]http://cache.tianya.cn/publicforum/content/free/1/1253505.shtml<br /><br />　　现代汉语词典解释:<br />　　<br />　　志哀:以某种方式表示哀悼.<br />　　致哀:向死者表示哀悼.<br /><br />原来都没错！</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/05/19/do-not-sell-it-to-him/">别理他</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-05-19T00:00:00+08:00" pubdate data-updated="true">May 19<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在网上经常出现这样的场景：某人在论坛或者在博客中发表言论后，后面跟帖骂声一片！这还不算，你骂声越多人家还从未停止找骂。<br />呵呵，在生活中就有这么一撮人，喜欢挨骂，为什么？我试着分析一下。<br />1. 商业利益驱动<br />如今是商品经济社会，大家都觉得自己的腰包比别人的瘪。于是乎，想法子多赚点。现在互联网的经济跟流量息息相关，另外现在的网民都见多识广，要求也很高。那么怎么样来吸引更多的人来访问网站呢？正派人士，想方设法的提高站点质量，旁门左道的呢，就是我们要说的人了。他们专门来挑衅网友敏感的神经， 怎么能让网友不爽就怎么写。他真的怕你不生气，不回贴。因为回帖骂人也是流量的来源！<br />2. 寻找某种心理依靠<br />不是每个人都是英雄，都有光辉的形象。有些人平时在生活中没有朋友，也可以说成没有人会理睬或者理解他。长此以往，心理会造成一些阴影。有了阴影怎么办呢？发泄！网络的确是一个很好的发泄渠道，一句很经典的话“没人知道互联网的对面是一条狗”说明了一切。所以有人骂他，其实证明了还有人真的在乎他。<br />3. 越描越黑型<br />这些人呢，真的是&#8221;一失足成千古恨&#8221;啊！可能某种事情不小心做错了，所以就像出来澄清一下，大家都知道有些事情是越描越黑的。<br />4. 其他<br />林子大了什么鸟都有，我也解释不了为什么。因为我不是万能的那个人。<br /><br />btw: 如果你看不惯，骂我吧！</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/14/">&larr; Older</a>
@@ -679,6 +542,10 @@ a b键替代<br />‘S / ^ [ ] / / g’ 删除行首所有t a b键<br />‘s / [
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
       </li>
     
@@ -692,10 +559,6 @@ a b键替代<br />‘S / ^ [ ] / / g’ 删除行首所有t a b键<br />‘s / [
     
       <li class="post">
         <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
       </li>
     
   </ul>

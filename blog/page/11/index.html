@@ -9,13 +9,7 @@
   <meta name="author" content="Tairan">
 
   
-  <meta name="description" content="你要了解游戏规则，
-你要了解语言的规则，
-你要了解系统的规则，
-你要了解计算机运作的规则，
-&#8230;&#8230; 要了解很多才行，事实上没有人能完全了解所有，这也是人与人之间的差异所在!
-尽可能多的去了解兴趣所在的领域吧! Enjoy!
-">
+  <meta name="description" content="在日常工作中，总要写一些小工具，或者一些代码片段等，这些都是自己的劳动成果，而且还有复用、备忘等功效。所以保存这些东西是有必要的。 管理这些文件是绝对有必要引入版本控制的，好处嘛是在是太多了，想知道的Google一下。因为是个人的文件管理，所以我选择了subversion。 subversion &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +64,102 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/09/09/save-labor/">保存劳动成果</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-09T00:00:00+08:00" pubdate data-updated="true">Sep 9<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p style="text-align:justify;">在日常工作中，总要写一些小工具，或者一些代码片段等，这些都是自己的劳动成果，而且还有复用、备忘等功效。所以保存这些东西是有必要的。</p>
+
+
+<p>        管理这些文件是绝对有必要引入版本控制的，好处嘛是在是太多了，想知道的Google一下。因为是个人的文件管理，所以我选择了<a href="http://subversion.tigris.org/">subversion</a>。<br /></p>
+
+
+<p>        <span style="font-style:italic;">subversion</span> 是一个CS结构的版本管理工具，所以我需要一个稳定的Server端。个人资金有限不能自己托管服务器以供使用，这时又想到Google了。Google提供了免费的SVN服务器为各个开源项目使用。虽然咱最开始的目的是为了私用，由于Google SVN Server的特性，咱的文档可以自由访问，如果自己的文档能为他人提供便利，也不枉自己一心想为<span style="font-weight:bold;font-style:italic;">Freedom Software</span>做点贡献。<br /></p>
+
+
+<p>        <span style="font-weight:bold;">如果你也有兴趣跟大家一起分享，我随时欢迎您的加入！</span><br /></p>
+
+
+<br /><p>项目地址: <a href="http://code.google.com/p/misc-snippets/">http://code.google.com/p/misc-snippets/</a></p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/09/08/i-want-to-cry-but-i-have-not-any-tear/">我想哭但是哭不出来！</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-08T00:00:00+08:00" pubdate data-updated="true">Sep 8<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>入行做程序员也不是一天两天了，居然还是犯这样的低级错误，绝对不可原谅。
+最近在写一个开源的项目svnaccesspolicy(用于管理在apache环境下的svn用户信息) ，基本功能已经完成，这些天一直在重构代码，让项目变得更模块话，更现代一些。重构阿重构，慢慢的快成形了。</p>
+
+<p>这时忍不住要玩 Debian Live USB了，也就是把debian安装在2G的优盘上。安装很容易，为了能让在windows上也能查看优盘上的信息，把优盘分了2个区，分别是fat和fat32格式的。这时也为后面的遭遇埋下了伏笔。</p>
+
+<p>优盘上的debian可以使用了，我就迫不及待的把svnaccesspolicy的源代码cut到了优盘上进行开发。此时既没check in代码也没用copy。</p>
+
+<p>在家里使用一切到还顺利，毕竟全是linux环境。等到了公司，才发现windows竟然不认识分区的优盘，只能看到优盘的第一个主分区。而那个主分区是live debian系统的，源码都不在那里。于是乎，打开vmware尝试重新整理优盘。在做这些之前，由于live系统的不方便，就把代码打包压缩，并复制到了 vmdk (vmware的虚拟硬盘上)。然后尝试安装了centos, suse, ubuntu 等，再次证明如此安装系统到优盘上是需要大量做工作的。就暂时放弃，改装最新的live debian。</p>
+
+<p>一切算是回到从前，准备把备份在vmware虚拟硬盘上的文件还原的时候，这才发现虚拟硬盘上空空也！空空也！辛苦的工作就这样付之东流！</p>
+
+<p>切记，切记，工作要稳重。 实验环境要和工作环境完全分开。否则真的是欲哭无泪阿！</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -425,82 +515,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/08/18/only-failure-is-not-enough/">只有失败是不够的</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-08-18T00:00:00+08:00" pubdate data-updated="true">Aug 18<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>更重要的是失败后总结，并修正错误。<br />俗话说失败是成功之母，这句话其实是概括了总结失败修正失败。只有总结失败，并修正才能不在同一个地方摔倒两次。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/08/17/communicate/">沟通</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-08-17T00:00:00+08:00" pubdate data-updated="true">Aug 17<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在我看来，读书也是一种沟通，是与作者的一次沟通。作者通过他的著作来告诉你他想要表达的思想，如果能读懂作者的表达的思想，那么这次沟通就是成功的。如果通过阅读而不能理解作者的意思，那就说明此次沟通存在问题，自己的知识水平和作者不是一个高度、自己和作者的专业领域不同、作者是个疯子？这些都是造成沟通障碍的可能原因。</p>
-
-
-<br /><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;平时的工作生活中，我们也免不了要和其他人进行沟通，那每次沟通的成果如何呢？作为一名技术人员，免不了要和一些非技术员进行沟通。此时如何让他们知道自己在说些什么呢？众所周知，一些大牛们说的话都很通俗易懂，以至于人们有点怀疑他们是不是真的专家。殊不知，这才是牛的最高境界。将专业知识用平明话的语言来进行表达。什么是相对论？爱因斯坦曾经这样说过，当你和你心爱的人在一起时，一个小时好像10分钟一样的就过去了，如果让你一个人大热天的坐在火热的锅炉旁边的话，即使是一分钟，你也会觉得是像1小时或者更长一样。这样的描述，各个年龄段的人应该都能听的懂。你说不是吗？</p><br /><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面说的是大家在技术背景不同的情况下进行沟通时，当大家都是专业技术人员的话又该如何沟通呢？难道也要将专业技术术语来描述成平民化的语言？此时完全没有必要，既然大家都是在相同的背景下进行沟通，那么就尽可能的使用专业术语，言简意赅的描述有画龙点睛之妙。</p><br /><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;造成沟通困难的原因，大都是人的原因，个体的差异导致沟通时出现鸡同鸭讲的局面。为了保证有效的沟通，一，用平民化的语言来描述，也就是站在对方的角度来描述问题。二，进行专业沟通时要统一专业术语，当有新的专业术语出现时，大家要及时更新，保证描述的一致性。</p>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -518,6 +532,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/15/the-go-with-win32-api/">使用 Go 调用 Windows API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/12/02/kindle-3-for-me/">我的 Kindle 3</a>
       </li>
     
@@ -531,10 +549,6 @@
     
       <li class="post">
         <a href="/blog/2011/04/14/move-on-amazon-ec2/">转战亚马逊EC2</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/03/30/follow-the-right-way/">守规矩才能行的方便</a>
       </li>
     
   </ul>
