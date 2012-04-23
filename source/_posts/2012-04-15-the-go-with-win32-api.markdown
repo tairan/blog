@@ -83,14 +83,12 @@ go build testapp
 go install testapp
 {% endcodeblock %}
 
-Troubleshooting
-----------------
+###Troubleshooting
 can't load package: package w32api: import "w32api": cannot find package
 设置好环境变量 GOPATH
 
 exec gcc: exec: "gcc": executable file not found in %PATH%
 安装 MingW 并将 bin 目录加入到环境变量 PATH 中
 
-参考
------
+###参考
 [使用CGO封装Windows API](http://www.cnblogs.com/AllenDang/archive/2012/02/21/2361197.html)
