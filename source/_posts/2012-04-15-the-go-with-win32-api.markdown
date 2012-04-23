@@ -22,7 +22,7 @@ Go 通过 [cgo](http://golang.org/cmd/cgo/) 可以利用现有C语言库
 2. [MingW](http://mingw.org)
 
 {% codeblock 项目文件完成后的布局 %}
-$GOPATH
+%GOPATH%
     +- src
         +- w32api
             +- kernel.go
@@ -57,7 +57,7 @@ func GetCurrentDirectory() string {
 
 *注意*：
 
-    在 import "C" 和 // #include <windows.h> 之间不能有空行
+在 import "C" 和 // #include <windows.h> 之间不能有空行
 
 编译并安装
 
@@ -84,11 +84,13 @@ go install testapp
 {% endcodeblock %}
 
 ###Troubleshooting
-can't load package: package w32api: import "w32api": cannot find package
-设置好环境变量 GOPATH
+* can't load package: package w32api: import "w32api": cannot find package
 
-exec gcc: exec: "gcc": executable file not found in %PATH%
-安装 MingW 并将 bin 目录加入到环境变量 PATH 中
+原因是没有设置环境变量 GOPATH
+
+* exec gcc: exec: "gcc": executable file not found in %PATH%
+
+原因是 gcc 所在目录没有加入道 %PATH% 中，检查 MingW 是否正确安装，并将 bin 目录加入到环境变量 %PATH% 中
 
 ###参考
 [使用CGO封装Windows API](http://www.cnblogs.com/AllenDang/archive/2012/02/21/2361197.html)
