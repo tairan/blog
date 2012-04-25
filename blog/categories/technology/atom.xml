@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Technology | Tairan's Story]]></title>
   <link href="http://tairan.github.com/blog/categories/technology/atom.xml" rel="self"/>
   <link href="http://tairan.github.com/"/>
-  <updated>2012-04-16T15:11:34+08:00</updated>
+  <updated>2012-04-25T16:53:47+08:00</updated>
   <id>http://tairan.github.com/</id>
   <author>
     <name><![CDATA[Tairan]]></name>
@@ -46,7 +46,7 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$GOPATH&lt;/p>
+</pre></td><td class='code'><pre><code class=''><span class='line'>%GOPATH%&lt;/p>
 </span><span class='line'>
 </span><span class='line'>&lt;pre>&lt;code>+- src
 </span><span class='line'>    +- w32api
@@ -106,8 +106,7 @@
 
 <p><em>注意</em>：</p>
 
-<pre><code>在 import "C" 和 // #include &lt;windows.h&gt; 之间不能有空行
-</code></pre>
+<p>在 import "C" 和 // #include &lt;windows.h> 之间不能有空行</p>
 
 <p>编译并安装</p>
 
@@ -148,15 +147,23 @@
 </span><span class='line'>go install testapp
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<h2>Troubleshooting</h2>
+<h3>Troubleshooting</h3>
 
-<p>can't load package: package w32api: import "w32api": cannot find package
-设置好环境变量 GOPATH</p>
+<ul>
+<li>can't load package: package w32api: import "w32api": cannot find package</li>
+</ul>
 
-<p>exec gcc: exec: "gcc": executable file not found in %PATH%
-安装 MingW 并将 bin 目录加入到环境变量 PATH 中</p>
 
-<h2>参考</h2>
+<p>原因是没有设置环境变量 GOPATH</p>
+
+<ul>
+<li>exec gcc: exec: "gcc": executable file not found in %PATH%</li>
+</ul>
+
+
+<p>原因是 gcc 所在目录没有加入道 %PATH% 中，检查 MingW 是否正确安装，并将 bin 目录加入到环境变量 %PATH% 中</p>
+
+<h3>参考</h3>
 
 <p><a href="http://www.cnblogs.com/AllenDang/archive/2012/02/21/2361197.html">使用CGO封装Windows API</a></p>
 ]]></content>

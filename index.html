@@ -21,7 +21,7 @@ MingW 项目文件完成后的布局 1
 9
 10
 11
-$GOPATH +- src +- w32api +- kernel.go +- &hellip;">
+%GOPATH% +- src +- w32api +- kernel.go +- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -129,7 +129,7 @@ $GOPATH +- src +- w32api +- kernel.go +- &hellip;">
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$GOPATH
+</pre></td><td class='code'><pre><code class=''><span class='line'>%GOPATH%
 </span><span class='line'>    +- src
 </span><span class='line'>        +- w32api
 </span><span class='line'>            +- kernel.go
@@ -182,8 +182,7 @@ $GOPATH +- src +- w32api +- kernel.go +- &hellip;">
 
 <p><em>注意</em>：</p>
 
-<pre><code>在 import "C" 和 // #include &lt;windows.h&gt; 之间不能有空行
-</code></pre>
+<p>在 import &#8220;C&#8221; 和 // #include &lt;windows.h> 之间不能有空行</p>
 
 <p>编译并安装</p>
 
@@ -223,15 +222,23 @@ $GOPATH +- src +- w32api +- kernel.go +- &hellip;">
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Troubleshooting</h2>
+<h3>Troubleshooting</h3>
 
-<p>can&#8217;t load package: package w32api: import &#8220;w32api&#8221;: cannot find package
-设置好环境变量 GOPATH</p>
+<ul>
+<li>can&#8217;t load package: package w32api: import &#8220;w32api&#8221;: cannot find package</li>
+</ul>
 
-<p>exec gcc: exec: &#8220;gcc&#8221;: executable file not found in %PATH%
-安装 MingW 并将 bin 目录加入到环境变量 PATH 中</p>
 
-<h2>参考</h2>
+<p>原因是没有设置环境变量 GOPATH</p>
+
+<ul>
+<li>exec gcc: exec: &#8220;gcc&#8221;: executable file not found in %PATH%</li>
+</ul>
+
+
+<p>原因是 gcc 所在目录没有加入道 %PATH% 中，检查 MingW 是否正确安装，并将 bin 目录加入到环境变量 %PATH% 中</p>
+
+<h3>参考</h3>
 
 <p><a href="http://www.cnblogs.com/AllenDang/archive/2012/02/21/2361197.html">使用CGO封装Windows API</a></p>
 </div>
