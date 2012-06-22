@@ -59,6 +59,14 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/twitter.ht
 
 # Douban
 douban_user: tairan
+douban_hidelogo: true
+douban_hideself: false
+douban_categories: "movie|book"
+douban_columns: 3
+douban_number: 12
+douban_show: "collection" # dolist, wishlist
+douban_select: "favorite" # random
+douban_picsize:
 
 # Github repositories
 github_user: tairan
