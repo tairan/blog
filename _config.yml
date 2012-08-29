@@ -70,7 +70,7 @@ douban_picsize:
 
 # Github repositories
 github_user: tairan
-github_repo_count: 0
+github_repo_count: 3
 github_show_profile_link: true
 github_skip_forks: true
 
@@ -104,7 +104,6 @@ disqus_short_name: tairan
 disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id:
-
+google_analytics_tracking_id: UA-5226610-2 
 # Facebook Like
 facebook_like: false
